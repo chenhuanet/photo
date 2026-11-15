@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://photo.chenhua.net/sitemap.xml
