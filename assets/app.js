@@ -10,6 +10,7 @@
     visible: 30,
     q: "",
     searchCollection: "all",
+    searchScope: "",
     themeCollection: "",
     filter: { collection: "all", topic: "all" },
     usage: "all",
@@ -135,7 +136,25 @@
   function brandHref() {
     return CFG.site === "main" ? routeHref("today") : (CFG.home || "/");
   }
+  function defaultSearchScope() {
+    return CFG.site === "photo" ? "photos" : (CFG.site === "paint" ? "paintings" : "all");
+  }
+  function searchHref() {
+    return CFG.site === "main" ? routeHref("search") : (CFG.home || "/") + "search/";
+  }
+  function searchUrl(qtext, scope) {
+    var parts = [];
+    if (qtext) parts.push("q=" + encodeURIComponent(qtext));
+    if (scope) parts.push("scope=" + scope);
+    return searchHref() + (parts.length ? "?" + parts.join("&") : "");
+  }
+  function homeSearchLabel() {
+    if (CFG.site === "photo") return "在摄影档案中搜索";
+    if (CFG.site === "paint") return "在绘画作品中搜索";
+    return "搜主题、人物、地点、年代";
+  }
   function itemHref(n) {
+    if (n.search) return searchUrl("", defaultSearchScope());
     if (n.themes) return themeHref();
     if (n.timeline) return timelineHref();
     return n.href || routeHref(n.route || "today");
@@ -221,6 +240,7 @@
         if (key === "collection") state.filter.collection = val;
         if (key === "topic") state.filter.topic = val;
         if (key === "searchCollection") { state.searchCollection = val; renderSearchResults(); syncSearchChips(); return; }
+        if (key === "searchScope") { state.searchScope = val; syncSearchUrl(); renderSearchResults(); syncSearchChips(); return; }
         if (key === "usage") { state.usage = val; renderView(); return; }
         state.visible = 30; renderView();
       } else if (t.hasAttribute("data-lb")) {
@@ -234,6 +254,14 @@
       } else if (t.hasAttribute("data-copy")) {
         copyText(t.getAttribute("data-copy"));
       }
+    });
+    app.addEventListener("submit", function (e) {
+      var f = e.target.closest("[data-search-form]");
+      if (!f) return;
+      e.preventDefault();
+      var input = f.querySelector('input[name="q"]');
+      var qtext = input ? input.value.trim() : "";
+      location.href = searchUrl(qtext, f.getAttribute("data-scope") || defaultSearchScope());
     });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") { closeLightbox(); closeSheet(); }
@@ -260,6 +288,7 @@
     b.classList.toggle("commercial", state.mode === "commercial");
   }
   function navigate(route) {
+    if (route === "search") { location.href = searchUrl("", defaultSearchScope()); return; }
     location.href = routeHref(route);
   }
   function currentRoute() {
@@ -316,6 +345,8 @@
       var u = new URL(location.href);
       if (state.q.trim()) u.searchParams.set("q", state.q.trim());
       else u.searchParams.delete("q");
+      if (state.searchScope && state.searchScope !== "all") u.searchParams.set("scope", state.searchScope);
+      else u.searchParams.delete("scope");
       history.replaceState(null, "", u.toString());
     } catch (e) {}
   }
@@ -370,6 +401,12 @@
     if (!years.length) return null;
     return { start: Math.min.apply(null, years), end: Math.max.apply(null, years) };
   }
+  function homeSearchBox() {
+    return '<div class="home-search-wrap"><form class="home-search" data-search-form data-scope="' + esc(defaultSearchScope()) + '">' +
+      '<input name="q" type="search" placeholder="' + esc(homeSearchLabel()) + '" autocomplete="off">' +
+      '<button type="submit">搜索</button></form>' +
+      '<div class="home-search-hint">试试：1906 · 巴黎 · 阿波罗 · 无名者</div></div>';
+  }
   function viewToday() {
     var isPaint = CFG.site === "paint";
     var rows = filtered().filter(function (r) { return imgOf(r); });
@@ -389,6 +426,7 @@
         '<div class="today-meta"><span>' + esc(r.year || "") + "</span><span>" + esc(r.place || r.region || "") + "</span><span>" + esc(r.source_short || "") + "</span>" + usageTag(r) + "</div>" +
         '<div class="today-actions"><a class="btn gold" href="' + esc(staticHref(r)) + '">' + (isPaint ? "看这张画" : "读这一帧") + '</a><button class="btn" data-lb="' + esc(r.id) + '">放大</button><a class="btn" href="' + esc(routeHref("gallery")) + '">进入' + (isPaint ? "绘画轴" : "影像轴") + '</a></div>' +
       "</div></section>" +
+      homeSearchBox() +
       '<div class="section"><div class="section-head"><h2>' + (isPaint ? "绘画长河" : "影像长河") + '</h2><span class="sub">由远及近 · 8 帧</span></div></div>' +
       masonry(related) +
       '<div class="more-wrap"><a class="btn" href="' + esc(routeHref("gallery")) + '">查看全部 ' + SITE_RECORDS.length + " 条</a></div>";
@@ -418,6 +456,7 @@
         '<div class="today-meta"><span>' + (s.count || 0) + " 帧</span><span>" + chapters.length + " 章</span><span>" + esc((s.themes || []).join(" / ")) + "</span></div>" +
         '<div class="today-actions"><a class="btn gold" href="' + esc(storyStaticHref(s)) + '">读这个主题</a><a class="btn" href="' + esc(routeHref("stories")) + '">全部主题</a><a class="btn" href="' + esc(routeHref("timeline")) + '">时间线</a></div>' +
       "</div></section>" +
+      homeSearchBox() +
       '<div class="section"><div class="section-head"><h2>主题预览</h2><span class="sub">' + (s.count || 0) + " 帧 · " + chapters.length + ' 章</span></div></div>' +
       '<div class="theme-preview">' + preview.map(function (r) {
         return '<a href="' + esc(staticHref(r)) + '"><img src="' + esc(imgOf(r)) + '" alt="' + esc(r.title) + '" loading="lazy"><span>' + esc(r.title) + "</span></a>";
@@ -483,15 +522,18 @@
       (caption ? '<span class="caption-text">' + esc(caption) + "</span>" : "") +
       '<span class="caption-meta">' + esc(r.year || "") + " · " + esc(r.place || r.region || "") + " · " + esc(r.source_short || "") + "</span></div></a>";
   }
-  function searchRows() {
+  function searchRows(scope) {
     var rows = SITE_RECORDS.filter(modeOk);
-    if (state.searchCollection !== "all") rows = rows.filter(function (r) { return r.collection === state.searchCollection; });
+    if (scope === "photos") rows = rows.filter(function (r) { return r.collection === "photos"; });
+    else if (scope === "paintings") rows = rows.filter(function (r) { return r.collection === "paintings"; });
+    else if (scope === "objects") rows = rows.filter(function (r) { return r.collection === "objects" || r.collection === "links"; });
+    else if (scope === "themes") rows = [];
     return rows;
   }
-  function search(qtext) {
+  function search(qtext, scope) {
     var terms = qtext.toLowerCase().trim().split(/\s+/).filter(Boolean);
     if (!terms.length) return [];
-    var rows = searchRows().filter(function (r) {
+    var rows = searchRows(scope).filter(function (r) {
       var txt = (r.search_text || "").toLowerCase();
       return terms.every(function (t) { return txt.indexOf(t) >= 0; });
     });
@@ -510,7 +552,25 @@
       });
       return { r: r, score: score };
     }).sort(function (a, b) { return b.score - a.score || (b.r.year || 0) - (a.r.year || 0); })
-      .slice(0, 60).map(function (x) { return x.r; });
+      .map(function (x) { return x.r; });
+  }
+  function themeSearchText(s) {
+    return [s.title, s.subtitle, s.intro,
+      (s.chapters || []).map(function (ch) { return (ch.title || "") + " " + (ch.text || ""); }).join(" "),
+      (s.themes || []).join(" ")].join(" ").toLowerCase();
+  }
+  function searchThemes(qtext) {
+    var terms = qtext.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    if (!terms.length) return [];
+    return themeStories().filter(function (s) {
+      var txt = themeSearchText(s);
+      return terms.every(function (t) { return txt.indexOf(t) >= 0; });
+    }).map(function (s) {
+      var title = String(s.title || "").toLowerCase();
+      var score = title.indexOf(qtext.toLowerCase()) >= 0 ? 10 : 0;
+      terms.forEach(function (t) { if (title.indexOf(t) >= 0) score += 5; });
+      return { s: s, score: score };
+    }).sort(function (a, b) { return b.score - a.score; }).slice(0, 20).map(function (x) { return x.s; });
   }
   function resultRow(r) {
     var img = imgOf(r);
@@ -522,40 +582,82 @@
       (r.content_type && r.content_type !== "photograph" ? "<span>" + esc(typeLabel(r)) + "</span>" : "") +
       "<span>" + esc(r.source_short || "") + "</span>" + usageTag(r) + "</div></div></a>";
   }
+  function themeResultRow(s) {
+    var cover = byId(s.cover);
+    var img = cover ? imgOf(cover) : "";
+    var thumb = img
+      ? '<img class="thumb" src="' + esc(img) + '" alt="' + esc(s.title) + '" loading="lazy">'
+      : '<div class="thumb ph">主题</div>';
+    return '<a class="result theme-result" href="' + esc(storyStaticHref(s)) + '">' + thumb +
+      '<div><h3>' + esc(s.title) + '</h3><div class="meta"><b>' + esc(s.type || "长文") + "</b><span>" +
+      (s.count || 0) + " 帧</span><span>" + esc((s.themes || []).join(" / ")) +
+      "</span></div><p>" + esc(s.subtitle) + "</p></div></a>";
+  }
+  function searchScopeChips() {
+    var defs = [["all", "全部"], ["themes", "主题"], ["photos", "摄影"], ["paintings", "绘画"], ["objects", "器物"]];
+    return defs.map(function (d) {
+      return '<button class="chip ' + (state.searchScope === d[0] ? "on" : "") + '" data-filter="searchScope" data-value="' + d[0] + '">' + d[1] + "</button>";
+    }).join("");
+  }
   function viewSearch() {
-    var chips = collectionChips(state.searchCollection, "searchCollection");
     return '<div class="searchbar"><div class="search-field">' + ICONS.search +
-      '<input id="searchInput" type="search" placeholder="搜标题、地点、作者、主题、年代" value="' + esc(state.q) + '" autocomplete="off">' +
+      '<input id="searchInput" type="search" placeholder="搜主题、人物、地点、年代" value="' + esc(state.q) + '" autocomplete="off">' +
       '<button class="search-clear" id="searchClear">清空</button></div></div>' +
-      '<div class="chips" id="searchChips">' + chips + "</div>" +
+      '<div class="chips" id="searchChips">' + searchScopeChips() + "</div>" +
       '<div class="search-hint" id="searchCount">输入关键词开始搜索</div>' +
       '<div class="results" id="searchResults"></div>';
   }
   function recentSearchHtml() {
-    var topics = {};
-    searchRows().forEach(function (r) { if (r.topic) topics[r.topic] = (topics[r.topic] || 0) + 1; });
-    var tops = Object.keys(topics).sort(function (a, b) { return topics[b] - topics[a]; }).slice(0, 8);
-    var rows = searchRows().slice(0, 10);
-    return '<div class="recent-topics"><div class="eyebrow" style="margin-bottom:8px">热门主题</div>' +
-      '<div class="chips" style="padding:0 0 14px">' + tops.map(function (t) {
-        return '<button class="chip" data-search-topic="' + esc(t) + '">' + esc(t) + "</button>";
-      }).join("") + "</div>" +
-      '<div class="eyebrow" style="margin-bottom:2px">最近收录</div></div>' + rows.map(resultRow).join("");
+    var scope = state.searchScope || "all";
+    var stories = (scope === "all" || scope === "themes") ? themeStories().slice(0, 4) : [];
+    var rows = scope === "themes" ? [] : searchRows(scope).slice(0, 8);
+    var html = "";
+    if (stories.length) {
+      html += '<div class="recent-topics"><div class="eyebrow" style="margin-bottom:8px">主题</div></div>' +
+        stories.map(themeResultRow).join("");
+    }
+    if (rows.length) {
+      html += '<div class="recent-topics"><div class="eyebrow" style="margin-bottom:2px">最近收录</div></div>' +
+        rows.map(resultRow).join("");
+    }
+    return html || '<div class="empty"><b>还没有内容</b>换一个范围试试。</div>';
   }
   function renderSearchResults() {
     var box = q("#searchResults");
     var cnt = q("#searchCount");
     if (!box) return;
     var txt = state.q.trim();
+    var scope = state.searchScope || "all";
     if (!txt) {
       if (cnt) cnt.textContent = "输入关键词开始搜索";
       box.innerHTML = recentSearchHtml();
       bindSearchTopics();
       return;
     }
-    var rows = search(txt);
-    if (cnt) cnt.textContent = rows.length ? "找到 " + rows.length + " 条" : "没有匹配结果";
-    box.innerHTML = rows.length ? rows.map(resultRow).join("") : '<div class="empty"><b>没有匹配</b>试试地点、作者、主题或年代，例如「上海」「1900」「街巷」。</div>';
+    var themes = (scope === "all" || scope === "themes") ? searchThemes(txt) : [];
+    var rows = scope === "themes" ? [] : search(txt, scope);
+    var total = themes.length + rows.length;
+    if (cnt) cnt.textContent = total ? "找到 " + total + " 条" : "没有匹配结果";
+    if (!total) {
+      box.innerHTML = '<div class="empty"><b>没有匹配</b>试试主题、人物、地点或年代，例如「1906」「巴黎」「阿波罗」。</div>';
+      return;
+    }
+    var html = "";
+    if (themes.length) {
+      html += '<div class="result-group"><div class="result-group-head"><span>主题</span><span>' + themes.length + " 条</span></div>" +
+        themes.slice(0, 8).map(themeResultRow).join("") + "</div>";
+    }
+    var groups = [["photos", "摄影"], ["paintings", "绘画"], ["objects", "器物 / 外链"]];
+    groups.forEach(function (g) {
+      var list = rows.filter(function (r) {
+        if (g[0] === "objects") return r.collection === "objects" || r.collection === "links";
+        return r.collection === g[0];
+      });
+      if (!list.length) return;
+      html += '<div class="result-group"><div class="result-group-head"><span>' + g[1] + "</span><span>" + list.length + " 条</span></div>" +
+        list.slice(0, 8).map(resultRow).join("") + "</div>";
+    });
+    box.innerHTML = html;
   }
   function bindSearchTopics() {
     qa("[data-search-topic]").forEach(function (b) {
@@ -570,7 +672,7 @@
   function syncSearchChips() {
     var box = q("#searchChips");
     if (!box) return;
-    box.innerHTML = collectionChips(state.searchCollection, "searchCollection");
+    box.innerHTML = searchScopeChips();
   }
 
   function viewSimple(title, text) {
@@ -667,6 +769,10 @@
     if (params.get("phone")) document.body.classList.add("phone-mode");
     if (params.get("q")) state.q = params.get("q");
     if (params.get("collection")) state.themeCollection = params.get("collection");
+    state.searchScope = params.get("scope") || defaultSearchScope();
+    if (["all", "themes", "photos", "paintings", "objects"].indexOf(state.searchScope) < 0) {
+      state.searchScope = defaultSearchScope();
+    }
     shell();
     syncMode();
     renderView();
