@@ -55,6 +55,7 @@ img{display:block;max-width:100%}
   font-size:9.5px;letter-spacing:.04em;padding:3px 0 2px;border-radius:10px}
 .tab svg{width:21px;height:21px}
 .tab.on{color:var(--accent)}
+.tab.cross{color:var(--muted)}
 .tab:active{background:var(--surface)}
 
 /* shared */
@@ -311,8 +312,10 @@ body.phone-mode .app-scroll{padding-bottom:calc(20px + var(--safe-bottom))}
   #app{height:auto;min-height:100vh;overflow:visible}
   .appbar{height:64px;padding:0 28px;position:sticky;top:0}
   .desknav{display:flex;align-items:center;gap:2px;margin-left:14px}
-  .desknav button{font-size:12px;color:var(--muted);padding:7px 12px;border-radius:999px}
-  .desknav button.on{background:var(--surface2);color:var(--text)}
+  .desknav a{font-size:12px;color:var(--muted);padding:7px 12px;border-radius:999px}
+  .desknav a.on{background:var(--surface2);color:var(--text)}
+  .desknav a:hover{color:var(--text)}
+  .desknav .sep{width:1px;height:14px;background:var(--line);margin:0 7px}
   .tabbar{display:none}
   .app-scroll{padding-bottom:50px}
   .view{max-width:1240px;margin:0 auto;padding:0 28px 46px}
