@@ -1,12 +1,30 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark" data-lang="zh">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,follow">
+<meta name="theme-color" content="#0d0c0b">
 <title>搜索 · 尘画</title>
 <link rel="canonical" href="https://www.chenhua.net/search/?scope=photos">
 <meta http-equiv="refresh" content="0;url=https://www.chenhua.net/search/?scope=photos">
+<style>
+html[data-lang="en"] [data-l="zh"]{display:none}
+html[data-lang="zh"] [data-l="en"]{display:none}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+background:#0d0c0b;color:#ebe5da;font:14px/1.8 "PingFang SC","Microsoft YaHei",sans-serif}
+html[data-theme="light"] body{background:#f6f2ea;color:#231f19}
+a{color:#c8a24a}
+html[data-theme="light"] a{color:#8b6520}
+</style>
+<script>
+(function(){try{var t=localStorage.getItem("chenhua-theme");if(t)document.documentElement.setAttribute("data-theme",t);
+var l=localStorage.getItem("chenhua-lang");if(l){document.documentElement.setAttribute("data-lang",l);
+document.documentElement.setAttribute("lang",l==="en"?"en":"zh-CN");}}catch(e){}})();
+</script>
 </head>
-<body><p>正在前往尘画统一搜索：<a href="https://www.chenhua.net/search/?scope=photos">继续</a></p></body>
+<body data-title-zh="搜索 · 尘画" data-title-en="Search · Chenhua">
+<p><span data-l="zh">正在前往尘画统一搜索：<a href="https://www.chenhua.net/search/?scope=photos">继续</a></span><span data-l="en">Redirecting to Chenhua search: <a href="https://www.chenhua.net/search/?scope=photos">continue</a></span></p>
+<script src="../assets/site.js"></script>
+</body>
 </html>

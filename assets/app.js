@@ -2,7 +2,10 @@
   "use strict";
   const CFG = window.SITE_CONFIG || {};
   const BUNDLE = window.CHENHUA_BUNDLE || { records: [], stories: [], stats: {} };
+  const I18N = window.CHENHUA_I18N || { zh: {}, en: {} };
   const app = document.getElementById("app");
+  const THEME_KEY = "chenhua-theme";
+  const LANG_KEY = "chenhua-lang";
   const state = {
     mode: "noncommercial",
     route: "today",
@@ -15,8 +18,36 @@
     filter: { collection: "all", topic: "all" },
     usage: "all",
     lb: { items: [], index: 0 },
-    sheet: false,
+    lang: (document.documentElement.getAttribute("data-lang") === "en") ? "en" : "zh",
+    theme: document.documentElement.getAttribute("data-theme") || "dark",
   };
+
+  function t(key, vars) {
+    var dict = I18N[state.lang] || {};
+    var text = dict[key];
+    if (text == null) text = (I18N.zh || {})[key];
+    if (text == null) text = key;
+    if (vars) {
+      text = text.replace(/\{(\w+)\}/g, function (_, k) {
+        return vars[k] == null ? "" : vars[k];
+      });
+    }
+    return text;
+  }
+  function isEn() { return state.lang === "en"; }
+  function loc(obj, field) {
+    if (!obj) return "";
+    if (isEn()) {
+      var v = obj[field + "_en"];
+      if (v != null && v !== "") return v;
+    }
+    return obj[field] == null ? "" : obj[field];
+  }
+  function tx(kind, value) {
+    if (!isEn() || !value) return value || "";
+    var map = (CFG.taxonomy || {})[kind] || {};
+    return map[value] || value;
+  }
 
   const SITE_RECORDS = (BUNDLE.records || []).filter(function (r) {
     return (CFG.collections || []).indexOf(r.collection) >= 0;
@@ -52,12 +83,14 @@
   function byId(id) { return SITE_RECORDS.filter(function (r) { return r.id === id; })[0]; }
   function usageTag(r) {
     var c = (r.usage_code || "").toLowerCase();
-    return '<span class="tag ' + c + '">' + esc(r.usage_short || r.usage_code) + "</span>";
+    var label = isEn() ? (r.usage_short_en || r.usage_short) : (r.usage_short || r.usage_code);
+    return '<span class="tag ' + c + '">' + esc(label) + "</span>";
   }
   function typeLabel(r) {
+    if (isEn()) return tx("content_type", r.content_type);
     return {
       painting: "绘画", print: "版画", drawing: "素描", postcard: "明信片",
-      object: "器物", document: "文书", photograph: "照片"
+      object: "器物", document: "文书", photograph: "照片", link: "外链"
     }[r.content_type] || "";
   }
   function siteUrl(path) {
@@ -80,28 +113,28 @@
     if (CFG.staticStoryBase) return CFG.staticStoryBase + s.id + ".html";
     return siteUrl(CFG.site === "main" ? "story/" + s.id + ".html" : "../main/story/" + s.id + ".html");
   }
-  function topicChips(active, handlerAttr) {
+  function topicChips(active) {
     var counts = {};
     SITE_RECORDS.forEach(function (r) { if (r.topic) counts[r.topic] = (counts[r.topic] || 0) + 1; });
     var topics = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; }).slice(0, 10);
-    var out = ['<button class="chip ' + (active === "all" ? "on" : "") + '" data-filter="topic" data-value="all">全部主题</button>'];
-    topics.forEach(function (t) {
-      out.push('<button class="chip ' + (active === t ? "on" : "") + '" data-filter="topic" data-value="' + esc(t) + '">' + esc(t) + "</button>");
+    var out = ['<button class="chip ' + (active === "all" ? "on" : "") + '" data-filter="topic" data-value="all">' + esc(t("common.allTopics")) + "</button>"];
+    topics.forEach(function (tp) {
+      out.push('<button class="chip ' + (active === tp ? "on" : "") + '" data-filter="topic" data-value="' + esc(tp) + '">' + esc(tx("topic", tp)) + "</button>");
     });
     return out.join("");
   }
   function collectionChips(active, key) {
     if (!CFG.collections || CFG.collections.length < 1) return "";
     var f = key === "searchCollection" ? "searchCollection" : "collection";
-    var out = ['<button class="chip ' + (active === "all" ? "on" : "") + '" data-filter="' + f + '" data-value="all">全部</button>'];
+    var out = ['<button class="chip ' + (active === "all" ? "on" : "") + '" data-filter="' + f + '" data-value="all">' + esc(t("common.all")) + "</button>"];
     if (CFG.collections.indexOf("photos") >= 0) {
-      out.push('<button class="chip ' + (active === "photos" ? "on" : "") + '" data-filter="' + f + '" data-value="photos">摄影</button>');
+      out.push('<button class="chip ' + (active === "photos" ? "on" : "") + '" data-filter="' + f + '" data-value="photos">' + esc(t("common.photos")) + "</button>");
     }
     if (CFG.collections.indexOf("paintings") >= 0) {
-      out.push('<button class="chip ' + (active === "paintings" ? "on" : "") + '" data-filter="' + f + '" data-value="paintings">绘画</button>');
+      out.push('<button class="chip ' + (active === "paintings" ? "on" : "") + '" data-filter="' + f + '" data-value="paintings">' + esc(t("common.paintings")) + "</button>");
     }
     if (CFG.collections.indexOf("links") >= 0) {
-      out.push('<button class="chip ' + (active === "links" ? "on" : "") + '" data-filter="' + f + '" data-value="links">仅外链</button>');
+      out.push('<button class="chip ' + (active === "links" ? "on" : "") + '" data-filter="' + f + '" data-value="links">' + esc(t("common.links")) + "</button>");
     }
     return out.join("");
   }
@@ -116,12 +149,17 @@
     home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 10.5L12 4l8 6.5V20H4z"/><path d="M9.5 20v-5h5v5"/></svg>',
     compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2.2 5.3-5.3 2.2 2.2-5.3z"/></svg>',
     timeline: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 3v18"/><path d="M10 7h8M10 12h6M10 17h9"/><circle cx="6" cy="7" r="1.6" fill="currentColor" stroke="none"/><circle cx="6" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="6" cy="17" r="1.6" fill="currentColor" stroke="none"/></svg>',
-    more: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>',
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+    sun: '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+    moon: '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>',
   };
+
   function navItems() {
     return (CFG.nav || []).filter(function (n) { return n && n.label; });
+  }
+  function navLabel(n) {
+    return isEn() ? (n.label_en || n.label) : n.label;
   }
   function themeHref() {
     if (CFG.site === "main") return routeHref("stories");
@@ -149,9 +187,9 @@
     return searchHref() + (parts.length ? "?" + parts.join("&") : "");
   }
   function homeSearchLabel() {
-    if (CFG.site === "photo") return "在摄影档案中搜索";
-    if (CFG.site === "paint") return "在绘画作品中搜索";
-    return "搜主题、人物、地点、年代";
+    if (CFG.site === "photo") return t("search.ph.photo");
+    if (CFG.site === "paint") return t("search.ph.paint");
+    return t("search.ph.main");
   }
   function itemHref(n) {
     if (n.search) return searchUrl("", defaultSearchScope());
@@ -162,6 +200,13 @@
   function wordmark() {
     return '<span class="wm"><span class="wm-lite">出</span><span class="wm-strong">尘</span>' +
       '<span class="wm-lite">入</span><span class="wm-strong">画</span></span>';
+  }
+  function monthName(i) {
+    return t("month." + (i + 1));
+  }
+  function fmtDate(d) {
+    if (isEn()) return monthName(d.getMonth()) + " " + d.getDate();
+    return (d.getMonth() + 1) + "月" + d.getDate() + "日";
   }
 
   function shell() {
@@ -174,7 +219,7 @@
       if (n.timeline) attr += ' data-timeline="1"';
       if (n.site) attr += ' data-site="' + esc(n.site) + '"';
       return '<a class="tab" href="' + esc(itemHref(n)) + '"' + attr + ">" +
-        (ICONS[n.icon] || "") + "<span>" + esc(n.label) + "</span></a>";
+        (ICONS[n.icon] || "") + "<span>" + esc(navLabel(n)) + "</span></a>";
     }).join("");
     var desk = items.map(function (n) {
       var attr = "";
@@ -182,26 +227,24 @@
       if (n.themes) attr += ' data-themes="1"';
       if (n.timeline) attr += ' data-timeline="1"';
       if (n.site) attr += ' data-site="' + esc(n.site) + '"';
-      return '<a' + (n.wideOnly ? ' class="wide-only"' : "") + ' href="' + esc(itemHref(n)) + '"' + attr + ">" + esc(n.label) + "</a>";
+      return '<a' + (n.wideOnly ? ' class="wide-only"' : "") + ' href="' + esc(itemHref(n)) + '"' + attr + ">" + esc(navLabel(n)) + "</a>";
     }).join("");
     app.innerHTML =
       '<header class="appbar">' +
-        '<a class="brand" href="' + esc(brandHref()) + '">' + wordmark() + '<span class="sub">' + esc(CFG.sub || "尘归尘，画归画") + "</span></a>" +
+        '<a class="brand" href="' + esc(brandHref()) + '">' + wordmark() + '<span class="sub">' + esc(t("brand.sub")) + "</span></a>" +
         '<nav class="desknav">' + desk + "</nav>" +
         '<div class="right">' +
-          '<button class="modebtn" data-mode="toggle">非商用</button>' +
-          '<button class="iconbtn" data-nav="search" aria-label="搜索">' + ICONS.search + "</button>" +
-          '<button class="iconbtn" data-more="1" aria-label="更多">' + ICONS.more + "</button>" +
+          '<button class="modebtn" data-mode="toggle">' + esc(t("mode.noncommercial")) + "</button>" +
+          '<button class="langbtn" data-lang-toggle aria-label="' + esc(t("lang.aria")) + '">' + esc(t("lang.switch")) + "</button>" +
+          '<button class="iconbtn themebtn" data-themebtn aria-label="' + esc(state.theme === "light" ? t("theme.toDark") : t("theme.toLight")) + '">' + ICONS.sun + ICONS.moon + "</button>" +
         "</div>" +
       "</header>" +
       '<main class="app-scroll"><div id="view" class="view"></div></main>' +
       '<nav class="tabbar" style="grid-template-columns:repeat(' + Math.max(1, mobile.length) + ',1fr)">' + nav + "</nav>" +
-      '<div class="backdrop" id="backdrop" data-close-sheet="1"></div>' +
-      '<div class="sheet" id="sheet"></div>' +
       '<div class="lightbox" id="lightbox">' +
-        '<div class="lb-top"><span class="t" id="lbCount">—</span><button class="iconbtn" data-lb-close="1" aria-label="关闭">' + ICONS.close + "</button></div>" +
+        '<div class="lb-top"><span class="t" id="lbCount">—</span><button class="iconbtn" data-lb-close="1" aria-label="' + esc(t("common.close")) + '">' + ICONS.close + "</button></div>" +
         '<div class="lb-stage" id="lbStage"><img id="lbImg" alt=""></div>' +
-        '<div class="lb-nav"><button class="btn" data-lb-prev="1">上一帧</button><button class="btn" data-lb-next="1">下一帧</button></div>' +
+        '<div class="lb-nav"><button class="btn" data-lb-prev="1">' + esc(t("common.prev")) + '</button><button class="btn" data-lb-next="1">' + esc(t("common.next")) + "</button></div>" +
         '<div class="lb-cap" id="lbCap"></div>' +
       "</div>" +
       '<div class="toast" id="toast"></div>';
@@ -210,53 +253,43 @@
 
   function bindGlobal() {
     app.addEventListener("click", function (e) {
-      var t = e.target.closest("[data-nav],[data-mode],[data-more],[data-filter],[data-lb],[data-lb-close],[data-lb-prev],[data-lb-next],[data-copy],[data-close-sheet],[data-sheet],[data-phone],[data-usage]");
-      if (!t) return;
-      if (t.hasAttribute("data-nav")) {
-        e.preventDefault(); navigate(t.getAttribute("data-nav"));
-      } else if (t.hasAttribute("data-mode")) {
+      var t2 = e.target.closest("[data-mode],[data-lang-toggle],[data-themebtn],[data-filter],[data-lb],[data-lb-close],[data-lb-prev],[data-lb-next],[data-copy],[data-phone],[data-usage]");
+      if (!t2) return;
+      if (t2.hasAttribute("data-mode")) {
         state.mode = state.mode === "commercial" ? "noncommercial" : "commercial";
         syncMode(); renderView();
-      } else if (t.hasAttribute("data-more")) {
-        openSheet();
-      } else if (t.hasAttribute("data-close-sheet")) {
-        closeSheet();
-      } else if (t.hasAttribute("data-phone")) {
+      } else if (t2.hasAttribute("data-lang-toggle")) {
+        var nextLang = isEn() ? "zh" : "en";
+        try { localStorage.setItem(LANG_KEY, nextLang); } catch (err) {}
+        var u = new URL(location.href);
+        u.searchParams.set("lang", nextLang);
+        location.href = u.toString();
+      } else if (t2.hasAttribute("data-themebtn")) {
+        applyTheme(state.theme === "light" ? "dark" : "light");
+      } else if (t2.hasAttribute("data-phone")) {
         var u = new URL(location.href);
         if (u.searchParams.get("phone")) u.searchParams.delete("phone");
         else u.searchParams.set("phone", "1");
         location.href = u.toString();
-      } else if (t.hasAttribute("data-sheet")) {
-        var to = t.getAttribute("data-sheet");
-        closeSheet();
-        if (to === "phone") {
-          var u2 = new URL(location.href);
-          u2.searchParams.set("phone", "1");
-          location.href = u2.toString();
-        } else if (to.indexOf("http") === 0 || to.charAt(0) === "/") {
-          location.href = to;
-        } else {
-          navigate(to);
-        }
-      } else if (t.hasAttribute("data-filter")) {
-        var key = t.getAttribute("data-filter");
-        var val = t.getAttribute("data-value");
+      } else if (t2.hasAttribute("data-filter")) {
+        var key = t2.getAttribute("data-filter");
+        var val = t2.getAttribute("data-value");
         if (key === "collection") state.filter.collection = val;
         if (key === "topic") state.filter.topic = val;
         if (key === "searchCollection") { state.searchCollection = val; renderSearchResults(); syncSearchChips(); return; }
         if (key === "searchScope") { state.searchScope = val; syncSearchUrl(); renderSearchResults(); syncSearchChips(); return; }
         if (key === "usage") { state.usage = val; renderView(); return; }
         state.visible = 30; renderView();
-      } else if (t.hasAttribute("data-lb")) {
-        e.preventDefault(); openLightbox(t.getAttribute("data-lb"));
-      } else if (t.hasAttribute("data-lb-close")) {
+      } else if (t2.hasAttribute("data-lb")) {
+        e.preventDefault(); openLightbox(t2.getAttribute("data-lb"));
+      } else if (t2.hasAttribute("data-lb-close")) {
         closeLightbox();
-      } else if (t.hasAttribute("data-lb-prev")) {
+      } else if (t2.hasAttribute("data-lb-prev")) {
         stepLightbox(-1);
-      } else if (t.hasAttribute("data-lb-next")) {
+      } else if (t2.hasAttribute("data-lb-next")) {
         stepLightbox(1);
-      } else if (t.hasAttribute("data-copy")) {
-        copyText(t.getAttribute("data-copy"));
+      } else if (t2.hasAttribute("data-copy")) {
+        copyText(t2.getAttribute("data-copy"));
       }
     });
     app.addEventListener("submit", function (e) {
@@ -268,8 +301,9 @@
       location.href = searchUrl(qtext, f.getAttribute("data-scope") || defaultSearchScope());
     });
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") { closeLightbox(); closeSheet(); }
-      if (q("#lightbox").classList.contains("on")) {
+      if (e.key === "Escape") { closeLightbox(); }
+      var lb = q("#lightbox");
+      if (lb && lb.classList.contains("on")) {
         if (e.key === "ArrowLeft") stepLightbox(-1);
         if (e.key === "ArrowRight") stepLightbox(1);
       }
@@ -285,10 +319,20 @@
     });
   }
 
+  function applyTheme(theme) {
+    state.theme = theme === "light" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", state.theme);
+    try { localStorage.setItem(THEME_KEY, state.theme); } catch (e) {}
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", state.theme === "light" ? "#f6f2ea" : "#0d0c0b");
+    var b = q("[data-themebtn]");
+    if (b) b.setAttribute("aria-label", state.theme === "light" ? t("theme.toDark") : t("theme.toLight"));
+  }
+
   function syncMode() {
     var b = q(".modebtn");
     if (!b) return;
-    b.textContent = state.mode === "commercial" ? "商用" : "非商用";
+    b.textContent = state.mode === "commercial" ? t("mode.commercial") : t("mode.noncommercial");
     b.classList.toggle("commercial", state.mode === "commercial");
   }
   function navigate(route) {
@@ -314,8 +358,8 @@
     else if (r.name === "stories") html = viewStories();
     else if (r.name === "timeline") html = viewTimeline();
     else if (r.name === "search") html = viewSearch();
-    else if (r.name === "rights") html = viewSimple("授权", "本站只做索引与展示，不主张图片权利。每张图的许可以记录页为准；商用前请逐张核对源站。U4 仅非商用，U5 仅外链。完整条款见「法律声明」。");
-    else if (r.name === "about") html = viewSimple("关于", "尘画，出尘入画；尘归尘，画归画。以图为史，记录人间的大事与小事。内容来自开放馆藏；采集、复核、策展三层都写日志。图片二进制不进内容仓，站点只引用世纪图片站。");
+    else if (r.name === "rights") html = viewSimple(t("page.rights.title"), t("page.rights.text"));
+    else if (r.name === "about") html = viewSimple(t("page.about.title"), t("page.about.text"));
     else if (CFG.site === "main") html = todayEvent() ? viewTodayEvent() : (themeStories().length ? viewTodayTheme() : viewToday());
     else html = viewToday();
     view.innerHTML = html + appFoot();
@@ -359,14 +403,14 @@
   function card(r) {
     var img = imgOf(r);
     var tags = '<span class="tag gold">' + esc(r.year || "") + "</span>" +
-      (r.topic ? '<span class="tag">' + esc(r.topic) + "</span>" : "") +
+      (r.topic ? '<span class="tag">' + esc(tx("topic", r.topic)) + "</span>" : "") +
       (r.content_type && r.content_type !== "photograph" ? '<span class="tag">' + esc(typeLabel(r)) + "</span>" : "") +
       usageTag(r);
     var pic = img
-      ? '<div class="pic"><img src="' + esc(img) + '" alt="' + esc(r.title) + '" loading="lazy" decoding="async"></div>'
-      : '<div class="pic"><div class="fallback">仅外链</div></div>';
+      ? '<div class="pic"><img src="' + esc(img) + '" alt="' + esc(loc(r, "title")) + '" loading="lazy" decoding="async"></div>'
+      : '<div class="pic"><div class="fallback">' + esc(t("common.links")) + "</div></div>";
     return '<a class="mcard' + (r.isLink ? " linkcard" : "") + '" href="' + esc(staticHref(r)) + '">' +
-      pic + '<div class="meta"><div class="yr">' + esc(r.year || "—") + "</div><h3>" + esc(r.title) + "</h3><div class=\"tags\">" + tags + "</div></div></a>";
+      pic + '<div class="meta"><div class="yr">' + esc(r.year || "—") + "</div><h3>" + esc(loc(r, "title")) + '</h3><div class="tags">' + tags + "</div></div></a>";
   }
   function masonry(rows, cls) {
     return '<div class="masonry ' + (cls || "") + '">' + rows.map(card).join("") + "</div>";
@@ -413,32 +457,32 @@
   function homeSearchBox() {
     return '<div class="home-search-wrap"><form class="home-search" data-search-form data-scope="' + esc(defaultSearchScope()) + '">' +
       '<input name="q" type="search" placeholder="' + esc(homeSearchLabel()) + '" autocomplete="off">' +
-      '<button type="submit">搜索</button></form>' +
-      '<div class="home-search-hint">试试：1906 · 巴黎 · 阿波罗 · 无名者</div></div>';
+      '<button type="submit">' + esc(t("common.search")) + "</button></form>" +
+      '<div class="home-search-hint">' + esc(t("search.hints")) + "</div></div>";
   }
   function viewToday() {
     var isPaint = CFG.site === "paint";
     var rows = filtered().filter(function (r) { return imgOf(r); });
     if (!rows.length) {
-      return '<div class="empty"><b>绘画档案筹备中</b>下一阶段接入绘画内容后，这里会出现今日一画与绘画长河。</div>';
+      return '<div class="empty"><b>' + esc(t("gallery.emptyTitle")) + "</b>" + esc(t("gallery.emptyText")) + "</div>";
     }
     var r = rows[dailyIndex(rows.length)];
     var d = new Date();
-    var date = (d.getMonth() + 1) + "月" + d.getDate() + "日";
+    var date = fmtDate(d);
     var related = riverPicks(rows, r.id, 8);
     return '<section class="today-hero">' +
-      '<img class="today-hero-img" src="' + esc(imgOf(r)) + '" alt="' + esc(r.title) + '">' +
+      '<img class="today-hero-img" src="' + esc(imgOf(r)) + '" alt="' + esc(loc(r, "title")) + '">' +
       '<div class="today-inner">' +
-        '<div class="today-date">' + esc(date) + " · 出尘入画 · " + (isPaint ? "今日一画" : "今日一帧") + "</div>" +
-        "<h1>" + esc(r.title) + "</h1>" +
-        '<p class="today-note">' + (r.note_html || "") + "</p>" +
-        '<div class="today-meta"><span>' + esc(r.year || "") + "</span><span>" + esc(r.place || r.region || "") + "</span><span>" + esc(r.source_short || "") + "</span>" + usageTag(r) + "</div>" +
-        '<div class="today-actions"><a class="btn gold" href="' + esc(staticHref(r)) + '">' + (isPaint ? "看这张画" : "读这一帧") + '</a><button class="btn" data-lb="' + esc(r.id) + '">放大</button><a class="btn" href="' + esc(routeHref("gallery")) + '">进入' + (isPaint ? "绘画轴" : "影像轴") + '</a></div>' +
+        '<div class="today-date">' + esc(date) + " · " + esc(t("brand.name")) + " · " + esc(isPaint ? t("home.todayPainting") : t("home.todayFrame")) + "</div>" +
+        "<h1>" + esc(loc(r, "title")) + "</h1>" +
+        '<p class="today-note">' + (isEn() ? esc(loc(r, "note")) : (r.note_html || "")) + "</p>" +
+        '<div class="today-meta"><span>' + esc(r.year || "") + "</span><span>" + esc(loc(r, "place") || tx("region", r.region)) + "</span><span>" + esc(tx("source_short", r.source_short)) + "</span>" + usageTag(r) + "</div>" +
+        '<div class="today-actions"><a class="btn gold" href="' + esc(staticHref(r)) + '">' + esc(isPaint ? t("home.openPainting") : t("home.readFrame")) + '</a><button class="btn" data-lb="' + esc(r.id) + '">' + esc(t("common.zoom")) + '</button><a class="btn" href="' + esc(routeHref("gallery")) + '">' + esc(isPaint ? t("home.enterPaintAxis") : t("home.enterPhotoAxis")) + "</a></div>" +
       "</div></section>" +
       homeSearchBox() +
-      '<div class="section"><div class="section-head"><h2>' + (isPaint ? "绘画长河" : "影像长河") + '</h2><span class="sub">由远及近 · 8 帧</span></div></div>' +
+      '<div class="section"><div class="section-head"><h2>' + esc(isPaint ? t("home.paintRiver") : t("home.photoRiver")) + '</h2><span class="sub">' + esc(t("home.riverSub")) + "</span></div></div>" +
       masonry(related) +
-      '<div class="more-wrap"><a class="btn" href="' + esc(routeHref("gallery")) + '">查看全部 ' + SITE_RECORDS.length + " 条</a></div>";
+      '<div class="more-wrap"><a class="btn" href="' + esc(routeHref("gallery")) + '">' + esc(t("home.viewAll", { n: SITE_RECORDS.length })) + "</a></div>";
   }
   function dailyThemes() {
     var rows = themeStories().filter(function (s) { return !s.date; });
@@ -454,10 +498,10 @@
   function renderThemeFeature(s, isEvent) {
     var cover = byId(s.cover);
     var d = new Date();
-    var date = (d.getMonth() + 1) + "月" + d.getDate() + "日";
-    var label = isEvent ? "历史上的今天" : "今日主题";
+    var date = fmtDate(d);
+    var label = isEvent ? t("home.historyToday") : t("home.todayTheme");
     var dateText = isEvent ? (s.date_label || s.date || date) : date;
-    var intro = s.subtitle || String(s.intro || "").split(/\n\s*\n/)[0] || "";
+    var intro = loc(s, "subtitle") || String(loc(s, "intro") || "").split(/\n\s*\n/)[0] || "";
     var seen = {}, preview = [];
     [s.cover].concat(s.photo_ids || []).forEach(function (id) {
       if (!id || seen[id] || preview.length >= 4) return;
@@ -465,26 +509,26 @@
       if (!r || !imgOf(r)) return;
       seen[id] = 1; preview.push(r);
     });
-    var chapters = (s.chapters || []).map(function (ch) { return ch.title; }).filter(Boolean);
+    var chapters = (s.chapters || []).map(function (ch) { return loc(ch, "title"); }).filter(Boolean);
     var meta = isEvent
-      ? '<span>' + esc(dateText) + "</span><span>" + esc(s.place || "") + "</span><span>" + (s.count || 0) + " 帧</span>"
-      : '<span>' + (s.count || 0) + " 帧</span><span>" + chapters.length + " 章</span><span>" + esc((s.themes || []).join(" / ")) + "</span>";
+      ? '<span>' + esc(dateText) + "</span><span>" + esc(loc(s, "place")) + "</span><span>" + (s.count || 0) + " " + esc(t("common.frames")) + "</span>"
+      : '<span>' + (s.count || 0) + " " + esc(t("common.frames")) + "</span><span>" + chapters.length + " " + esc(t("common.chapters")) + "</span><span>" + esc(isEn() ? (s.themes_en || []).join(" / ") : (s.themes || []).join(" / ")) + "</span>";
     return '<section class="today-hero theme-hero">' +
-      '<img class="today-hero-img" src="' + esc(cover ? imgOf(cover) : (preview[0] ? imgOf(preview[0]) : "")) + '" alt="' + esc(s.title) + '">' +
+      '<img class="today-hero-img" src="' + esc(cover ? imgOf(cover) : (preview[0] ? imgOf(preview[0]) : "")) + '" alt="' + esc(loc(s, "title")) + '">' +
       '<div class="today-inner">' +
-        '<div class="today-date">' + esc(dateText) + " · " + label + " · 出尘入画</div>" +
-        "<h1>" + esc(s.title) + "</h1>" +
+        '<div class="today-date">' + esc(dateText) + " · " + esc(label) + " · " + esc(t("brand.name")) + "</div>" +
+        "<h1>" + esc(loc(s, "title")) + "</h1>" +
         '<p class="today-note">' + esc(intro) + "</p>" +
         '<div class="today-meta">' + meta + "</div>" +
-        '<div class="today-actions"><a class="btn gold" href="' + esc(storyStaticHref(s)) + '">' + (isEvent ? "读这个事件" : "读这个主题") + '</a><a class="btn" href="' + esc(routeHref("stories")) + '">全部主题</a><a class="btn" href="' + esc(routeHref("timeline")) + '">时间线</a></div>' +
+        '<div class="today-actions"><a class="btn gold" href="' + esc(storyStaticHref(s)) + '">' + esc(isEvent ? t("home.readEvent") : t("home.readTheme")) + '</a><a class="btn" href="' + esc(routeHref("stories")) + '">' + esc(t("story.allStories")) + '</a><a class="btn" href="' + esc(routeHref("timeline")) + '">' + esc(t("timeline.title")) + "</a></div>" +
       "</div></section>" +
       homeSearchBox() +
-      '<div class="section"><div class="section-head"><h2>' + (isEvent ? "事件预览" : "主题预览") + '</h2><span class="sub">' + (s.count || 0) + " 帧 · " + chapters.length + ' 章</span></div></div>' +
+      '<div class="section"><div class="section-head"><h2>' + esc(isEvent ? t("home.eventPreview") : t("home.themePreview")) + '</h2><span class="sub">' + (s.count || 0) + " " + esc(t("common.frames")) + " · " + chapters.length + " " + esc(t("common.chapters")) + '</span></div></div>' +
       '<div class="theme-preview">' + preview.map(function (r) {
-        return '<a href="' + esc(staticHref(r)) + '"><img src="' + esc(imgOf(r)) + '" alt="' + esc(r.title) + '" loading="lazy"><span>' + esc(r.title) + "</span></a>";
+        return '<a href="' + esc(staticHref(r)) + '"><img src="' + esc(imgOf(r)) + '" alt="' + esc(loc(r, "title")) + '" loading="lazy"><span>' + esc(loc(r, "title")) + "</span></a>";
       }).join("") + "</div>" +
-      (chapters.length ? '<div class="section"><div class="section-head"><h2>章节</h2><span class="sub">' + (isEvent ? "读这个事件" : "读这个主题") + '</span></div></div><div class="theme-chapters">' + chapters.map(function (t, i) {
-        return "<div><b>第 " + (i + 1) + " 章</b><span>" + esc(t) + "</span></div>";
+      (chapters.length ? '<div class="section"><div class="section-head"><h2>' + esc(t("home.chapters")) + '</h2><span class="sub">' + esc(isEvent ? t("home.chapterSubEvent") : t("home.chapterSubTheme")) + '</span></div></div><div class="theme-chapters">' + chapters.map(function (title, i) {
+        return "<div><b>" + esc(t("story.chapterN", { n: i + 1 })) + "</b><span>" + esc(title) + "</span></div>";
       }).join("") + "</div>" : "");
   }
   function viewTodayTheme() {
@@ -503,9 +547,9 @@
       return a.span.start - b.span.start;
     });
     if (!items.length) {
-      return '<div class="empty"><b>时间线筹备中</b>主题有明确年代后，这里会按时间排成一条线。</div>';
+      return '<div class="empty"><b>' + esc(t("timeline.emptyTitle")) + "</b>" + esc(t("timeline.emptyText")) + "</div>";
     }
-    return '<div class="section"><div class="section-head"><h2>时间线</h2><span class="sub">主题按年代排列 · ' + items.length + ' 个</span></div></div>' +
+    return '<div class="section"><div class="section-head"><h2>' + esc(t("timeline.title")) + '</h2><span class="sub">' + esc(t("timeline.sub", { n: items.length })) + '</span></div></div>' +
       '<div class="timeline">' + items.map(function (x) {
         var cover = byId(x.s.cover);
         var img = cover ? imgOf(cover) : "";
@@ -513,46 +557,46 @@
         return '<a class="tl-item" href="' + esc(storyStaticHref(x.s)) + '">' +
           '<div class="tl-year">' + esc(span) + '</div>' +
           '<div class="tl-pic" style="background-image:url(\'' + esc(img) + '\')"></div>' +
-          '<div class="tl-body"><div class="status">' + esc(x.s.type || "长文") + '</div><h3>' + esc(x.s.title) + '</h3><p>' + esc(x.s.subtitle) + '</p>' +
-          '<div class="cnt">' + (x.s.count || 0) + " 帧 · " + (x.s.chapters || []).length + " 章</div></div></a>";
+          '<div class="tl-body"><div class="status">' + esc(isEn() ? (x.s.type_en || "Story") : (x.s.type || "长文")) + '</div><h3>' + esc(loc(x.s, "title")) + '</h3><p>' + esc(loc(x.s, "subtitle")) + '</p>' +
+          '<div class="cnt">' + (x.s.count || 0) + " " + esc(t("common.frames")) + " · " + (x.s.chapters || []).length + " " + esc(t("common.chapters")) + "</div></div></a>";
       }).join("") + "</div>";
   }
 
   function viewGallery() {
     var rows = filtered();
     var shown = rows.slice(0, state.visible);
-    var chips = collectionChips(state.filter.collection, "collection") + topicChips(state.filter.topic, "filter");
-    return '<div class="section"><div class="section-head"><h2>' + (CFG.site === "photo" ? "摄影影像" : CFG.site === "paint" ? "绘画与版画" : "影像轴") + '</h2><span class="sub">' + rows.length + " 条</span></div></div>" +
+    var chips = collectionChips(state.filter.collection, "collection") + topicChips(state.filter.topic);
+    return '<div class="section"><div class="section-head"><h2>' + esc(CFG.site === "photo" ? t("gallery.photoTitle") : CFG.site === "paint" ? t("gallery.paintTitle") : t("gallery.mainTitle")) + '</h2><span class="sub">' + rows.length + " " + esc(t("common.items")) + "</span></div></div>" +
       '<div class="chips">' + chips + "</div>" +
-      (state.mode === "commercial" ? '<div class="notice">商用模式：已隐藏仅非商用与仅外链影像。</div>' : "") +
-      (shown.length ? masonry(shown) : '<div class="empty"><b>没有符合条件的影像</b>换一个主题或切换用途模式试试。</div>') +
-      (state.visible < rows.length ? '<div class="more-wrap"><button class="btn" id="loadMore">加载更多</button></div>' : '<div class="endnote">已到本页末尾</div>');
+      (state.mode === "commercial" ? '<div class="notice">' + esc(t("gallery.commercialNotice")) + "</div>" : "") +
+      (shown.length ? masonry(shown) : '<div class="empty"><b>' + esc(t("gallery.emptyTitle")) + "</b>" + esc(t("gallery.emptyText")) + "</div>") +
+      (state.visible < rows.length ? '<div class="more-wrap"><button class="btn" id="loadMore">' + esc(t("common.loadMore")) + "</button></div>" : '<div class="endnote">' + esc(t("common.end")) + "</div>");
   }
 
   function viewStories() {
     var stories = themeStories();
     if (!stories.length) {
-      return '<div class="empty"><b>主题筹备中</b>这一集合还没有主题，先去看影像或搜索。</div>';
+      return '<div class="empty"><b>' + esc(t("stories.emptyTitle")) + "</b>" + esc(t("stories.emptyText")) + "</div>";
     }
-    return '<div class="section"><div class="section-head"><h2>主题</h2><span class="sub">事件、人物、地方、技艺与长文</span></div></div>' +
-      '<div class="chips"><a class="chip" href="' + esc(timelineHref()) + '">按时间线浏览</a></div>' +
+    return '<div class="section"><div class="section-head"><h2>' + esc(t("stories.title")) + '</h2><span class="sub">' + esc(t("stories.sub")) + '</span></div></div>' +
+      '<div class="chips"><a class="chip" href="' + esc(timelineHref()) + '">' + esc(t("stories.byTimeline")) + "</a></div>" +
       stories.map(function (s) {
         var cover = byId(s.cover);
         var img = cover ? imgOf(cover) : "";
-        var type = s.type || "长文";
-        var status = type + (s.date ? " · " + s.date : "") + (s.status === "published" ? " · 已刊" : "");
+        var type = isEn() ? (s.type_en || "Story") : (s.type || "长文");
+        var status = type + (s.date ? " · " + s.date : "") + (s.status === "published" ? " · " + t("stories.published") : "");
         return '<a class="story-card" href="' + esc(storyStaticHref(s)) + '">' +
           '<div class="pic" style="background-image:url(\'' + esc(img) + '\')"></div>' +
-          '<div class="body"><div class="status">' + esc(status) + "</div><h3>" + esc(s.title) + "</h3><p>" + esc(s.subtitle) + '</p><div class="cnt">' + (s.count || 0) + " 帧 · " + esc((s.themes || []).join(" / ")) + "</div></div></a>";
+          '<div class="body"><div class="status">' + esc(status) + "</div><h3>" + esc(loc(s, "title")) + "</h3><p>" + esc(loc(s, "subtitle")) + '</p><div class="cnt">' + (s.count || 0) + " " + esc(t("common.frames")) + " · " + esc(isEn() ? (s.themes_en || []).join(" / ") : (s.themes || []).join(" / ")) + "</div></div></a>";
       }).join("");
   }
 
   function storyItem(r, caption) {
     return '<a class="story-item" href="' + esc(staticHref(r)) + '">' +
-      '<img src="' + esc(imgOf(r)) + '" alt="' + esc(r.title) + '" loading="lazy">' +
-      '<div class="cap"><b>' + esc(r.title) + "</b>" +
+      '<img src="' + esc(imgOf(r)) + '" alt="' + esc(loc(r, "title")) + '" loading="lazy">' +
+      '<div class="cap"><b>' + esc(loc(r, "title")) + "</b>" +
       (caption ? '<span class="caption-text">' + esc(caption) + "</span>" : "") +
-      '<span class="caption-meta">' + esc(r.year || "") + " · " + esc(r.place || r.region || "") + " · " + esc(r.source_short || "") + "</span></div></a>";
+      '<span class="caption-meta">' + esc(r.year || "") + " · " + esc(loc(r, "place") || tx("region", r.region)) + " · " + esc(tx("source_short", r.source_short)) + "</span></div></a>";
   }
   function searchRows(scope) {
     var rows = SITE_RECORDS.filter(modeOk);
@@ -566,77 +610,79 @@
     var terms = qtext.toLowerCase().trim().split(/\s+/).filter(Boolean);
     if (!terms.length) return [];
     var rows = searchRows(scope).filter(function (r) {
-      var txt = (r.search_text || "").toLowerCase();
-      return terms.every(function (t) { return txt.indexOf(t) >= 0; });
+      var txt = String((isEn() ? (r.search_text_en || r.search_text) : r.search_text) || "").toLowerCase();
+      return terms.every(function (term) { return txt.indexOf(term) >= 0; });
     });
     return rows.map(function (r) {
-      var title = String(r.title || "").toLowerCase();
+      var title = String(loc(r, "title") || "").toLowerCase();
       var score = 0;
       if (title === qtext.toLowerCase()) score += 20;
       if (title.indexOf(qtext.toLowerCase()) >= 0) score += 10;
-      terms.forEach(function (t) {
-        if (title.indexOf(t) >= 0) score += 5;
-        if (String(r.place || "").toLowerCase().indexOf(t) >= 0) score += 3;
-        if (String(r.creator || "").toLowerCase().indexOf(t) >= 0) score += 3;
-        if (String(r.topic || "").toLowerCase().indexOf(t) >= 0) score += 2;
-        if (String(r.region || "").toLowerCase().indexOf(t) >= 0) score += 2;
-        if (String(r.year) === t) score += 4;
+      terms.forEach(function (term) {
+        if (title.indexOf(term) >= 0) score += 5;
+        if (String(loc(r, "place")).toLowerCase().indexOf(term) >= 0) score += 3;
+        if (String(r.creator || "").toLowerCase().indexOf(term) >= 0) score += 3;
+        if (String(tx("topic", r.topic)).toLowerCase().indexOf(term) >= 0) score += 2;
+        if (String(tx("region", r.region)).toLowerCase().indexOf(term) >= 0) score += 2;
+        if (String(r.year) === term) score += 4;
       });
       return { r: r, score: score };
     }).sort(function (a, b) { return b.score - a.score || (b.r.year || 0) - (a.r.year || 0); })
       .map(function (x) { return x.r; });
   }
   function themeSearchText(s) {
-    return [s.title, s.subtitle, s.intro,
-      (s.chapters || []).map(function (ch) { return (ch.title || "") + " " + (ch.text || ""); }).join(" "),
-      (s.themes || []).join(" ")].join(" ").toLowerCase();
+    var chapterText = (s.chapters || []).map(function (ch) {
+      return loc(ch, "title") + " " + loc(ch, "text");
+    }).join(" ");
+    return [loc(s, "title"), loc(s, "subtitle"), loc(s, "intro"), chapterText,
+      isEn() ? (s.themes_en || []).join(" ") : (s.themes || []).join(" ")].join(" ").toLowerCase();
   }
   function searchThemes(qtext) {
     var terms = qtext.toLowerCase().trim().split(/\s+/).filter(Boolean);
     if (!terms.length) return [];
     return themeStories().filter(function (s) {
       var txt = themeSearchText(s);
-      return terms.every(function (t) { return txt.indexOf(t) >= 0; });
+      return terms.every(function (term) { return txt.indexOf(term) >= 0; });
     }).map(function (s) {
-      var title = String(s.title || "").toLowerCase();
+      var title = String(loc(s, "title") || "").toLowerCase();
       var score = title.indexOf(qtext.toLowerCase()) >= 0 ? 10 : 0;
-      terms.forEach(function (t) { if (title.indexOf(t) >= 0) score += 5; });
+      terms.forEach(function (term) { if (title.indexOf(term) >= 0) score += 5; });
       return { s: s, score: score };
     }).sort(function (a, b) { return b.score - a.score; }).slice(0, 20).map(function (x) { return x.s; });
   }
   function resultRow(r) {
     var img = imgOf(r);
     var thumb = img
-      ? '<img class="thumb" src="' + esc(img) + '" alt="' + esc(r.title) + '" loading="lazy">'
-      : '<div class="thumb ph">外链</div>';
+      ? '<img class="thumb" src="' + esc(img) + '" alt="' + esc(loc(r, "title")) + '" loading="lazy">'
+      : '<div class="thumb ph">' + esc(t("common.links")) + "</div>";
     return '<a class="result" href="' + esc(staticHref(r)) + '">' + thumb +
-      '<div><h3>' + esc(r.title) + "</h3><div class=\"meta\"><b>" + esc(r.year || "") + "</b><span>" + esc(r.place || r.region || "") + "</span><span>" + esc(r.topic || "") + "</span>" +
+      '<div><h3>' + esc(loc(r, "title")) + "</h3><div class=\"meta\"><b>" + esc(r.year || "") + "</b><span>" + esc(loc(r, "place") || tx("region", r.region)) + "</span><span>" + esc(tx("topic", r.topic)) + "</span>" +
       (r.content_type && r.content_type !== "photograph" ? "<span>" + esc(typeLabel(r)) + "</span>" : "") +
-      "<span>" + esc(r.source_short || "") + "</span>" + usageTag(r) + "</div></div></a>";
+      "<span>" + esc(tx("source_short", r.source_short)) + "</span>" + usageTag(r) + "</div></div></a>";
   }
   function themeResultRow(s) {
     var cover = byId(s.cover);
     var img = cover ? imgOf(cover) : "";
     var thumb = img
-      ? '<img class="thumb" src="' + esc(img) + '" alt="' + esc(s.title) + '" loading="lazy">'
-      : '<div class="thumb ph">主题</div>';
+      ? '<img class="thumb" src="' + esc(img) + '" alt="' + esc(loc(s, "title")) + '" loading="lazy">'
+      : '<div class="thumb ph">' + esc(t("common.themes")) + "</div>";
     return '<a class="result theme-result" href="' + esc(storyStaticHref(s)) + '">' + thumb +
-      '<div><h3>' + esc(s.title) + '</h3><div class="meta"><b>' + esc(s.type || "长文") + "</b><span>" +
-      (s.count || 0) + " 帧</span><span>" + esc((s.themes || []).join(" / ")) +
-      "</span></div><p>" + esc(s.subtitle) + "</p></div></a>";
+      '<div><h3>' + esc(loc(s, "title")) + '</h3><div class="meta"><b>' + esc(isEn() ? (s.type_en || "Story") : (s.type || "长文")) + "</b><span>" +
+      (s.count || 0) + " " + esc(t("common.frames")) + "</span><span>" + esc(isEn() ? (s.themes_en || []).join(" / ") : (s.themes || []).join(" / ")) +
+      "</span></div><p>" + esc(loc(s, "subtitle")) + "</p></div></a>";
   }
   function searchScopeChips() {
-    var defs = [["all", "全部"], ["themes", "主题"], ["photos", "摄影"], ["paintings", "绘画"], ["objects", "器物"]];
+    var defs = [["all", t("common.all")], ["themes", t("common.themes")], ["photos", t("common.photos")], ["paintings", t("common.paintings")], ["objects", t("common.objects")]];
     return defs.map(function (d) {
-      return '<button class="chip ' + (state.searchScope === d[0] ? "on" : "") + '" data-filter="searchScope" data-value="' + d[0] + '">' + d[1] + "</button>";
+      return '<button class="chip ' + (state.searchScope === d[0] ? "on" : "") + '" data-filter="searchScope" data-value="' + d[0] + '">' + esc(d[1]) + "</button>";
     }).join("");
   }
   function viewSearch() {
     return '<div class="searchbar"><div class="search-field">' + ICONS.search +
-      '<input id="searchInput" type="search" placeholder="搜主题、人物、地点、年代" value="' + esc(state.q) + '" autocomplete="off">' +
-      '<button class="search-clear" id="searchClear">清空</button></div></div>' +
+      '<input id="searchInput" type="search" placeholder="' + esc(t("search.ph.main")) + '" value="' + esc(state.q) + '" autocomplete="off">' +
+      '<button class="search-clear" id="searchClear">' + esc(t("common.clear")) + "</button></div></div>" +
       '<div class="chips" id="searchChips">' + searchScopeChips() + "</div>" +
-      '<div class="search-hint" id="searchCount">输入关键词开始搜索</div>' +
+      '<div class="search-hint" id="searchCount">' + esc(t("search.start")) + "</div>" +
       '<div class="results" id="searchResults"></div>';
   }
   function recentSearchHtml() {
@@ -645,14 +691,14 @@
     var rows = scope === "themes" ? [] : searchRows(scope).slice(0, 8);
     var html = "";
     if (stories.length) {
-      html += '<div class="recent-topics"><div class="eyebrow" style="margin-bottom:8px">主题</div></div>' +
+      html += '<div class="recent-topics"><div class="eyebrow" style="margin-bottom:8px">' + esc(t("common.themes")) + "</div></div>" +
         stories.map(themeResultRow).join("");
     }
     if (rows.length) {
-      html += '<div class="recent-topics"><div class="eyebrow" style="margin-bottom:2px">最近收录</div></div>' +
+      html += '<div class="recent-topics"><div class="eyebrow" style="margin-bottom:2px">' + esc(t("search.recent")) + "</div></div>" +
         rows.map(resultRow).join("");
     }
-    return html || '<div class="empty"><b>还没有内容</b>换一个范围试试。</div>';
+    return html || '<div class="empty"><b>' + esc(t("search.emptyTitle")) + "</b>" + esc(t("search.emptyText")) + "</div>";
   }
   function renderSearchResults() {
     var box = q("#searchResults");
@@ -661,7 +707,7 @@
     var txt = state.q.trim();
     var scope = state.searchScope || "all";
     if (!txt) {
-      if (cnt) cnt.textContent = "输入关键词开始搜索";
+      if (cnt) cnt.textContent = t("search.start");
       box.innerHTML = recentSearchHtml();
       bindSearchTopics();
       return;
@@ -669,24 +715,24 @@
     var themes = (scope === "all" || scope === "themes") ? searchThemes(txt) : [];
     var rows = scope === "themes" ? [] : search(txt, scope);
     var total = themes.length + rows.length;
-    if (cnt) cnt.textContent = total ? "找到 " + total + " 条" : "没有匹配结果";
+    if (cnt) cnt.textContent = total ? t("search.found", { n: total }) : t("search.noMatch");
     if (!total) {
-      box.innerHTML = '<div class="empty"><b>没有匹配</b>试试主题、人物、地点或年代，例如「1906」「巴黎」「阿波罗」。</div>';
+      box.innerHTML = '<div class="empty"><b>' + esc(t("search.noMatchTitle")) + "</b>" + esc(t("search.noMatchText")) + "</div>";
       return;
     }
     var html = "";
     if (themes.length) {
-      html += '<div class="result-group"><div class="result-group-head"><span>主题</span><span>' + themes.length + " 条</span></div>" +
+      html += '<div class="result-group"><div class="result-group-head"><span>' + esc(t("common.themes")) + "</span><span>" + themes.length + " " + esc(t("common.items")) + "</span></div>" +
         themes.slice(0, 8).map(themeResultRow).join("") + "</div>";
     }
-    var groups = [["photos", "摄影"], ["paintings", "绘画"], ["objects", "器物 / 外链"]];
+    var groups = [["photos", t("common.photos")], ["paintings", t("common.paintings")], ["objects", t("common.objects") + " / " + t("common.links")]];
     groups.forEach(function (g) {
       var list = rows.filter(function (r) {
         if (g[0] === "objects") return r.collection === "objects" || r.collection === "links";
         return r.collection === g[0];
       });
       if (!list.length) return;
-      html += '<div class="result-group"><div class="result-group-head"><span>' + g[1] + "</span><span>" + list.length + " 条</span></div>" +
+      html += '<div class="result-group"><div class="result-group-head"><span>' + esc(g[1]) + "</span><span>" + list.length + " " + esc(t("common.items")) + "</span></div>" +
         list.slice(0, 8).map(resultRow).join("") + "</div>";
     });
     box.innerHTML = html;
@@ -708,44 +754,18 @@
   }
 
   function viewSimple(title, text) {
-    return '<div class="section"><div class="section-head"><h2>' + esc(title) + '</h2><span class="sub">' + esc(CFG.brand || "尘画") + "</span></div><p class=\"muted\" style=\"font-size:13px;line-height:1.9\">" + esc(text) + "</p></div>";
+    return '<div class="section"><div class="section-head"><h2>' + esc(title) + '</h2><span class="sub">' + esc(t("brand.name")) + "</span></div><p class=\"muted\" style=\"font-size:13px;line-height:1.9\">" + esc(text) + "</p></div>";
   }
   function appFoot() {
     return '<footer class="app-foot">' +
-      '<div class="brandline">尘画 · 出尘入画</div>' +
-      '<div class="motto">尘归尘，画归画</div>' +
-      '<nav><a href="' + esc(routeHref("about")) + '">关于</a><a href="' + esc(routeHref("rights")) + '">授权</a>' +
-      '<a href="' + esc(routeHref("legal")) + '">法律声明</a><a href="https://netcn.org/">导航</a></nav>' +
-      '<p>影像版权归原作者与收藏机构；本站仅作非商业索引与展示。</p>' +
+      '<div class="brandline">' + esc(t("brand.line")) + '</div>' +
+      '<div class="motto">' + esc(t("brand.motto")) + '</div>' +
+      '<nav><a href="' + esc(routeHref("about")) + '">' + esc(t("footer.about")) + '</a><a href="' + esc(routeHref("rights")) + '">' + esc(t("footer.rights")) + '</a>' +
+      '<a href="' + esc(routeHref("legal")) + '">' + esc(t("footer.legal")) + '</a><a href="https://netcn.org/">' + esc(t("footer.guide")) + "</a></nav>" +
+      "<p>" + esc(t("footer.disclaimer")) + "</p>" +
       "</footer>";
   }
 
-  function openSheet() {
-    var sheet = q("#sheet");
-    if (!sheet) return;
-    var cross = navItems().filter(function (n) { return n.kind === "cross"; }).map(function (n) {
-      return '<button class="row" data-sheet="' + esc(itemHref(n)) + '"><span>' + esc(n.label) + '</span><span class="s">' + esc(n.sub || "") + "</span></button>";
-    }).join("");
-    sheet.innerHTML = '<div class="handle"></div>' +
-      '<div class="sect">站内</div>' +
-      '<button class="row" data-sheet="about"><span>关于</span><span class="s">采集与复核</span></button>' +
-      '<button class="row" data-sheet="rights"><span>授权</span><span class="s">U1–U5</span></button>' +
-      '<button class="row" data-sheet="' + esc(routeHref("legal")) + '"><span>法律声明</span><span class="s">免责与隐私</span></button>' +
-      '<div class="sect">分站</div>' + cross +
-      '<div class="sect">预览</div>' +
-      '<button class="row" data-sheet="phone"><span>手机外框预览</span><span class="s">?phone=1</span></button>' +
-      '<button class="row" data-close-sheet="1"><span>关闭</span><span class="s">ESC</span></button>';
-    q("#backdrop").classList.add("on");
-    sheet.classList.add("on");
-    state.sheet = true;
-  }
-  function closeSheet() {
-    var sheet = q("#sheet");
-    var bd = q("#backdrop");
-    if (sheet) sheet.classList.remove("on");
-    if (bd) bd.classList.remove("on");
-    state.sheet = false;
-  }
   function currentList() {
     if (state.route === "search" && state.q.trim()) return search(state.q).filter(function (r) { return imgOf(r); });
     return filtered().filter(function (r) { return imgOf(r); });
@@ -763,8 +783,8 @@
     var it = state.lb.items[state.lb.index];
     if (!it) return;
     q("#lbImg").src = imgOf(it);
-    q("#lbImg").alt = it.title || "";
-    q("#lbCap").innerHTML = "<b>" + esc(it.title) + "</b>" + esc(it.year || "") + " · " + esc(it.place || it.region || "") + " · " + esc(it.source_short || "");
+    q("#lbImg").alt = loc(it, "title") || "";
+    q("#lbCap").innerHTML = "<b>" + esc(loc(it, "title")) + "</b>" + esc(it.year || "") + " · " + esc(loc(it, "place") || tx("region", it.region)) + " · " + esc(tx("source_short", it.source_short));
     q("#lbCount").textContent = (state.lb.index + 1) + " / " + state.lb.items.length;
   }
   function stepLightbox(d) {
@@ -775,28 +795,38 @@
   function closeLightbox() {
     var lb = q("#lightbox"); if (lb) lb.classList.remove("on");
   }
-  function copyText(t) {
-    var done = function () { toast("已复制"); };
+  function copyText(text) {
+    var done = function () { toast(t("common.copied")); };
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(t).then(done).catch(function () { fallbackCopy(t); done(); });
-    } else { fallbackCopy(t); done(); }
+      navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text); done(); });
+    } else { fallbackCopy(text); done(); }
   }
-  function fallbackCopy(t) {
+  function fallbackCopy(text) {
     var ta = document.createElement("textarea");
-    ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
     document.body.appendChild(ta); ta.select();
     try { document.execCommand("copy"); } catch (e) {}
     document.body.removeChild(ta);
   }
   function toast(msg) {
-    var t = q("#toast");
-    if (!t) return;
-    t.textContent = msg; t.classList.add("on");
-    clearTimeout(t._tm);
-    t._tm = setTimeout(function () { t.classList.remove("on"); }, 1600);
+    var el = q("#toast");
+    if (!el) return;
+    el.textContent = msg; el.classList.add("on");
+    clearTimeout(el._tm);
+    el._tm = setTimeout(function () { el.classList.remove("on"); }, 1600);
   }
 
   function boot() {
+    state.lang = document.documentElement.getAttribute("data-lang") === "en" ? "en" : "zh";
+    state.theme = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+    if (isEn()) {
+      document.documentElement.lang = "en";
+      var dt = document.body.getAttribute("data-title-en");
+      if (dt) document.title = dt;
+      var dd = document.body.getAttribute("data-desc-en");
+      var dm = document.querySelector('meta[name="description"]');
+      if (dd && dm) dm.setAttribute("content", dd);
+    }
     var params = new URLSearchParams(location.search);
     if (params.get("phone")) document.body.classList.add("phone-mode");
     if (params.get("q")) state.q = params.get("q");
@@ -808,14 +838,13 @@
     shell();
     syncMode();
     renderView();
-    // load more
+    applyTheme(state.theme);
     app.addEventListener("click", function (e) {
       if (e.target.id === "loadMore") {
         state.visible += 30;
         renderView();
       }
     });
-    // search clear
     app.addEventListener("click", function (e) {
       if (e.target.id === "searchClear") {
         state.q = ""; var input = q("#searchInput"); if (input) { input.value = ""; input.focus(); }
@@ -823,16 +852,12 @@
         renderSearchResults();
       }
     });
-    // initial search results
     if (state.route === "search") renderSearchResults();
   }
 
-  // 首次进入搜索页时补渲染结果
-  var _render = renderView;
-  renderView = function () {
-    _render();
-    if (state.route === "search") renderSearchResults();
-  };
-
-  boot();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
 })();
