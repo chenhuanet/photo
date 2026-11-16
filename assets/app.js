@@ -316,7 +316,8 @@
     else if (r.name === "search") html = viewSearch();
     else if (r.name === "rights") html = viewSimple("授权", "本站只做索引与展示，不主张图片权利。每张图的许可以记录页为准；商用前请逐张核对源站。U4 仅非商用，U5 仅外链。完整条款见「法律声明」。");
     else if (r.name === "about") html = viewSimple("关于", "尘画，出尘入画；尘归尘，画归画。以图为史，记录人间的大事与小事。内容来自开放馆藏；采集、复核、策展三层都写日志。图片二进制不进内容仓，站点只引用世纪图片站。");
-    else html = (CFG.site === "main" && themeStories().length) ? viewTodayTheme() : viewToday();
+    else if (CFG.site === "main") html = todayEvent() ? viewTodayEvent() : (themeStories().length ? viewTodayTheme() : viewToday());
+    else html = viewToday();
     view.innerHTML = html + appFoot();
     syncActiveTab();
     syncMode();
@@ -397,6 +398,10 @@
     return rows;
   }
   function storySpan(s) {
+    if (s.date) {
+      var eventYear = Number(String(s.date).slice(0, 4));
+      if (isFinite(eventYear)) return { start: eventYear, end: eventYear };
+    }
     var years = (s.photo_ids || []).map(function (id) {
       var r = byId(id);
       var y = r && Number(r.year);
@@ -435,13 +440,23 @@
       masonry(related) +
       '<div class="more-wrap"><a class="btn" href="' + esc(routeHref("gallery")) + '">查看全部 ' + SITE_RECORDS.length + " 条</a></div>";
   }
-  function viewTodayTheme() {
-    var stories = themeStories();
-    if (!stories.length) return viewToday();
-    var s = stories[dailyIndex(stories.length)];
+  function dailyThemes() {
+    var rows = themeStories().filter(function (s) { return !s.date; });
+    return rows.length ? rows : themeStories();
+  }
+  function todayEvent() {
+    var d = new Date();
+    var mmdd = ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+    return themeStories().filter(function (s) {
+      return String(s.date || "").slice(5, 10) === mmdd;
+    })[0] || null;
+  }
+  function renderThemeFeature(s, isEvent) {
     var cover = byId(s.cover);
     var d = new Date();
     var date = (d.getMonth() + 1) + "月" + d.getDate() + "日";
+    var label = isEvent ? "历史上的今天" : "今日主题";
+    var dateText = isEvent ? (s.date_label || s.date || date) : date;
     var intro = s.subtitle || String(s.intro || "").split(/\n\s*\n/)[0] || "";
     var seen = {}, preview = [];
     [s.cover].concat(s.photo_ids || []).forEach(function (id) {
@@ -451,23 +466,35 @@
       seen[id] = 1; preview.push(r);
     });
     var chapters = (s.chapters || []).map(function (ch) { return ch.title; }).filter(Boolean);
+    var meta = isEvent
+      ? '<span>' + esc(dateText) + "</span><span>" + esc(s.place || "") + "</span><span>" + (s.count || 0) + " 帧</span>"
+      : '<span>' + (s.count || 0) + " 帧</span><span>" + chapters.length + " 章</span><span>" + esc((s.themes || []).join(" / ")) + "</span>";
     return '<section class="today-hero theme-hero">' +
       '<img class="today-hero-img" src="' + esc(cover ? imgOf(cover) : (preview[0] ? imgOf(preview[0]) : "")) + '" alt="' + esc(s.title) + '">' +
       '<div class="today-inner">' +
-        '<div class="today-date">' + esc(date) + " · 今日主题 · 出尘入画</div>" +
+        '<div class="today-date">' + esc(dateText) + " · " + label + " · 出尘入画</div>" +
         "<h1>" + esc(s.title) + "</h1>" +
         '<p class="today-note">' + esc(intro) + "</p>" +
-        '<div class="today-meta"><span>' + (s.count || 0) + " 帧</span><span>" + chapters.length + " 章</span><span>" + esc((s.themes || []).join(" / ")) + "</span></div>" +
-        '<div class="today-actions"><a class="btn gold" href="' + esc(storyStaticHref(s)) + '">读这个主题</a><a class="btn" href="' + esc(routeHref("stories")) + '">全部主题</a><a class="btn" href="' + esc(routeHref("timeline")) + '">时间线</a></div>' +
+        '<div class="today-meta">' + meta + "</div>" +
+        '<div class="today-actions"><a class="btn gold" href="' + esc(storyStaticHref(s)) + '">' + (isEvent ? "读这个事件" : "读这个主题") + '</a><a class="btn" href="' + esc(routeHref("stories")) + '">全部主题</a><a class="btn" href="' + esc(routeHref("timeline")) + '">时间线</a></div>' +
       "</div></section>" +
       homeSearchBox() +
-      '<div class="section"><div class="section-head"><h2>主题预览</h2><span class="sub">' + (s.count || 0) + " 帧 · " + chapters.length + ' 章</span></div></div>' +
+      '<div class="section"><div class="section-head"><h2>' + (isEvent ? "事件预览" : "主题预览") + '</h2><span class="sub">' + (s.count || 0) + " 帧 · " + chapters.length + ' 章</span></div></div>' +
       '<div class="theme-preview">' + preview.map(function (r) {
         return '<a href="' + esc(staticHref(r)) + '"><img src="' + esc(imgOf(r)) + '" alt="' + esc(r.title) + '" loading="lazy"><span>' + esc(r.title) + "</span></a>";
       }).join("") + "</div>" +
-      (chapters.length ? '<div class="section"><div class="section-head"><h2>章节</h2><span class="sub">读这个主题</span></div></div><div class="theme-chapters">' + chapters.map(function (t, i) {
+      (chapters.length ? '<div class="section"><div class="section-head"><h2>章节</h2><span class="sub">' + (isEvent ? "读这个事件" : "读这个主题") + '</span></div></div><div class="theme-chapters">' + chapters.map(function (t, i) {
         return "<div><b>第 " + (i + 1) + " 章</b><span>" + esc(t) + "</span></div>";
       }).join("") + "</div>" : "");
+  }
+  function viewTodayTheme() {
+    var stories = dailyThemes();
+    if (!stories.length) return viewToday();
+    return renderThemeFeature(stories[dailyIndex(stories.length)], false);
+  }
+  function viewTodayEvent() {
+    var s = todayEvent();
+    return s ? renderThemeFeature(s, true) : viewTodayTheme();
   }
   function viewTimeline() {
     var items = themeStories().map(function (s) {
@@ -513,9 +540,10 @@
         var cover = byId(s.cover);
         var img = cover ? imgOf(cover) : "";
         var type = s.type || "长文";
+        var status = type + (s.date ? " · " + s.date : "") + (s.status === "published" ? " · 已刊" : "");
         return '<a class="story-card" href="' + esc(storyStaticHref(s)) + '">' +
           '<div class="pic" style="background-image:url(\'' + esc(img) + '\')"></div>' +
-          '<div class="body"><div class="status">' + esc(type) + (s.status === "published" ? " · 已刊" : "") + "</div><h3>" + esc(s.title) + "</h3><p>" + esc(s.subtitle) + '</p><div class="cnt">' + (s.count || 0) + " 帧 · " + esc((s.themes || []).join(" / ")) + "</div></div></a>";
+          '<div class="body"><div class="status">' + esc(status) + "</div><h3>" + esc(s.title) + "</h3><p>" + esc(s.subtitle) + '</p><div class="cnt">' + (s.count || 0) + " 帧 · " + esc((s.themes || []).join(" / ")) + "</div></div></a>";
       }).join("");
   }
 

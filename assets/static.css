@@ -35,6 +35,8 @@
 .s-evidence h2{font-family:var(--serif);font-weight:400;font-size:18px;margin:0 0 8px}
 .s-evidence p{font-size:11px;color:var(--muted);line-height:1.8;margin:0 0 6px}
 .s-evidence b{color:var(--dim);font-weight:400}
+.s-evidence ul{margin:0;padding-left:18px;font-size:11px;color:var(--muted);line-height:1.9}
+.s-evidence ul a{color:var(--accent)}
 .s-actions{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0 26px}
 .s-btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);
   border-radius:999px;padding:8px 14px;font-size:11px;color:var(--muted);background:var(--surface)}
