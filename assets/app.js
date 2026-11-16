@@ -112,6 +112,7 @@
     photo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="14" rx="2.5"/><circle cx="12" cy="13" r="4"/><path d="M8 6l1.5-2h5L16 6"/></svg>',
     paint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18h1.5a2 2 0 0 0 0-4H12a2 2 0 0 1 0-4h4a5 5 0 0 0 5-5c0-2.8-4-5-9-5z"/><circle cx="7.5" cy="10" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="14" cy="7" r="1"/></svg>',
     home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 10.5L12 4l8 6.5V20H4z"/><path d="M9.5 20v-5h5v5"/></svg>',
+    compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2.2 5.3-5.3 2.2 2.2-5.3z"/></svg>',
     more: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>',
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
@@ -253,12 +254,14 @@
     state.arg = r.arg;
     var view = q("#view");
     if (!view) return;
-    if (r.name === "gallery") view.innerHTML = viewGallery();
-    else if (r.name === "stories") view.innerHTML = viewStories();
-    else if (r.name === "search") view.innerHTML = viewSearch();
-    else if (r.name === "rights") view.innerHTML = viewSimple("授权", "本站只做索引与展示，不主张图片权利。每张图的许可以记录页为准；商用前请逐张核对源站。U4 仅非商用，U5 仅外链。");
-    else if (r.name === "about") view.innerHTML = viewSimple("关于", "尘画以图为史，记录人间的大事与小事。内容来自开放馆藏；采集、复核、策展三层都写日志。图片二进制不进内容仓，站点只引用世纪图片站。");
-    else view.innerHTML = viewToday();
+    var html;
+    if (r.name === "gallery") html = viewGallery();
+    else if (r.name === "stories") html = viewStories();
+    else if (r.name === "search") html = viewSearch();
+    else if (r.name === "rights") html = viewSimple("授权", "本站只做索引与展示，不主张图片权利。每张图的许可以记录页为准；商用前请逐张核对源站。U4 仅非商用，U5 仅外链。完整条款见「法律声明」。");
+    else if (r.name === "about") html = viewSimple("关于", "尘画，出尘入画；尘归尘，画归画。以图为史，记录人间的大事与小事。内容来自开放馆藏；采集、复核、策展三层都写日志。图片二进制不进内容仓，站点只引用世纪图片站。");
+    else html = viewToday();
+    view.innerHTML = html + appFoot();
     syncActiveTab();
     syncMode();
     var sc = q(".app-scroll"); if (sc) sc.scrollTop = 0;
@@ -274,9 +277,19 @@
     if (input) {
       input.addEventListener("input", function () {
         state.q = input.value;
+        syncSearchUrl();
         renderSearchResults();
       });
     }
+  }
+  function syncSearchUrl() {
+    if (state.route !== "search" || !window.history || !history.replaceState) return;
+    try {
+      var u = new URL(location.href);
+      if (state.q.trim()) u.searchParams.set("q", state.q.trim());
+      else u.searchParams.delete("q");
+      history.replaceState(null, "", u.toString());
+    } catch (e) {}
   }
 
   function card(r) {
@@ -295,27 +308,40 @@
     return '<div class="masonry ' + (cls || "") + '">' + rows.map(card).join("") + "</div>";
   }
 
+  function dailyIndex(len) {
+    var d = new Date();
+    var seed = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+    return (seed * 9301 + 49297) % 233280 % len;
+  }
+  function riverPicks(rows, skipId, count) {
+    var sorted = rows.slice().sort(function (a, b) { return (a.year || 0) - (b.year || 0); });
+    var out = [], step = Math.max(1, Math.floor(sorted.length / count));
+    for (var i = 0; i < sorted.length && out.length < count; i += step) {
+      if (sorted[i].id !== skipId) out.push(sorted[i]);
+    }
+    return out;
+  }
   function viewToday() {
     var rows = filtered().filter(function (r) { return imgOf(r); });
     if (!rows.length) {
       return '<div class="empty"><b>绘画档案筹备中</b>下一阶段接入绘画内容后，这里会出现今日一帧与影像长河。</div>';
     }
-    var idx = Math.floor(Date.now() / 86400000) % rows.length;
-    var r = rows[idx];
+    var r = rows[dailyIndex(rows.length)];
     var d = new Date();
     var date = (d.getMonth() + 1) + "月" + d.getDate() + "日";
-    var related = filtered().filter(function (x) { return x.id !== r.id && imgOf(x); }).slice(0, 8);
-    return '<section class="today-hero" style="background-image:url(\'' + esc(imgOf(r)) + '\')">' +
+    var related = riverPicks(rows, r.id, 8);
+    return '<section class="today-hero">' +
+      '<img class="today-hero-img" src="' + esc(imgOf(r)) + '" alt="' + esc(r.title) + '">' +
       '<div class="today-inner">' +
-        '<div class="today-date">' + esc(date) + " · 今日一帧</div>" +
+        '<div class="today-date">' + esc(date) + " · 出尘入画 · 今日一帧</div>" +
         "<h1>" + esc(r.title) + "</h1>" +
         '<p class="today-note">' + (r.note_html || "") + "</p>" +
         '<div class="today-meta"><span>' + esc(r.year || "") + "</span><span>" + esc(r.place || r.region || "") + "</span><span>" + esc(r.source_short || "") + "</span>" + usageTag(r) + "</div>" +
-        '<div class="today-actions"><button class="btn gold" data-lb="' + esc(r.id) + '">放大看这一帧</button><button class="btn" data-nav="gallery">进入影像轴</button></div>' +
+        '<div class="today-actions"><a class="btn gold" href="' + esc(staticHref(r)) + '">读这一帧</a><button class="btn" data-lb="' + esc(r.id) + '">放大</button><a class="btn" href="' + esc(routeHref("gallery")) + '">进入影像轴</a></div>' +
       "</div></section>" +
-      '<div class="section"><div class="section-head"><h2>影像长河</h2><span class="sub">按年代推进 · 向下滚动</span></div></div>' +
+      '<div class="section"><div class="section-head"><h2>影像长河</h2><span class="sub">由远及近 · 8 帧</span></div></div>' +
       masonry(related) +
-      '<div class="more-wrap"><button class="btn" data-nav="gallery">查看全部 ' + SITE_RECORDS.length + " 条</button></div>";
+      '<div class="more-wrap"><a class="btn" href="' + esc(routeHref("gallery")) + '">查看全部 ' + SITE_RECORDS.length + " 条</a></div>";
   }
 
   function viewGallery() {
@@ -430,6 +456,7 @@
       b.addEventListener("click", function () {
         state.q = b.getAttribute("data-search-topic");
         var input = q("#searchInput"); if (input) input.value = state.q;
+        syncSearchUrl();
         renderSearchResults();
       });
     });
@@ -443,6 +470,15 @@
   function viewSimple(title, text) {
     return '<div class="section"><div class="section-head"><h2>' + esc(title) + '</h2><span class="sub">' + esc(CFG.brand || "尘画") + "</span></div><p class=\"muted\" style=\"font-size:13px;line-height:1.9\">" + esc(text) + "</p></div>";
   }
+  function appFoot() {
+    return '<footer class="app-foot">' +
+      '<div class="brandline">尘画 · 出尘入画</div>' +
+      '<div class="motto">尘归尘，画归画</div>' +
+      '<nav><a href="' + esc(routeHref("about")) + '">关于</a><a href="' + esc(routeHref("rights")) + '">授权</a>' +
+      '<a href="' + esc(routeHref("legal")) + '">法律声明</a><a href="https://netcn.org/">导航</a></nav>' +
+      '<p>影像版权归原作者与收藏机构；本站仅作非商业索引与展示。</p>' +
+      "</footer>";
+  }
 
   function openSheet() {
     var sheet = q("#sheet");
@@ -454,6 +490,7 @@
       '<div class="sect">站内</div>' +
       '<button class="row" data-sheet="about"><span>关于</span><span class="s">采集与复核</span></button>' +
       '<button class="row" data-sheet="rights"><span>授权</span><span class="s">U1–U5</span></button>' +
+      '<button class="row" data-sheet="' + esc(routeHref("legal")) + '"><span>法律声明</span><span class="s">免责与隐私</span></button>' +
       '<div class="sect">分站</div>' + cross +
       '<div class="sect">预览</div>' +
       '<button class="row" data-sheet="phone"><span>手机外框预览</span><span class="s">?phone=1</span></button>' +
@@ -520,7 +557,9 @@
   }
 
   function boot() {
-    if (new URLSearchParams(location.search).get("phone")) document.body.classList.add("phone-mode");
+    var params = new URLSearchParams(location.search);
+    if (params.get("phone")) document.body.classList.add("phone-mode");
+    if (params.get("q")) state.q = params.get("q");
     shell();
     syncMode();
     renderView();
@@ -535,6 +574,7 @@
     app.addEventListener("click", function (e) {
       if (e.target.id === "searchClear") {
         state.q = ""; var input = q("#searchInput"); if (input) { input.value = ""; input.focus(); }
+        syncSearchUrl();
         renderSearchResults();
       }
     });

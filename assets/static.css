@@ -4,6 +4,7 @@
 .s-head{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);
   position:sticky;top:0;background:rgba(13,12,11,.92);backdrop-filter:blur(16px);z-index:5}
 .s-brand{font-family:var(--serif);font-size:22px;letter-spacing:.18em;white-space:nowrap}
+.s-slogan{font-size:10px;color:var(--dim);letter-spacing:.18em;white-space:nowrap;margin-left:-6px}
 .s-head nav{margin-left:auto;display:flex;gap:14px;font-size:11px;color:var(--muted);flex-wrap:wrap}
 .s-head nav a:hover{color:var(--accent)}
 .s-kicker{padding-top:30px;font-size:9px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
@@ -61,10 +62,16 @@
 .s-rights b{color:var(--accent);font-weight:400}
 .s-foot{border-top:1px solid var(--line);padding:22px 0;margin-top:20px;font-size:10px;color:var(--dim);
   letter-spacing:.1em;text-align:center}
-.s-foot nav{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.s-foot nav{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
 .s-foot a{color:var(--muted)}
 .s-foot a:hover{color:var(--accent)}
-.s-foot p{margin:0}
+.s-foot p{margin:0 0 4px}
+.s-foot .brandline{color:var(--muted);letter-spacing:.16em}
+@media(max-width:719px){
+  .s-head{flex-wrap:wrap;gap:8px}
+  .s-slogan{display:none}
+  .s-head nav{margin-left:0;width:100%;gap:10px;font-size:10px}
+}
 @media(min-width:720px){
   .s-shell{padding:0 28px 70px}
   .s-meta{grid-template-columns:repeat(3,minmax(0,1fr))}
