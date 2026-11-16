@@ -29,8 +29,11 @@ img{display:block;max-width:100%}
   backdrop-filter:blur(18px);position:relative;z-index:12;overflow:hidden}
 .brand{display:flex;align-items:baseline;gap:9px;white-space:nowrap;min-width:0;flex:0 1 auto}
 .brand .cn{font-family:var(--serif);font-size:21px;letter-spacing:.18em;flex:none}
-.brand .sub{font-size:9px;letter-spacing:.14em;color:var(--dim);overflow:hidden;
-  text-overflow:ellipsis;max-width:150px;min-width:0}
+.brand .wm{display:inline-flex;align-items:baseline;gap:1px;white-space:nowrap;flex:none}
+.wm-lite{font-family:var(--serif);font-size:17px;color:var(--muted);letter-spacing:.03em}
+.wm-strong{font-family:var(--serif);font-size:24px;color:var(--accent);letter-spacing:.03em}
+.brand .sub{font-size:9px;letter-spacing:.12em;color:var(--dim);overflow:hidden;
+  text-overflow:ellipsis;max-width:130px;min-width:0}
 .appbar .right{margin-left:auto;display:flex;align-items:center;gap:7px;flex:none}
 .iconbtn{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;
   color:var(--muted);border:1px solid transparent}
@@ -40,10 +43,14 @@ img{display:block;max-width:100%}
 .modebtn.commercial{color:var(--accent);border-color:#c8a24a66}
 @media(max-width:430px){
   .appbar{padding:0 12px;gap:6px}
-  .brand .sub{display:none}
-  .brand .cn{font-size:20px;letter-spacing:.14em}
+  .brand .sub{display:block;font-size:8px;max-width:96px;letter-spacing:.04em}
+  .brand .wm-lite{font-size:14px}
+  .brand .wm-strong{font-size:21px}
   .modebtn{font-size:9px;padding:4px 7px}
   .iconbtn{width:32px;height:32px}
+}
+@media(max-width:360px){
+  .brand .sub{display:none}
 }
 .desknav{display:none}
 

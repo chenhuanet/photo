@@ -159,6 +159,10 @@
     if (n.timeline) return timelineHref();
     return n.href || routeHref(n.route || "today");
   }
+  function wordmark() {
+    return '<span class="wm"><span class="wm-lite">出</span><span class="wm-strong">尘</span>' +
+      '<span class="wm-lite">入</span><span class="wm-strong">画</span></span>';
+  }
 
   function shell() {
     var items = navItems();
@@ -182,7 +186,7 @@
     }).join("");
     app.innerHTML =
       '<header class="appbar">' +
-        '<a class="brand" href="' + esc(brandHref()) + '"><span class="cn">' + esc(CFG.brand || "尘画") + '</span><span class="sub">' + esc(CFG.sub || "") + "</span></a>" +
+        '<a class="brand" href="' + esc(brandHref()) + '">' + wordmark() + '<span class="sub">' + esc(CFG.sub || "尘归尘，画归画") + "</span></a>" +
         '<nav class="desknav">' + desk + "</nav>" +
         '<div class="right">' +
           '<button class="modebtn" data-mode="toggle">非商用</button>' +
