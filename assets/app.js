@@ -10,6 +10,7 @@
     visible: 30,
     q: "",
     searchCollection: "all",
+    themeCollection: "",
     filter: { collection: "all", topic: "all" },
     usage: "all",
     lb: { items: [], index: 0 },
@@ -113,6 +114,7 @@
     paint: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18h1.5a2 2 0 0 0 0-4H12a2 2 0 0 1 0-4h4a5 5 0 0 0 5-5c0-2.8-4-5-9-5z"/><circle cx="7.5" cy="10" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="14" cy="7" r="1"/></svg>',
     home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 10.5L12 4l8 6.5V20H4z"/><path d="M9.5 20v-5h5v5"/></svg>',
     compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2.2 5.3-5.3 2.2 2.2-5.3z"/></svg>',
+    timeline: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 3v18"/><path d="M10 7h8M10 12h6M10 17h9"/><circle cx="6" cy="7" r="1.6" fill="currentColor" stroke="none"/><circle cx="6" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="6" cy="17" r="1.6" fill="currentColor" stroke="none"/></svg>',
     more: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>',
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
@@ -120,28 +122,48 @@
   function navItems() {
     return (CFG.nav || []).filter(function (n) { return n && n.label; });
   }
+  function themeHref() {
+    if (CFG.site === "main") return routeHref("stories");
+    var coll = CFG.site === "photo" ? "?collection=photos" : (CFG.site === "paint" ? "?collection=paintings" : "");
+    return (CFG.home || "/") + "stories/" + coll;
+  }
+  function timelineHref() {
+    if (CFG.site === "main") return routeHref("timeline");
+    var coll = CFG.site === "photo" ? "?collection=photos" : (CFG.site === "paint" ? "?collection=paintings" : "");
+    return (CFG.home || "/") + "timeline/" + coll;
+  }
+  function brandHref() {
+    return CFG.site === "main" ? routeHref("today") : (CFG.home || "/");
+  }
   function itemHref(n) {
+    if (n.themes) return themeHref();
+    if (n.timeline) return timelineHref();
     return n.href || routeHref(n.route || "today");
   }
 
   function shell() {
     var items = navItems();
-    var mobile = items.filter(function (n) { return n.mobile !== false; });
+    var mobile = items.filter(function (n) { return n.mobile !== false && !n.wideOnly; });
     var nav = mobile.map(function (n) {
-      var attr = n.route ? ' data-tab="' + esc(n.route) + '"' : "";
-      return '<a class="tab' + (n.kind === "cross" ? " cross" : "") + '" href="' + esc(itemHref(n)) + '"' + attr + ">" +
+      var attr = "";
+      if (n.route) attr += ' data-tab="' + esc(n.route) + '"';
+      if (n.themes) attr += ' data-themes="1"';
+      if (n.timeline) attr += ' data-timeline="1"';
+      if (n.site) attr += ' data-site="' + esc(n.site) + '"';
+      return '<a class="tab" href="' + esc(itemHref(n)) + '"' + attr + ">" +
         (ICONS[n.icon] || "") + "<span>" + esc(n.label) + "</span></a>";
     }).join("");
-    var crossSeen = false;
     var desk = items.map(function (n) {
-      var sep = "";
-      if (n.kind === "cross" && !crossSeen) { crossSeen = true; sep = '<span class="sep"></span>'; }
-      var attr = n.route ? ' data-desk="' + esc(n.route) + '"' : "";
-      return sep + '<a href="' + esc(itemHref(n)) + '"' + attr + ">" + esc(n.label) + "</a>";
+      var attr = "";
+      if (n.route) attr += ' data-desk="' + esc(n.route) + '"';
+      if (n.themes) attr += ' data-themes="1"';
+      if (n.timeline) attr += ' data-timeline="1"';
+      if (n.site) attr += ' data-site="' + esc(n.site) + '"';
+      return '<a' + (n.wideOnly ? ' class="wide-only"' : "") + ' href="' + esc(itemHref(n)) + '"' + attr + ">" + esc(n.label) + "</a>";
     }).join("");
     app.innerHTML =
       '<header class="appbar">' +
-        '<a class="brand" href="' + esc(routeHref("today")) + '"><span class="cn">' + esc(CFG.brand || "尘画") + '</span><span class="sub">' + esc(CFG.sub || "") + "</span></a>" +
+        '<a class="brand" href="' + esc(brandHref()) + '"><span class="cn">' + esc(CFG.brand || "尘画") + '</span><span class="sub">' + esc(CFG.sub || "") + "</span></a>" +
         '<nav class="desknav">' + desk + "</nav>" +
         '<div class="right">' +
           '<button class="modebtn" data-mode="toggle">非商用</button>' +
@@ -241,7 +263,7 @@
     location.href = routeHref(route);
   }
   function currentRoute() {
-    var known = ["today", "gallery", "stories", "search", "about", "rights"];
+    var known = ["today", "gallery", "stories", "timeline", "search", "about", "rights"];
     var p = location.pathname.replace(/index\.html$/, "");
     var base = CFG.base || "/";
     if (p.indexOf(base) === 0) p = p.slice(base.length);
@@ -257,10 +279,11 @@
     var html;
     if (r.name === "gallery") html = viewGallery();
     else if (r.name === "stories") html = viewStories();
+    else if (r.name === "timeline") html = viewTimeline();
     else if (r.name === "search") html = viewSearch();
     else if (r.name === "rights") html = viewSimple("授权", "本站只做索引与展示，不主张图片权利。每张图的许可以记录页为准；商用前请逐张核对源站。U4 仅非商用，U5 仅外链。完整条款见「法律声明」。");
     else if (r.name === "about") html = viewSimple("关于", "尘画，出尘入画；尘归尘，画归画。以图为史，记录人间的大事与小事。内容来自开放馆藏；采集、复核、策展三层都写日志。图片二进制不进内容仓，站点只引用世纪图片站。");
-    else html = viewToday();
+    else html = (CFG.site === "main" && themeStories().length) ? viewTodayTheme() : viewToday();
     view.innerHTML = html + appFoot();
     syncActiveTab();
     syncMode();
@@ -271,6 +294,11 @@
     var active = state.route;
     qa("[data-tab]").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-tab") === active); });
     qa("[data-desk]").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-desk") === active); });
+    qa("[data-themes]").forEach(function (b) { b.classList.toggle("on", active === "stories"); });
+    qa("[data-timeline]").forEach(function (b) { b.classList.toggle("on", active === "timeline"); });
+    qa("[data-site]").forEach(function (b) {
+      b.classList.toggle("on", b.getAttribute("data-site") === CFG.site);
+    });
   }
   function bindView() {
     var input = q("#searchInput");
@@ -321,10 +349,32 @@
     }
     return out;
   }
+  function themeStories() {
+    var rows = SITE_STORIES;
+    if (state.themeCollection) {
+      rows = rows.filter(function (s) {
+        return (s.photo_ids || []).some(function (id) {
+          var r = byId(id);
+          return r && r.collection === state.themeCollection;
+        });
+      });
+    }
+    return rows;
+  }
+  function storySpan(s) {
+    var years = (s.photo_ids || []).map(function (id) {
+      var r = byId(id);
+      var y = r && Number(r.year);
+      return isFinite(y) ? y : null;
+    }).filter(function (y) { return y !== null; });
+    if (!years.length) return null;
+    return { start: Math.min.apply(null, years), end: Math.max.apply(null, years) };
+  }
   function viewToday() {
+    var isPaint = CFG.site === "paint";
     var rows = filtered().filter(function (r) { return imgOf(r); });
     if (!rows.length) {
-      return '<div class="empty"><b>绘画档案筹备中</b>下一阶段接入绘画内容后，这里会出现今日一帧与影像长河。</div>';
+      return '<div class="empty"><b>绘画档案筹备中</b>下一阶段接入绘画内容后，这里会出现今日一画与绘画长河。</div>';
     }
     var r = rows[dailyIndex(rows.length)];
     var d = new Date();
@@ -333,15 +383,69 @@
     return '<section class="today-hero">' +
       '<img class="today-hero-img" src="' + esc(imgOf(r)) + '" alt="' + esc(r.title) + '">' +
       '<div class="today-inner">' +
-        '<div class="today-date">' + esc(date) + " · 出尘入画 · 今日一帧</div>" +
+        '<div class="today-date">' + esc(date) + " · 出尘入画 · " + (isPaint ? "今日一画" : "今日一帧") + "</div>" +
         "<h1>" + esc(r.title) + "</h1>" +
         '<p class="today-note">' + (r.note_html || "") + "</p>" +
         '<div class="today-meta"><span>' + esc(r.year || "") + "</span><span>" + esc(r.place || r.region || "") + "</span><span>" + esc(r.source_short || "") + "</span>" + usageTag(r) + "</div>" +
-        '<div class="today-actions"><a class="btn gold" href="' + esc(staticHref(r)) + '">读这一帧</a><button class="btn" data-lb="' + esc(r.id) + '">放大</button><a class="btn" href="' + esc(routeHref("gallery")) + '">进入影像轴</a></div>' +
+        '<div class="today-actions"><a class="btn gold" href="' + esc(staticHref(r)) + '">' + (isPaint ? "看这张画" : "读这一帧") + '</a><button class="btn" data-lb="' + esc(r.id) + '">放大</button><a class="btn" href="' + esc(routeHref("gallery")) + '">进入' + (isPaint ? "绘画轴" : "影像轴") + '</a></div>' +
       "</div></section>" +
-      '<div class="section"><div class="section-head"><h2>影像长河</h2><span class="sub">由远及近 · 8 帧</span></div></div>' +
+      '<div class="section"><div class="section-head"><h2>' + (isPaint ? "绘画长河" : "影像长河") + '</h2><span class="sub">由远及近 · 8 帧</span></div></div>' +
       masonry(related) +
       '<div class="more-wrap"><a class="btn" href="' + esc(routeHref("gallery")) + '">查看全部 ' + SITE_RECORDS.length + " 条</a></div>";
+  }
+  function viewTodayTheme() {
+    var stories = themeStories();
+    if (!stories.length) return viewToday();
+    var s = stories[dailyIndex(stories.length)];
+    var cover = byId(s.cover);
+    var d = new Date();
+    var date = (d.getMonth() + 1) + "月" + d.getDate() + "日";
+    var intro = s.subtitle || String(s.intro || "").split(/\n\s*\n/)[0] || "";
+    var seen = {}, preview = [];
+    [s.cover].concat(s.photo_ids || []).forEach(function (id) {
+      if (!id || seen[id] || preview.length >= 4) return;
+      var r = byId(id);
+      if (!r || !imgOf(r)) return;
+      seen[id] = 1; preview.push(r);
+    });
+    var chapters = (s.chapters || []).map(function (ch) { return ch.title; }).filter(Boolean);
+    return '<section class="today-hero theme-hero">' +
+      '<img class="today-hero-img" src="' + esc(cover ? imgOf(cover) : (preview[0] ? imgOf(preview[0]) : "")) + '" alt="' + esc(s.title) + '">' +
+      '<div class="today-inner">' +
+        '<div class="today-date">' + esc(date) + " · 今日主题 · 出尘入画</div>" +
+        "<h1>" + esc(s.title) + "</h1>" +
+        '<p class="today-note">' + esc(intro) + "</p>" +
+        '<div class="today-meta"><span>' + (s.count || 0) + " 帧</span><span>" + chapters.length + " 章</span><span>" + esc((s.themes || []).join(" / ")) + "</span></div>" +
+        '<div class="today-actions"><a class="btn gold" href="' + esc(storyStaticHref(s)) + '">读这个主题</a><a class="btn" href="' + esc(routeHref("stories")) + '">全部主题</a><a class="btn" href="' + esc(routeHref("timeline")) + '">时间线</a></div>' +
+      "</div></section>" +
+      '<div class="section"><div class="section-head"><h2>主题预览</h2><span class="sub">' + (s.count || 0) + " 帧 · " + chapters.length + ' 章</span></div></div>' +
+      '<div class="theme-preview">' + preview.map(function (r) {
+        return '<a href="' + esc(staticHref(r)) + '"><img src="' + esc(imgOf(r)) + '" alt="' + esc(r.title) + '" loading="lazy"><span>' + esc(r.title) + "</span></a>";
+      }).join("") + "</div>" +
+      (chapters.length ? '<div class="section"><div class="section-head"><h2>章节</h2><span class="sub">读这个主题</span></div></div><div class="theme-chapters">' + chapters.map(function (t, i) {
+        return "<div><b>第 " + (i + 1) + " 章</b><span>" + esc(t) + "</span></div>";
+      }).join("") + "</div>" : "");
+  }
+  function viewTimeline() {
+    var items = themeStories().map(function (s) {
+      return { s: s, span: storySpan(s) };
+    }).filter(function (x) { return x.span; }).sort(function (a, b) {
+      return a.span.start - b.span.start;
+    });
+    if (!items.length) {
+      return '<div class="empty"><b>时间线筹备中</b>主题有明确年代后，这里会按时间排成一条线。</div>';
+    }
+    return '<div class="section"><div class="section-head"><h2>时间线</h2><span class="sub">主题按年代排列 · ' + items.length + ' 个</span></div></div>' +
+      '<div class="timeline">' + items.map(function (x) {
+        var cover = byId(x.s.cover);
+        var img = cover ? imgOf(cover) : "";
+        var span = x.span.start + (x.span.end !== x.span.start ? "–" + x.span.end : "");
+        return '<a class="tl-item" href="' + esc(storyStaticHref(x.s)) + '">' +
+          '<div class="tl-year">' + esc(span) + '</div>' +
+          '<div class="tl-pic" style="background-image:url(\'' + esc(img) + '\')"></div>' +
+          '<div class="tl-body"><div class="status">' + esc(x.s.type || "长文") + '</div><h3>' + esc(x.s.title) + '</h3><p>' + esc(x.s.subtitle) + '</p>' +
+          '<div class="cnt">' + (x.s.count || 0) + " 帧 · " + (x.s.chapters || []).length + " 章</div></div></a>";
+      }).join("") + "</div>";
   }
 
   function viewGallery() {
@@ -356,17 +460,19 @@
   }
 
   function viewStories() {
-    if (!SITE_STORIES.length) {
-      return '<div class="empty"><b>专题筹备中</b>专题页会在下一阶段接入，先保留首页与影像轴。</div>';
+    var stories = themeStories();
+    if (!stories.length) {
+      return '<div class="empty"><b>主题筹备中</b>这一集合还没有主题，先去看影像或搜索。</div>';
     }
-    return '<div class="section"><div class="section-head"><h2>专题</h2><span class="sub">精选 + 论点，不是标签页</span></div></div>' +
-      SITE_STORIES.map(function (s) {
+    return '<div class="section"><div class="section-head"><h2>主题</h2><span class="sub">事件、人物、地方、技艺与长文</span></div></div>' +
+      '<div class="chips"><a class="chip" href="' + esc(timelineHref()) + '">按时间线浏览</a></div>' +
+      stories.map(function (s) {
         var cover = byId(s.cover);
         var img = cover ? imgOf(cover) : "";
-        var label = s.status === "published" ? "已刊" : (s.status || "筹备中");
+        var type = s.type || "长文";
         return '<a class="story-card" href="' + esc(storyStaticHref(s)) + '">' +
           '<div class="pic" style="background-image:url(\'' + esc(img) + '\')"></div>' +
-          '<div class="body"><div class="status">' + esc(label) + "</div><h3>" + esc(s.title) + "</h3><p>" + esc(s.subtitle) + '</p><div class="cnt">' + (s.count || 0) + " 帧 · " + esc((s.themes || []).join(" / ")) + "</div></div></a>";
+          '<div class="body"><div class="status">' + esc(type) + (s.status === "published" ? " · 已刊" : "") + "</div><h3>" + esc(s.title) + "</h3><p>" + esc(s.subtitle) + '</p><div class="cnt">' + (s.count || 0) + " 帧 · " + esc((s.themes || []).join(" / ")) + "</div></div></a>";
       }).join("");
   }
 
@@ -560,6 +666,7 @@
     var params = new URLSearchParams(location.search);
     if (params.get("phone")) document.body.classList.add("phone-mode");
     if (params.get("q")) state.q = params.get("q");
+    if (params.get("collection")) state.themeCollection = params.get("collection");
     shell();
     syncMode();
     renderView();
