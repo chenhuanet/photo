@@ -201,6 +201,22 @@
     return '<span class="wm"><span class="wm-lite">出</span><span class="wm-strong">尘</span>' +
       '<span class="wm-lite">入</span><span class="wm-strong">画</span></span>';
   }
+  function leafSrc(expr) {
+    return (CFG.leafBase || "assets/leaf/") + (expr || "calm") + ".svg";
+  }
+  function leafIcon(expr, size, cls) {
+    return '<img class="leaf-mark ' + (cls || "") + '" src="' + esc(leafSrc(expr)) +
+      '" width="' + size + '" height="' + size + '" alt="" aria-hidden="true" decoding="async">';
+  }
+  function siteLeaf() {
+    if (CFG.site === "photo") return "curious";
+    if (CFG.site === "paint") return "proud";
+    return "joy";
+  }
+  function emptyState(expr, title, text, cls) {
+    return '<div class="empty empty-leaf ' + (cls || "") + '">' + leafIcon(expr, 82, "empty-mark") +
+      "<b>" + esc(title) + "</b><p>" + esc(text) + "</p></div>";
+  }
   function monthName(i) {
     return t("month." + (i + 1));
   }
@@ -231,7 +247,7 @@
     }).join("");
     app.innerHTML =
       '<header class="appbar">' +
-        '<a class="brand" href="' + esc(brandHref()) + '">' + wordmark() + '<span class="sub">' + esc(t("brand.sub")) + "</span></a>" +
+        '<a class="brand" href="' + esc(brandHref()) + '">' + leafIcon(siteLeaf(), 30, "brand-mark") + wordmark() + '<span class="sub">' + esc(t("brand.sub")) + "</span></a>" +
         '<nav class="desknav">' + desk + "</nav>" +
         '<div class="right">' +
           '<button class="modebtn" data-mode="toggle">' + esc(t("mode.noncommercial")) + "</button>" +
@@ -358,8 +374,8 @@
     else if (r.name === "stories") html = viewStories();
     else if (r.name === "timeline") html = viewTimeline();
     else if (r.name === "search") html = viewSearch();
-    else if (r.name === "rights") html = viewSimple(t("page.rights.title"), t("page.rights.text"));
-    else if (r.name === "about") html = viewSimple(t("page.about.title"), t("page.about.text"));
+    else if (r.name === "rights") html = viewSimple(t("page.rights.title"), t("page.rights.text"), "think");
+    else if (r.name === "about") html = viewSimple(t("page.about.title"), t("page.about.text"), "shy");
     else if (CFG.site === "main") html = todayEvent() ? viewTodayEvent() : (themeStories().length ? viewTodayTheme() : viewToday());
     else html = viewToday();
     view.innerHTML = html + appFoot();
@@ -464,7 +480,7 @@
     var isPaint = CFG.site === "paint";
     var rows = filtered().filter(function (r) { return imgOf(r); });
     if (!rows.length) {
-      return '<div class="empty"><b>' + esc(t("gallery.emptyTitle")) + "</b>" + esc(t("gallery.emptyText")) + "</div>";
+      return emptyState("sleepy", t("gallery.emptyTitle"), t("gallery.emptyText"));
     }
     var r = rows[dailyIndex(rows.length)];
     var d = new Date();
@@ -488,12 +504,16 @@
     var rows = themeStories().filter(function (s) { return !s.date; });
     return rows.length ? rows : themeStories();
   }
-  function todayEvent() {
+  function todayEvents() {
     var d = new Date();
     var mmdd = ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
     return themeStories().filter(function (s) {
       return String(s.date || "").slice(5, 10) === mmdd;
-    })[0] || null;
+    }).sort(function (a, b) { return (a.today_rank || 1) - (b.today_rank || 1); });
+  }
+  function todayEvent() {
+    var rows = todayEvents();
+    return rows.length ? rows[0] : null;
   }
   function renderThemeFeature(s, isEvent) {
     var cover = byId(s.cover);
@@ -537,8 +557,17 @@
     return renderThemeFeature(stories[dailyIndex(stories.length)], false);
   }
   function viewTodayEvent() {
-    var s = todayEvent();
-    return s ? renderThemeFeature(s, true) : viewTodayTheme();
+    var rows = todayEvents();
+    var s = rows.length ? rows[0] : null;
+    if (!s) return viewTodayTheme();
+    var more = rows.slice(1);
+    var extra = more.length ? '<div class="section"><div class="section-head"><h2>' + esc(isEn() ? "More from this day" : "同一天，更多故事") + '</h2><span class="sub">' + esc(isEn() ? "A second story from the same date" : "同一天的另一篇故事") + '</span></div></div><div class="story-grid">' + more.map(function (x) {
+      var cover = byId(x.cover);
+      var img = cover ? imgOf(cover) : "";
+      var type = isEn() ? (x.type_en || "Story") : (x.type || "长文");
+      return '<a class="story-card" href="' + esc(storyStaticHref(x)) + '"><div class="pic" style="background-image:url(\'' + esc(img) + '\')"></div><div class="body"><div class="status">' + esc(type + (x.date ? " · " + x.date : "")) + '</div><h3>' + esc(loc(x, "title")) + '</h3><p>' + esc(loc(x, "subtitle")) + '</p><div class="cnt">' + (x.count || 0) + " " + esc(t("common.frames")) + " · " + esc(isEn() ? (x.themes_en || []).join(" / ") : (x.themes || []).join(" / ")) + "</div></div></a>";
+    }).join("") + "</div>" : "";
+    return renderThemeFeature(s, true) + extra;
   }
   function viewTimeline() {
     var items = themeStories().map(function (s) {
@@ -547,7 +576,7 @@
       return a.span.start - b.span.start;
     });
     if (!items.length) {
-      return '<div class="empty"><b>' + esc(t("timeline.emptyTitle")) + "</b>" + esc(t("timeline.emptyText")) + "</div>";
+      return emptyState("curious", t("timeline.emptyTitle"), t("timeline.emptyText"));
     }
     return '<div class="section"><div class="section-head"><h2>' + esc(t("timeline.title")) + '</h2><span class="sub">' + esc(t("timeline.sub", { n: items.length })) + '</span></div></div>' +
       '<div class="timeline">' + items.map(function (x) {
@@ -569,14 +598,14 @@
     return '<div class="section"><div class="section-head"><h2>' + esc(CFG.site === "photo" ? t("gallery.photoTitle") : CFG.site === "paint" ? t("gallery.paintTitle") : t("gallery.mainTitle")) + '</h2><span class="sub">' + rows.length + " " + esc(t("common.items")) + "</span></div></div>" +
       '<div class="chips">' + chips + "</div>" +
       (state.mode === "commercial" ? '<div class="notice">' + esc(t("gallery.commercialNotice")) + "</div>" : "") +
-      (shown.length ? masonry(shown) : '<div class="empty"><b>' + esc(t("gallery.emptyTitle")) + "</b>" + esc(t("gallery.emptyText")) + "</div>") +
+      (shown.length ? masonry(shown) : emptyState("sleepy", t("gallery.emptyTitle"), t("gallery.emptyText"))) +
       (state.visible < rows.length ? '<div class="more-wrap"><button class="btn" id="loadMore">' + esc(t("common.loadMore")) + "</button></div>" : '<div class="endnote">' + esc(t("common.end")) + "</div>");
   }
 
   function viewStories() {
     var stories = themeStories();
     if (!stories.length) {
-      return '<div class="empty"><b>' + esc(t("stories.emptyTitle")) + "</b>" + esc(t("stories.emptyText")) + "</div>";
+      return emptyState("think", t("stories.emptyTitle"), t("stories.emptyText"));
     }
     return '<div class="section"><div class="section-head"><h2>' + esc(t("stories.title")) + '</h2><span class="sub">' + esc(t("stories.sub")) + '</span></div></div>' +
       '<div class="chips"><a class="chip" href="' + esc(timelineHref()) + '">' + esc(t("stories.byTimeline")) + "</a></div>" +
@@ -698,7 +727,7 @@
       html += '<div class="recent-topics"><div class="eyebrow" style="margin-bottom:2px">' + esc(t("search.recent")) + "</div></div>" +
         rows.map(resultRow).join("");
     }
-    return html || '<div class="empty"><b>' + esc(t("search.emptyTitle")) + "</b>" + esc(t("search.emptyText")) + "</div>";
+    return html || emptyState("curious", t("search.emptyTitle"), t("search.emptyText"));
   }
   function renderSearchResults() {
     var box = q("#searchResults");
@@ -717,7 +746,7 @@
     var total = themes.length + rows.length;
     if (cnt) cnt.textContent = total ? t("search.found", { n: total }) : t("search.noMatch");
     if (!total) {
-      box.innerHTML = '<div class="empty"><b>' + esc(t("search.noMatchTitle")) + "</b>" + esc(t("search.noMatchText")) + "</div>";
+      box.innerHTML = emptyState("surprised", t("search.noMatchTitle"), t("search.noMatchText"));
       return;
     }
     var html = "";
@@ -753,15 +782,21 @@
     box.innerHTML = searchScopeChips();
   }
 
-  function viewSimple(title, text) {
-    return '<div class="section"><div class="section-head"><h2>' + esc(title) + '</h2><span class="sub">' + esc(t("brand.name")) + "</span></div><p class=\"muted\" style=\"font-size:13px;line-height:1.9\">" + esc(text) + "</p></div>";
+  function viewSimple(title, text, expr) {
+    return '<div class="section simple-page"><div class="simple-mark">' + leafIcon(expr || "calm", 74, "about-mark") +
+      '</div><div class="section-head"><h2>' + esc(title) + '</h2><span class="sub">' + esc(t("brand.name")) + "</span></div><p class=\"muted\" style=\"font-size:13px;line-height:1.9\">" + esc(text) + "</p></div>";
   }
   function appFoot() {
+    var primary = navItems().map(function (n) {
+      return '<a href="' + esc(itemHref(n)) + '">' + esc(navLabel(n)) + "</a>";
+    }).join("");
     return '<footer class="app-foot">' +
+      '<div class="foot-mark-row">' + leafIcon("calm", 26, "foot-mark") + '</div>' +
       '<div class="brandline">' + esc(t("brand.line")) + '</div>' +
       '<div class="motto">' + esc(t("brand.motto")) + '</div>' +
-      '<nav><a href="' + esc(routeHref("about")) + '">' + esc(t("footer.about")) + '</a><a href="' + esc(routeHref("rights")) + '">' + esc(t("footer.rights")) + '</a>' +
-      '<a href="' + esc(routeHref("legal")) + '">' + esc(t("footer.legal")) + '</a><a href="https://netcn.org/">' + esc(t("footer.guide")) + "</a></nav>" +
+      '<nav class="foot-primary">' + primary + "</nav>" +
+      '<nav class="foot-utility"><a href="' + esc(routeHref("about")) + '">' + esc(t("footer.about")) + '</a><a href="' + esc(routeHref("rights")) + '">' + esc(t("footer.rights")) + '</a>' +
+      '<a href="' + esc(routeHref("legal")) + '">' + esc(t("footer.legal")) + "</a></nav>" +
       "<p>" + esc(t("footer.disclaimer")) + "</p>" +
       "</footer>";
   }

@@ -69,10 +69,18 @@ html[data-theme="light"] .s-story-hero:after{
 .s-foot{border-top:1px solid var(--line);padding:22px 0;margin-top:20px;font-size:10px;color:var(--dim);
   letter-spacing:.1em;text-align:center}
 .s-foot nav{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.s-foot .foot-primary{padding-bottom:8px;border-bottom:1px solid var(--line);max-width:760px;margin-left:auto;margin-right:auto}
+.s-foot .foot-utility{font-size:10px;gap:12px;margin-bottom:12px}
 .s-foot a{color:var(--muted)}
 .s-foot a:hover{color:var(--accent)}
 .s-foot p{margin:0 0 4px}
+.s-foot .motto{font-size:9px;color:var(--dim);letter-spacing:.16em;margin:5px 0 9px}
+.s-foot .s-foot-mark{margin:0 0 4px;line-height:1}
+.s-foot .s-foot-mark img{width:24px;height:24px;opacity:.9}
 .s-foot .brandline{color:var(--muted);letter-spacing:.16em}
+@media(max-width:899px){
+  .s-appbar .desknav{display:none}
+}
 @media(max-width:719px){
   .s-appbar{flex-wrap:wrap;gap:8px;height:auto;padding:10px 18px}
   .s-appbar .desknav{display:none}
