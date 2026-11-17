@@ -250,7 +250,6 @@
         '<a class="brand" href="' + esc(brandHref()) + '">' + leafIcon(siteLeaf(), 30, "brand-mark") + wordmark() + '<span class="sub">' + esc(t("brand.sub")) + "</span></a>" +
         '<nav class="desknav">' + desk + "</nav>" +
         '<div class="right">' +
-          '<button class="modebtn" data-mode="toggle">' + esc(t("mode.noncommercial")) + "</button>" +
           '<button class="langbtn" data-lang-toggle aria-label="' + esc(t("lang.aria")) + '">' + esc(t("lang.switch")) + "</button>" +
           '<button class="iconbtn themebtn" data-themebtn aria-label="' + esc(state.theme === "light" ? t("theme.toDark") : t("theme.toLight")) + '">' + ICONS.sun + ICONS.moon + "</button>" +
         "</div>" +
@@ -790,14 +789,11 @@
     var primary = navItems().map(function (n) {
       return '<a href="' + esc(itemHref(n)) + '">' + esc(navLabel(n)) + "</a>";
     }).join("");
-    return '<footer class="app-foot">' +
-      '<div class="foot-mark-row">' + leafIcon("calm", 26, "foot-mark") + '</div>' +
-      '<div class="brandline">' + esc(t("brand.line")) + '</div>' +
-      '<div class="motto">' + esc(t("brand.motto")) + '</div>' +
-      '<nav class="foot-primary">' + primary + "</nav>" +
-      '<nav class="foot-utility"><a href="' + esc(routeHref("about")) + '">' + esc(t("footer.about")) + '</a><a href="' + esc(routeHref("rights")) + '">' + esc(t("footer.rights")) + '</a>' +
+    return '<footer class="site-foot">' +
+      '<a class="sf-brand" href="' + esc(brandHref()) + '">' + esc(isEn() ? "Chenhua" : "出尘入画") + '</a>' +
+      '<nav class="sf-nav">' + primary + "</nav>" +
+      '<nav class="sf-utility"><a href="' + esc(routeHref("about")) + '">' + esc(t("footer.about")) + '</a><a href="' + esc(routeHref("rights")) + '">' + esc(t("footer.rights")) + '</a>' +
       '<a href="' + esc(routeHref("legal")) + '">' + esc(t("footer.legal")) + "</a></nav>" +
-      "<p>" + esc(t("footer.disclaimer")) + "</p>" +
       "</footer>";
   }
 

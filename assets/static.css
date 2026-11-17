@@ -4,10 +4,10 @@
 .s-appbar{border-radius:0 0 14px 14px;margin:0 -18px;padding:0 18px;height:60px;overflow:visible}
 .s-brand{font-family:var(--serif);font-size:22px;letter-spacing:.18em;white-space:nowrap}
 .s-brand .wm{display:inline-flex;align-items:baseline;gap:1px}
-.s-brand .wm-lite{font-size:16px;color:var(--muted);letter-spacing:.03em}
-.s-brand .wm-strong{font-size:23px;color:var(--accent);letter-spacing:.03em}
+.s-brand .wm-lite{font-size:17px;color:var(--muted);letter-spacing:.03em}
+.s-brand .wm-strong{font-size:24px;color:var(--accent);letter-spacing:.03em}
 .s-slogan{font-size:10px;color:var(--dim);letter-spacing:.12em;white-space:nowrap;margin-left:-6px}
-.s-head nav{margin-left:auto;display:flex;gap:14px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.s-head nav{margin-left:auto;display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
 .s-head nav a:hover{color:var(--accent)}
 .s-kicker{padding-top:30px;font-size:9px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
 .s-title{font-family:var(--serif);font-weight:400;font-size:clamp(28px,5vw,44px);
@@ -78,6 +78,13 @@ html[data-theme="light"] .s-story-hero:after{
 .s-foot .s-foot-mark{margin:0 0 4px;line-height:1}
 .s-foot .s-foot-mark img{width:24px;height:24px;opacity:.9}
 .s-foot .brandline{color:var(--muted);letter-spacing:.16em}
+.site-foot{display:flex;align-items:center;justify-content:center;gap:7px 13px;flex-wrap:wrap;
+  margin-top:24px;padding:11px 18px;border-top:1px solid var(--line);font-size:10.5px;color:var(--muted)}
+.site-foot a{color:var(--muted);text-decoration:none}
+.site-foot a:hover{color:var(--accent)}
+.site-foot .sf-brand{font-family:var(--serif);font-size:12px;letter-spacing:.14em;color:var(--text);white-space:nowrap}
+.site-foot .sf-nav,.site-foot .sf-utility{display:flex;gap:11px;flex-wrap:wrap;justify-content:center}
+.site-foot .sf-utility{font-size:9px;color:var(--dim)}
 @media(max-width:899px){
   .s-appbar .desknav{display:none}
 }
