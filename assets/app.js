@@ -161,6 +161,9 @@
   function navLabel(n) {
     return isEn() ? (n.label_en || n.label) : n.label;
   }
+  function deskLabel(n) {
+    return isEn() ? (n.deskLabel_en || n.deskLabel || n.label_en || n.label) : (n.deskLabel || n.label);
+  }
   function themeHref() {
     if (CFG.site === "main") return routeHref("stories");
     var coll = CFG.site === "photo" ? "?collection=photos" : (CFG.site === "paint" ? "?collection=paintings" : "");
@@ -243,7 +246,7 @@
       if (n.themes) attr += ' data-themes="1"';
       if (n.timeline) attr += ' data-timeline="1"';
       if (n.site) attr += ' data-site="' + esc(n.site) + '"';
-      return '<a' + (n.wideOnly ? ' class="wide-only"' : "") + ' href="' + esc(itemHref(n)) + '"' + attr + ">" + esc(navLabel(n)) + "</a>";
+      return '<a' + (n.wideOnly ? ' class="wide-only"' : "") + ' href="' + esc(itemHref(n)) + '"' + attr + ">" + esc(deskLabel(n)) + "</a>";
     }).join("");
     app.innerHTML =
       '<header class="appbar">' +
