@@ -83,7 +83,7 @@
       if (!first) return;
       var label = textOf(first);
       var href = first.getAttribute("href") || "";
-      if (label.indexOf("尘画") >= 0 || label === "Chenhua" ||
+      if (label.indexOf("尘画") >= 0 || label === "Frame & Grain" ||
           /^(\.\.\/|\.\.\/\.\.\/dist\/main\/|index\.html|\.\/|\/)$/.test(href)) {
         nav.removeChild(first);
       }
@@ -97,7 +97,7 @@
       if (!wm) return;
       var en = document.createElement("span");
       en.className = "wm-en";
-      en.textContent = "Chenhua";
+      en.textContent = "Frame & Grain";
       wm.parentNode.insertBefore(en, wm.nextSibling);
     });
   }
@@ -163,7 +163,7 @@
   });
   var footCss = document.createElement("style");
   footCss.textContent =
-    ".wm-en{display:none;font-family:var(--serif);font-size:19px;line-height:1;letter-spacing:.12em;color:var(--accent,#c8a24a);white-space:nowrap}" +
+    ".wm-en{display:none;font-family:var(--serif);font-size:18px;line-height:1;letter-spacing:.06em;color:var(--accent,#c8a24a);white-space:nowrap}" +
     "html[data-lang=\"en\"] .brand .wm,html[data-lang=\"en\"] .g-brand .wm{display:none}" +
     "html[data-lang=\"en\"] .brand .wm-en,html[data-lang=\"en\"] .g-brand .wm-en{display:inline-block}" +
     ".site-foot .sf-nav a[data-sf-drop]{display:none}";
@@ -181,7 +181,8 @@
       ".g-tool svg,.iconbtn svg{width:18px;height:18px;flex:none}" +
       ".masthead.has-head-search .topmeta,.g-head.has-head-search .g-tools{margin-left:0}" +
       ".g-lang{font-size:0;padding:0;display:grid;place-items:center}" +
-      "@media(max-width:899px){.head-search{display:none}}";
+      "@media(max-width:899px){.head-search{display:none}}" +
+      "@media(max-width:430px){.brand .wm-en,.g-brand .wm-en{font-size:15px;letter-spacing:.04em}}";
     document.head.appendChild(headCss);
   }
 

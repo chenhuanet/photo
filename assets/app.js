@@ -229,7 +229,7 @@
   function wordmark() {
     return '<span class="wm"><span class="wm-lite">出</span><span class="wm-strong">尘</span>' +
       '<span class="wm-lite">入</span><span class="wm-strong">画</span></span>' +
-      '<span class="wm-en">Chenhua</span>';
+      '<span class="wm-en">Frame & Grain</span>';
   }
   function leafSrc(expr) {
     return (CFG.leafBase || "assets/leaf/") + (expr || "calm") + ".svg";
@@ -909,7 +909,7 @@
       return '<a href="' + esc(itemHref(n)) + '">' + esc(navLabel(n)) + "</a>";
     }).join("");
     return '<footer class="site-foot">' +
-      '<a class="sf-brand" href="' + esc(brandHref()) + '">' + esc(isEn() ? "Chenhua" : "出尘入画") + '</a>' +
+      '<a class="sf-brand" href="' + esc(brandHref()) + '">' + esc(isEn() ? "Frame & Grain" : "出尘入画") + '</a>' +
       '<nav class="sf-nav">' + primary + "</nav>" +
       '<nav class="sf-utility"><a href="' + esc(routeHref("about")) + '">' + esc(t("footer.about")) + '</a><a href="' + esc(routeHref("rights")) + '">' + esc(t("footer.rights")) + '</a>' +
       '<a href="' + esc(routeHref("legal")) + '">' + esc(t("footer.legal")) + "</a></nav>" +

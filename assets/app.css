@@ -45,7 +45,7 @@ img{display:block;max-width:100%}
 .brand .brand-mark{width:30px;height:30px;flex:none;object-fit:contain;margin-right:-1px}
 .brand .cn{font-family:var(--serif);font-size:21px;letter-spacing:.18em;flex:none}
 .brand .wm{display:inline-flex;align-items:baseline;gap:1px;white-space:nowrap;flex:none}
-.brand .wm-en{display:none;font-family:var(--serif);font-size:19px;line-height:1;letter-spacing:.12em;color:var(--accent);white-space:nowrap;flex:none}
+.brand .wm-en{display:none;font-family:var(--serif);font-size:18px;line-height:1;letter-spacing:.06em;color:var(--accent);white-space:nowrap;flex:none}
 html[data-lang="en"] .brand .wm{display:none}
 html[data-lang="en"] .brand .wm-en{display:inline-block}
 .wm-lite{font-family:var(--serif);font-size:17px;color:var(--muted);letter-spacing:.03em}
@@ -86,6 +86,7 @@ html[data-theme="light"] .icon-moon{display:none}
   .brand .brand-mark{width:26px;height:26px}
   .brand .wm-lite{font-size:14px}
   .brand .wm-strong{font-size:21px}
+  .brand .wm-en{font-size:15px;letter-spacing:.04em}
   .modebtn{font-size:9px;padding:4px 7px}
   .langbtn{width:32px;height:32px}
   .iconbtn{width:32px;height:32px}
