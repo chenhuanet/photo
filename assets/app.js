@@ -279,6 +279,11 @@
       } else if (t2.hasAttribute("data-lang-toggle")) {
         var nextLang = isEn() ? "zh" : "en";
         try { localStorage.setItem(LANG_KEY, nextLang); } catch (err) {}
+        try {
+          var host = location.hostname;
+          var domain = (host === "chenhua.net" || host.slice(-12) === ".chenhua.net") ? "; domain=.chenhua.net" : "";
+          document.cookie = LANG_KEY + "=" + nextLang + "; path=/; max-age=31536000; SameSite=Lax" + domain;
+        } catch (err) {}
         var u = new URL(location.href);
         u.searchParams.set("lang", nextLang);
         location.href = u.toString();
@@ -341,6 +346,11 @@
     state.theme = theme === "light" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", state.theme);
     try { localStorage.setItem(THEME_KEY, state.theme); } catch (e) {}
+    try {
+      var host = location.hostname;
+      var domain = (host === "chenhua.net" || host.slice(-12) === ".chenhua.net") ? "; domain=.chenhua.net" : "";
+      document.cookie = THEME_KEY + "=" + state.theme + "; path=/; max-age=31536000; SameSite=Lax" + domain;
+    } catch (e) {}
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", state.theme === "light" ? "#f6f2ea" : "#0d0c0b");
     var b = q("[data-themebtn]");

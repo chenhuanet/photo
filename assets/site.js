@@ -4,11 +4,33 @@
   var THEME_KEY = "chenhua-theme";
   var LANG_KEY = "chenhua-lang";
 
+  function readCookie(name) {
+    try {
+      var hit = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "=([^;]*)"));
+      return hit ? decodeURIComponent(hit[1]) : "";
+    } catch (e) { return ""; }
+  }
+
+  function cookieDomain() {
+    var host = location.hostname;
+    if (host === "chenhua.net" || host.slice(-12) === ".chenhua.net") return ".chenhua.net";
+    return "";
+  }
+
+  function writeCookie(name, value) {
+    try {
+      var domain = cookieDomain();
+      document.cookie = name + "=" + encodeURIComponent(value) +
+        "; path=/; max-age=31536000; SameSite=Lax" + (domain ? "; domain=" + domain : "");
+    } catch (e) {}
+  }
+
   function meta() { return document.querySelector('meta[name="theme-color"]'); }
 
   function applyTheme(theme) {
     root.setAttribute("data-theme", theme);
     try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+    writeCookie(THEME_KEY, theme);
     var m = meta();
     if (m) m.setAttribute("content", theme === "light" ? "#f6f2ea" : "#0d0c0b");
     var b = document.querySelector("[data-themebtn]");
@@ -28,6 +50,7 @@
     root.setAttribute("data-lang", lang);
     root.setAttribute("lang", lang === "en" ? "en" : "zh-CN");
     try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
+    writeCookie(LANG_KEY, lang);
     var t = bodyData(lang === "en" ? "data-title-en" : "data-title-zh");
     if (t) document.title = t;
     var d = bodyData(lang === "en" ? "data-desc-en" : "data-desc-zh");
@@ -47,15 +70,20 @@
     });
   }
 
-  var initialTheme = "";
-  try { initialTheme = localStorage.getItem(THEME_KEY) || ""; } catch (e) {}
+  var initialTheme = readCookie(THEME_KEY);
+  if (initialTheme !== "light" && initialTheme !== "dark") {
+    try { initialTheme = localStorage.getItem(THEME_KEY) || ""; } catch (e) {}
+  }
   if (initialTheme !== "light" && initialTheme !== "dark") {
     initialTheme = root.getAttribute("data-theme") ||
       (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
   }
   applyTheme(initialTheme);
   var lang = "";
-  try { lang = new URLSearchParams(location.search).get("lang") || localStorage.getItem(LANG_KEY) || ""; } catch (e) {}
+  try {
+    lang = new URLSearchParams(location.search).get("lang") ||
+      readCookie(LANG_KEY) || localStorage.getItem(LANG_KEY) || "";
+  } catch (e) {}
   if (lang !== "en" && lang !== "zh") lang = root.getAttribute("data-lang") || "zh";
   applyLang(lang);
 
