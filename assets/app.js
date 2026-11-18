@@ -15,7 +15,7 @@
     searchCollection: "all",
     searchScope: "",
     themeCollection: "",
-    filter: { collection: "all", topic: "all" },
+    filter: { collection: "all", topic: "all", movement: "all" },
     usage: "all",
     lb: { items: [], index: 0 },
     lang: (document.documentElement.getAttribute("data-lang") === "en") ? "en" : "zh",
@@ -92,6 +92,9 @@
     if (state.filter.topic !== "all") {
       rows = rows.filter(function (r) { return r.topic === state.filter.topic; });
     }
+    if (state.filter.movement !== "all") {
+      rows = rows.filter(function (r) { return r.movement === state.filter.movement; });
+    }
     return rows.sort(function (a, b) { return (b.year || 0) - (a.year || 0); });
   }
   function byId(id) { return SITE_RECORDS.filter(function (r) { return r.id === id; })[0]; }
@@ -134,6 +137,21 @@
     var out = ['<button class="chip ' + (active === "all" ? "on" : "") + '" data-filter="topic" data-value="all">' + esc(t("common.allTopics")) + "</button>"];
     topics.forEach(function (tp) {
       out.push('<button class="chip ' + (active === tp ? "on" : "") + '" data-filter="topic" data-value="' + esc(tp) + '">' + esc(tx("topic", tp)) + "</button>");
+    });
+    return out.join("");
+  }
+  function movementChips(active) {
+    var counts = {}, labels = {};
+    SITE_RECORDS.forEach(function (r) {
+      if (r.collection !== "paintings" || !r.movement) return;
+      counts[r.movement] = (counts[r.movement] || 0) + 1;
+      labels[r.movement] = isEn() ? (r.movement_en || r.movement) : r.movement;
+    });
+    var moves = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
+    if (!moves.length) return "";
+    var out = ['<button class="chip ' + (active === "all" ? "on" : "") + '" data-filter="movement" data-value="all">' + esc(t("common.allMovements")) + "</button>"];
+    moves.forEach(function (mv) {
+      out.push('<button class="chip ' + (active === mv ? "on" : "") + '" data-filter="movement" data-value="' + esc(mv) + '">' + esc(labels[mv]) + "</button>");
     });
     return out.join("");
   }
@@ -330,8 +348,9 @@
       } else if (t2.hasAttribute("data-filter")) {
         var key = t2.getAttribute("data-filter");
         var val = t2.getAttribute("data-value");
-        if (key === "collection") state.filter.collection = val;
-        if (key === "topic") state.filter.topic = val;
+        if (key === "collection") { state.filter.collection = val; state.filter.movement = "all"; }
+        if (key === "topic") { state.filter.topic = val; state.filter.movement = "all"; }
+        if (key === "movement") { state.filter.movement = val; state.filter.topic = "all"; }
         if (key === "searchCollection") { state.searchCollection = val; renderSearchResults(); syncSearchChips(); return; }
         if (key === "searchScope") { state.searchScope = val; syncSearchUrl(); renderSearchResults(); syncSearchChips(); return; }
         if (key === "usage") { state.usage = val; renderView(); return; }
@@ -463,9 +482,12 @@
 
   function card(r) {
     var img = imgOf(r);
+    var typeTag = (r.collection === "paintings" && r.movement)
+      ? loc(r, "movement")
+      : (r.content_type && r.content_type !== "photograph" ? typeLabel(r) : "");
     var tags = '<span class="tag gold">' + esc(r.year || "") + "</span>" +
       (r.topic ? '<span class="tag">' + esc(tx("topic", r.topic)) + "</span>" : "") +
-      (r.content_type && r.content_type !== "photograph" ? '<span class="tag">' + esc(typeLabel(r)) + "</span>" : "") +
+      (typeTag ? '<span class="tag">' + esc(typeTag) + "</span>" : "") +
       usageTag(r);
     var pic = img
       ? '<div class="pic"><img src="' + esc(img) + '" alt="' + esc(loc(r, "title")) + '" loading="lazy" decoding="async"></div>'
@@ -712,8 +734,10 @@
     var rows = filtered();
     var shown = rows.slice(0, state.visible);
     var chips = collectionChips(state.filter.collection, "collection") + topicChips(state.filter.topic);
+    var mchips = CFG.site === "paint" ? movementChips(state.filter.movement) : "";
     return '<div class="section"><div class="section-head"><h2>' + esc(CFG.site === "photo" ? t("gallery.photoTitle") : CFG.site === "paint" ? t("gallery.paintTitle") : t("gallery.mainTitle")) + '</h2><span class="sub">' + rows.length + " " + esc(t("common.items")) + "</span></div></div>" +
       '<div class="chips">' + chips + "</div>" +
+      (mchips ? '<div class="chips chips-movement">' + mchips + "</div>" : "") +
       (state.mode === "commercial" ? '<div class="notice">' + esc(t("gallery.commercialNotice")) + "</div>" : "") +
       (shown.length ? masonry(shown) : emptyState("sleepy", t("gallery.emptyTitle"), t("gallery.emptyText"))) +
       (state.visible < rows.length ? '<div class="more-wrap"><button class="btn" id="loadMore">' + esc(t("common.loadMore")) + "</button></div>" : '<div class="endnote">' + esc(t("common.end")) + "</div>");
