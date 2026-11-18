@@ -318,8 +318,10 @@
     links.forEach(function (a, i) {
       var href = a.getAttribute("href") || "";
       var label = a.innerHTML;
-      if (root.getAttribute("data-lang") === "en" && a.querySelector(".sf-brand-long") && a.querySelector(".sf-brand-short")) {
-        label = '<span data-l="en">' + a.querySelector(".sf-brand-short").textContent + "</span>";
+      if (a.querySelector(".sf-brand-long") && a.querySelector(".sf-brand-short")) {
+        label = root.getAttribute("data-lang") === "en"
+          ? '<span data-l="en">' + a.querySelector(".sf-brand-short").textContent + "</span>"
+          : '<span data-l="zh">尘画</span>';
       }
       nav.innerHTML += '<a class="tab' + (i === best ? " on" : "") + '" href="' + href + '"' +
         (i === best ? ' aria-current="page"' : "") + '>' +
