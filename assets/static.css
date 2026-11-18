@@ -86,10 +86,14 @@ html[data-theme="light"] .s-story-hero:after{
 .site-foot .sf-nav,.site-foot .sf-utility{display:flex;gap:11px;flex-wrap:wrap;justify-content:center}
 .site-foot .sf-utility{font-size:9px;color:var(--dim)}
 @media(max-width:899px){
+  .site-foot .sf-nav{display:none}
+  .site-foot{margin-top:18px;gap:6px 10px;padding:10px 18px}
+}
+@media(max-width:899px){
   .s-appbar .desknav{display:none}
 }
 @media(max-width:719px){
-  .s-appbar{flex-wrap:wrap;gap:8px;height:auto;padding:10px 18px}
+  .s-appbar{flex-wrap:nowrap;gap:8px;height:60px;padding:0 18px}
   .s-appbar .desknav{display:none}
 }
 @media(min-width:720px){

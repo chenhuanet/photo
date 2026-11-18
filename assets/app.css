@@ -38,7 +38,7 @@ img{display:block;max-width:100%}
 @keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
 /* app bar */
-.appbar{flex:none;height:58px;display:flex;align-items:center;gap:10px;padding:0 15px;
+.appbar{flex:none;height:60px;display:flex;align-items:center;gap:10px;padding:0 15px;
   border-bottom:1px solid var(--line);background:var(--appbar-bg);
   backdrop-filter:blur(18px);position:relative;z-index:12;overflow:hidden}
 .brand{display:flex;align-items:center;gap:8px;white-space:nowrap;min-width:0;flex:0 1 auto}
@@ -367,7 +367,7 @@ body.phone-mode{background:#1a1a1a;display:flex;align-items:center;justify-conte
 body.phone-mode #app{width:390px;height:844px;max-height:calc(100vh - 44px);
   border:9px solid #060606;border-radius:44px;overflow:hidden;
   box-shadow:0 30px 90px #000c,0 0 0 1px #ffffff12}
-body.phone-mode .appbar{padding:4px 12px 0;height:62px;gap:6px}
+body.phone-mode .appbar{padding:4px 12px 0;height:60px;gap:6px}
 body.phone-mode .brand .sub{display:none}
 body.phone-mode .modebtn{font-size:9px;padding:4px 7px}
 body.phone-mode .iconbtn{width:32px;height:32px}
@@ -405,10 +405,11 @@ body.phone-mode .app-scroll{padding-bottom:calc(20px + var(--safe-bottom))}
 /* desktop */
 @media(min-width:900px){
   #app{height:auto;min-height:100vh;overflow:visible}
-  .appbar{height:64px;padding:0 28px;position:sticky;top:0;max-width:1240px;margin:0 auto;width:100%}
+  .appbar{height:60px;padding:0 28px;position:sticky;top:0;max-width:1240px;margin:0 auto;width:100%}
   .desknav{display:flex;align-items:center;gap:2px;margin-left:14px}
   .desknav a{font-size:12px;color:var(--muted);padding:7px 10px;border-radius:999px}
   .desknav a.on{background:var(--surface2);color:var(--text)}
+  .desknav a[aria-current="page"]{background:var(--surface2);color:var(--text)}
   .desknav a:hover{color:var(--text)}
   .desknav .sep{width:1px;height:14px;background:var(--line);margin:0 7px}
   .desknav a.wide-only{display:inline-block}
