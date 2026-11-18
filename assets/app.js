@@ -904,8 +904,11 @@
   }
   function appFoot() {
     var primary = navItems().filter(function (n) {
-      return n.route === "stories" || n.route === "timeline" || n.route === "today";
-    }).map(function (n) {
+      var href = n.href || "";
+      return /\/themes\//.test(href) || /\/timeline\//.test(href) || /\/today\//.test(href);
+    });
+    if (!primary.length) primary = navItems().slice(1, 4);
+    primary = primary.map(function (n) {
       return '<a href="' + esc(itemHref(n)) + '">' + esc(navLabel(n)) + "</a>";
     }).join("");
     return '<footer class="site-foot">' +
@@ -913,6 +916,7 @@
       '<nav class="sf-nav">' + primary + "</nav>" +
       '<nav class="sf-utility"><a href="' + esc(routeHref("about")) + '">' + esc(t("footer.about")) + '</a><a href="' + esc(routeHref("rights")) + '">' + esc(t("footer.rights")) + '</a>' +
       '<a href="' + esc(routeHref("legal")) + '">' + esc(t("footer.legal")) + "</a></nav>" +
+      '<span class="sf-copy"><span data-l="zh">© 2026 尘画 · <a href="https://www.chenhua.net">chenhua.net</a></span><span data-l="en">© 2026 Frame & Grain · <a href="https://www.chenhua.net">chenhua.net</a></span></span>' +
       "</footer>";
   }
 

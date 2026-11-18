@@ -145,6 +145,17 @@
     }
   }
 
+  function addFooterCopy() {
+    Array.prototype.forEach.call(document.querySelectorAll(".site-foot"), function (foot) {
+      if (foot.querySelector(".sf-copy")) return;
+      var copy = document.createElement("span");
+      copy.className = "sf-copy";
+      copy.innerHTML = '<span data-l="zh">© 2026 尘画 · <a href="https://www.chenhua.net">chenhua.net</a></span>' +
+        '<span data-l="en">© 2026 Frame & Grain · <a href="https://www.chenhua.net">chenhua.net</a></span>';
+      foot.appendChild(copy);
+    });
+  }
+
   function markFooterLinks() {
     Array.prototype.forEach.call(document.querySelectorAll(".site-foot .sf-nav a"), function (a) {
       var href = (a.getAttribute("href") || "").toLowerCase();
@@ -162,6 +173,7 @@
   removeHomeNavLink();
   localizeBrand();
   markFooterLinks();
+  addFooterCopy();
   Array.prototype.forEach.call(document.querySelectorAll(".appbar, .masthead, .g-head"), function (header) {
     normalizeHeader(header, searchHref);
   });
@@ -170,7 +182,11 @@
     ".wm-en{display:none;font-family:var(--serif);font-size:18px;line-height:1;letter-spacing:.06em;color:var(--accent,#c8a24a);white-space:nowrap}" +
     "html[data-lang=\"en\"] .brand .wm,html[data-lang=\"en\"] .g-brand .wm{display:none}" +
     "html[data-lang=\"en\"] .brand .wm-en,html[data-lang=\"en\"] .g-brand .wm-en{display:inline-block}" +
-    ".site-foot .sf-nav a[data-sf-drop]{display:none}";
+    ".site-foot .sf-nav a[data-sf-drop]{display:none}" +
+    ".site-foot .sf-copy{display:inline-flex;align-items:center;font-size:9.5px;color:var(--dim,var(--muted));white-space:nowrap;letter-spacing:.01em}" +
+    ".site-foot .sf-copy a{color:inherit;text-decoration:none;border-bottom:1px solid transparent}" +
+    ".site-foot .sf-copy a:hover{color:var(--accent,var(--text));border-color:var(--accent,var(--text))}" +
+    "html[data-lang=\"en\"] .site-foot .sf-copy [data-l=\"zh\"],html[data-lang=\"zh\"] .site-foot .sf-copy [data-l=\"en\"]{display:none}";
   document.head.appendChild(footCss);
   if (searchHref) {
     var headCss = document.createElement("style");
