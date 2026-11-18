@@ -264,8 +264,9 @@
       if (n.themes) attr += ' data-themes="1"';
       if (n.timeline) attr += ' data-timeline="1"';
       if (n.site) attr += ' data-site="' + esc(n.site) + '"';
+      var label = (isEn() && n.icon === "home") ? "Frame" : navLabel(n);
       return '<a class="tab" href="' + esc(itemHref(n)) + '"' + attr + ">" +
-        (ICONS[n.icon] || "") + "<span>" + esc(navLabel(n)) + "</span></a>";
+        (ICONS[n.icon] || "") + "<span>" + esc(label) + "</span></a>";
     }).join("");
     var deskItems = items.filter(function (n) { return n.icon !== "home"; });
     var desk = deskItems.map(function (n) {
