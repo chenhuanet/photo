@@ -39,16 +39,22 @@
 .year-head{display:flex;justify-content:space-between;align-items:baseline;margin:26px 0 12px}
 .year-head h2{font-family:var(--serif);font-size:18px;font-weight:400;letter-spacing:.04em;margin:0}
 .today-months{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
-.today-month{min-width:0;background:var(--bg);padding:14px 14px 12px}
+.today-month{min-width:0;background:var(--bg);padding:0 14px 12px;overflow:hidden}
 .today-month.is-current{background:var(--surface2);box-shadow:inset 0 0 0 1px var(--accent)}
+.today-month-cover{position:relative;height:58px;margin:0 -14px 12px;overflow:hidden;background:var(--surface2)}
+.today-month-cover img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.92)}
+.today-month-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.18),transparent 55%,rgba(0,0,0,.2));pointer-events:none}
+.today-month.is-current .today-month-cover{height:68px}
+.today-month-flag{position:absolute;right:9px;bottom:8px;z-index:1;padding:3px 7px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(0,0,0,.22);color:#fff;font-size:9px;letter-spacing:.08em;backdrop-filter:blur(6px)}
 .today-month h2{display:flex;align-items:baseline;gap:8px;font-family:var(--serif);font-size:17px;font-weight:400;margin:0 0 10px}
-.today-month-count{font-family:var(--sans);font-size:9px;letter-spacing:.04em;color:var(--dim);font-weight:400;margin-left:auto}
+.today-month-count{font-family:var(--sans);font-size:9px;letter-spacing:.03em;color:var(--muted);font-weight:400;margin-left:auto;padding:2px 7px;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
 .today-weekdays,.today-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
 .today-weekdays{margin-bottom:3px}
 .today-weekdays span{text-align:center;font-size:9px;color:var(--dim);padding:0 0 2px}
-.today-day{display:flex;align-items:center;justify-content:center;min-height:28px;font-size:11px;color:var(--muted);text-decoration:none;font-variant-numeric:tabular-nums;border:1px solid transparent}
+.today-day{display:flex;align-items:center;justify-content:center;min-height:30px;font-size:11px;color:var(--dim);text-decoration:none;font-variant-numeric:tabular-nums;border:1px solid transparent}
+.today-day.has-stories{color:var(--text)}
 .today-day.is-blank,.today-day.is-empty{color:var(--dim);opacity:.4}
-.today-day.has-stories:hover{border-color:var(--line);color:var(--text);background:var(--surface2)}
-.today-day.is-today{background:var(--accent);color:var(--bg);font-weight:600}
-@media(max-width:760px){.today-main{padding:0}.day-hero{padding:42px 0 20px}.today-card{grid-template-columns:1fr}.today-cover{min-height:210px;aspect-ratio:16/10}.today-noimg{min-height:210px;border-right:0}.today-copy{padding:18px 0 22px}.today-months{grid-template-columns:1fr 1fr}.today-intro{padding-top:22px}.today-intro h1{font-size:30px}.today-month{padding:12px}.today-nav{font-size:11px;flex-wrap:wrap}.today-feature{grid-template-columns:1fr}.today-feature-main{height:220px}.today-feature-side{grid-template-columns:1fr 1fr;grid-template-rows:1fr;height:112px}.today-feature-date{left:14px;bottom:12px;font-size:19px}}
-@media(max-width:480px){.today-months{grid-template-columns:1fr 1fr}.today-day{min-height:28px}.today-month-count{display:none}}
+.today-day.has-stories:hover{border-color:var(--line);color:var(--text);background:var(--surface)}
+.today-day.is-today{background:var(--accent);color:var(--bg);font-weight:600;box-shadow:0 0 0 1px var(--accent)}
+@media(max-width:760px){.today-main{padding:0}.day-hero{padding:42px 0 20px}.today-card{grid-template-columns:1fr}.today-cover{min-height:210px;aspect-ratio:16/10}.today-noimg{min-height:210px;border-right:0}.today-copy{padding:18px 0 22px}.today-months{grid-template-columns:1fr 1fr}.today-intro{padding-top:22px}.today-intro h1{font-size:30px}.today-month{padding:0 10px 10px}.today-month-cover{height:50px;margin:0 -10px 10px}.today-month.is-current .today-month-cover{height:58px}.today-nav{font-size:11px;flex-wrap:wrap}.today-feature{grid-template-columns:1fr}.today-feature-main{height:220px}.today-feature-side{grid-template-columns:1fr 1fr;grid-template-rows:1fr;height:112px}.today-feature-date{left:14px;bottom:12px;font-size:19px}}
+@media(max-width:480px){.today-months{grid-template-columns:1fr 1fr}.today-day{min-height:28px;font-size:10.5px}.today-month-count{display:none}.today-month h2{font-size:16px}}

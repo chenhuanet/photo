@@ -90,6 +90,18 @@
     });
   }
 
+  function localizeBrand() {
+    Array.prototype.forEach.call(document.querySelectorAll(".brand, .g-brand"), function (brand) {
+      if (brand.querySelector(".wm-en")) return;
+      var wm = brand.querySelector(".wm");
+      if (!wm) return;
+      var en = document.createElement("span");
+      en.className = "wm-en";
+      en.textContent = "Chenhua";
+      wm.parentNode.insertBefore(en, wm.nextSibling);
+    });
+  }
+
   function headSearchForm(href) {
     var label = root.getAttribute("data-lang") === "en" ? "Search archive" : "搜索标题、地点或主题";
     var form = document.createElement("form");
@@ -144,12 +156,17 @@
   if (!searchHref) searchHref = "https://www.chenhua.net/search/";
   removeSearchLinks();
   removeHomeNavLink();
+  localizeBrand();
   markFooterLinks();
   Array.prototype.forEach.call(document.querySelectorAll(".appbar, .masthead, .g-head"), function (header) {
     normalizeHeader(header, searchHref);
   });
   var footCss = document.createElement("style");
-  footCss.textContent = ".site-foot .sf-nav a[data-sf-drop]{display:none}";
+  footCss.textContent =
+    ".wm-en{display:none;font-family:var(--serif);font-size:19px;line-height:1;letter-spacing:.12em;color:var(--accent,#c8a24a);white-space:nowrap}" +
+    "html[data-lang=\"en\"] .brand .wm,html[data-lang=\"en\"] .g-brand .wm{display:none}" +
+    "html[data-lang=\"en\"] .brand .wm-en,html[data-lang=\"en\"] .g-brand .wm-en{display:inline-block}" +
+    ".site-foot .sf-nav a[data-sf-drop]{display:none}";
   document.head.appendChild(footCss);
   if (searchHref) {
     var headCss = document.createElement("style");

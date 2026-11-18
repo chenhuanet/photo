@@ -228,7 +228,8 @@
   }
   function wordmark() {
     return '<span class="wm"><span class="wm-lite">出</span><span class="wm-strong">尘</span>' +
-      '<span class="wm-lite">入</span><span class="wm-strong">画</span></span>';
+      '<span class="wm-lite">入</span><span class="wm-strong">画</span></span>' +
+      '<span class="wm-en">Chenhua</span>';
   }
   function leafSrc(expr) {
     return (CFG.leafBase || "assets/leaf/") + (expr || "calm") + ".svg";
