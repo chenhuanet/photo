@@ -48,6 +48,20 @@
     var map = (CFG.taxonomy || {})[kind] || {};
     return map[value] || value;
   }
+  function tagsText(s) {
+    var arr = isEn() ? (s.themes_en || s.themes || []) : (s.themes || []);
+    if (isEn()) {
+      arr = arr.map(function (x) {
+        if (!/[\u4e00-\u9fff]/.test(x)) return x;
+        var tax = CFG.taxonomy || {};
+        for (var k in tax) {
+          if (tax[k] && tax[k][x]) return tax[k][x];
+        }
+        return x;
+      });
+    }
+    return arr.join(" / ");
+  }
 
   const SITE_RECORDS = (BUNDLE.records || []).filter(function (r) {
     return (CFG.collections || []).indexOf(r.collection) >= 0;
@@ -648,7 +662,7 @@
     var chapters = (s.chapters || []).map(function (ch) { return loc(ch, "title"); }).filter(Boolean);
     var meta = isEvent
       ? '<span>' + esc(dateText) + "</span><span>" + esc(loc(s, "place")) + "</span><span>" + (s.count || 0) + " " + esc(t("common.frames")) + "</span>"
-      : '<span>' + (s.count || 0) + " " + esc(t("common.frames")) + "</span><span>" + chapters.length + " " + esc(t("common.chapters")) + "</span><span>" + esc(isEn() ? (s.themes_en || []).join(" / ") : (s.themes || []).join(" / ")) + "</span>";
+      : '<span>' + (s.count || 0) + " " + esc(t("common.frames")) + "</span><span>" + chapters.length + " " + esc(t("common.chapters")) + "</span><span>" + esc(tagsText(s)) + "</span>";
     return '<section class="today-hero theme-hero">' +
       '<img class="today-hero-img" src="' + esc(cover ? imgOf(cover) : (preview[0] ? imgOf(preview[0]) : "")) + '" alt="' + esc(loc(s, "title")) + '">' +
       '<div class="today-inner">' +
@@ -717,7 +731,7 @@
         var status = type + (s.date ? " · " + s.date : "") + (s.status === "published" ? " · " + t("stories.published") : "");
         return '<a class="story-card" href="' + esc(storyStaticHref(s)) + '">' +
           '<div class="pic" style="background-image:url(\'' + esc(img) + '\')"></div>' +
-          '<div class="body"><div class="status">' + esc(status) + "</div><h3>" + esc(loc(s, "title")) + "</h3><p>" + esc(loc(s, "subtitle")) + '</p><div class="cnt">' + (s.count || 0) + " " + esc(t("common.frames")) + " · " + esc(isEn() ? (s.themes_en || []).join(" / ") : (s.themes || []).join(" / ")) + "</div></div></a>";
+          '<div class="body"><div class="status">' + esc(status) + "</div><h3>" + esc(loc(s, "title")) + "</h3><p>" + esc(loc(s, "subtitle")) + '</p><div class="cnt">' + (s.count || 0) + " " + esc(t("common.frames")) + " · " + esc(tagsText(s)) + "</div></div></a>";
       }).join("");
   }
 
@@ -798,7 +812,7 @@
       : '<div class="thumb ph">' + esc(t("common.themes")) + "</div>";
     return '<a class="result theme-result" href="' + esc(storyStaticHref(s)) + '">' + thumb +
       '<div><h3>' + esc(loc(s, "title")) + '</h3><div class="meta"><b>' + esc(isEn() ? (s.type_en || "Story") : (s.type || "长文")) + "</b><span>" +
-      (s.count || 0) + " " + esc(t("common.frames")) + "</span><span>" + esc(isEn() ? (s.themes_en || []).join(" / ") : (s.themes || []).join(" / ")) +
+      (s.count || 0) + " " + esc(t("common.frames")) + "</span><span>" + esc(tagsText(s)) +
       "</span></div><p>" + esc(loc(s, "subtitle")) + "</p></div></a>";
   }
   function searchScopeChips() {
