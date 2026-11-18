@@ -147,7 +147,7 @@
 
   function addFooterCopy() {
     Array.prototype.forEach.call(document.querySelectorAll(".site-foot"), function (foot) {
-      if (foot.querySelector(".sf-copy")) return;
+      if (foot.querySelector(".sf-copy") || foot.querySelector(".sf-left")) return;
       var copy = document.createElement("span");
       copy.className = "sf-copy";
       copy.innerHTML = '<span data-l="zh">© 2026 尘画 · <a href="https://www.chenhua.net">chenhua.net</a></span>' +
@@ -159,10 +159,10 @@
   function markFooterLinks() {
     Array.prototype.forEach.call(document.querySelectorAll(".site-foot .sf-nav a"), function (a) {
       var href = (a.getAttribute("href") || "").toLowerCase();
-      if (/(themes|timeline|today|about|rights|legal)/.test(href)) {
-        a.setAttribute("data-sf-keep", "1");
-      } else {
+      if (/(search|about|rights)/.test(href)) {
         a.setAttribute("data-sf-drop", "1");
+      } else {
+        a.setAttribute("data-sf-keep", "1");
       }
     });
   }
@@ -183,6 +183,8 @@
     "html[data-lang=\"en\"] .brand .wm,html[data-lang=\"en\"] .g-brand .wm{display:none}" +
     "html[data-lang=\"en\"] .brand .wm-en,html[data-lang=\"en\"] .g-brand .wm-en{display:inline-block}" +
     ".site-foot .sf-nav a[data-sf-drop]{display:none}" +
+    ".site-foot .sf-brand-short{display:none}" +
+    "@media(max-width:899px){html[data-lang=\"en\"] .site-foot .sf-brand-long{display:none}html[data-lang=\"en\"] .site-foot .sf-brand-short{display:inline}}" +
     ".site-foot .sf-copy{display:inline-flex;align-items:center;font-size:9.5px;color:var(--dim,var(--muted));white-space:nowrap;letter-spacing:.01em}" +
     ".site-foot .sf-copy a{color:inherit;text-decoration:none;border-bottom:1px solid transparent}" +
     ".site-foot .sf-copy a:hover{color:var(--accent,var(--text));border-color:var(--accent,var(--text))}" +
@@ -316,6 +318,9 @@
     links.forEach(function (a, i) {
       var href = a.getAttribute("href") || "";
       var label = a.innerHTML;
+      if (root.getAttribute("data-lang") === "en" && a.querySelector(".sf-brand-long") && a.querySelector(".sf-brand-short")) {
+        label = '<span data-l="en">' + a.querySelector(".sf-brand-short").textContent + "</span>";
+      }
       nav.innerHTML += '<a class="tab' + (i === best ? " on" : "") + '" href="' + href + '"' +
         (i === best ? ' aria-current="page"' : "") + '>' +
         (TAB_ICONS[tabIconFor(a)] || "") + '<span class="tab-label">' + label + "</span></a>";

@@ -902,21 +902,21 @@
     return '<div class="section simple-page"><div class="simple-mark">' + leafIcon(expr || "calm", 74, "about-mark") +
       '</div><div class="section-head"><h2>' + esc(title) + '</h2><span class="sub">' + esc(t("brand.name")) + "</span></div><p class=\"muted\" style=\"font-size:13px;line-height:1.9\">" + esc(text) + "</p></div>";
   }
+  function footerHomeLabel() {
+    return '<span data-l="zh">出尘入画</span><span data-l="en"><span class="sf-brand-long">Frame &amp; Grain</span><span class="sf-brand-short">Frame</span></span>';
+  }
+
   function appFoot() {
-    var primary = navItems().filter(function (n) {
-      var href = n.href || "";
-      return /\/themes\//.test(href) || /\/timeline\//.test(href) || /\/today\//.test(href);
-    });
-    if (!primary.length) primary = navItems().slice(1, 4);
-    primary = primary.map(function (n) {
-      return '<a href="' + esc(itemHref(n)) + '">' + esc(navLabel(n)) + "</a>";
+    var links = navItems().map(function (n, i) {
+      var label = i === 0 ? footerHomeLabel() : esc(navLabel(n));
+      return '<a href="' + esc(itemHref(n)) + '">' + label + "</a>";
     }).join("");
+    var navAria = isEn() ? "Site navigation" : "站内导航";
     return '<footer class="site-foot">' +
-      '<a class="sf-brand" href="' + esc(brandHref()) + '">' + esc(isEn() ? "Frame & Grain" : "出尘入画") + '</a>' +
-      '<nav class="sf-nav">' + primary + "</nav>" +
-      '<nav class="sf-utility"><a href="' + esc(routeHref("about")) + '">' + esc(t("footer.about")) + '</a><a href="' + esc(routeHref("rights")) + '">' + esc(t("footer.rights")) + '</a>' +
-      '<a href="' + esc(routeHref("legal")) + '">' + esc(t("footer.legal")) + "</a></nav>" +
-      '<span class="sf-copy"><span data-l="zh">© 2026 尘画 · <a href="https://www.chenhua.net">chenhua.net</a></span><span data-l="en">© 2026 Frame & Grain · <a href="https://www.chenhua.net">chenhua.net</a></span></span>' +
+      '<div class="sf-left"><span data-l="zh">© 2026 尘画 · <a href="https://www.chenhua.net">chenhua.net</a></span>' +
+      '<span data-l="en">© 2026 <span class="sf-brand-long">Frame &amp; Grain</span><span class="sf-brand-short">Frame</span> · <a href="https://www.chenhua.net">chenhua.net</a></span></div>' +
+      '<nav class="sf-nav" aria-label="' + navAria + '">' + links + "</nav>" +
+      '<div class="sf-right"><a href="' + esc(routeHref("legal")) + '">' + (isEn() ? "Disclaimer" : "免责条款") + "</a></div>" +
       "</footer>";
   }
 
