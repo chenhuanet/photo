@@ -92,6 +92,10 @@
 
   function localizeBrand() {
     Array.prototype.forEach.call(document.querySelectorAll(".brand, .g-brand"), function (brand) {
+      var brandLink = brand.closest("a") || brand;
+      if (brandLink && root.getAttribute("data-lang") === "en") {
+        brandLink.setAttribute("aria-label", "Frame & Grain home");
+      }
       if (brand.querySelector(".wm-en")) return;
       var wm = brand.querySelector(".wm");
       if (!wm) return;
