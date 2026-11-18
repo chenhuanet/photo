@@ -153,10 +153,11 @@
     back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
     sun: '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
     moon: '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>',
+    lang: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.8 12h16.4M12 3.5c2.1 2.4 3.2 5.4 3.2 8.5s-1.1 6.1-3.2 8.5c-2.1-2.4-3.2-5.4-3.2-8.5S9.9 5.9 12 3.5z"/></svg>',
   };
 
   function navItems() {
-    return (CFG.nav || []).filter(function (n) { return n && n.label; });
+    return (CFG.nav || []).filter(function (n) { return n && n.label && !n.search; });
   }
   function navLabel(n) {
     return isEn() ? (n.label_en || n.label) : n.label;
@@ -193,6 +194,17 @@
     if (CFG.site === "photo") return t("search.ph.photo");
     if (CFG.site === "paint") return t("search.ph.paint");
     return t("search.ph.main");
+  }
+  function headSearch() {
+    return '<form class="head-search" action="' + esc(searchHref()) + '" role="search">' +
+      '<input name="q" type="search" placeholder="' + esc(homeSearchLabel()) + '" autocomplete="off" aria-label="' + esc(t("common.search")) + '">' +
+      '<button type="submit" aria-label="' + esc(t("common.search")) + '">' + ICONS.search + "</button></form>";
+  }
+  function searchIcon() {
+    return '<a class="iconbtn searchbtn" href="' + esc(searchUrl("", defaultSearchScope())) + '" aria-label="' + esc(t("common.search")) + '">' + ICONS.search + "</a>";
+  }
+  function langIcon() {
+    return '<button class="langbtn" type="button" data-lang-toggle aria-label="' + esc(t("lang.aria")) + '">' + ICONS.lang + "</button>";
   }
   function itemHref(n) {
     if (n.search) return searchUrl("", defaultSearchScope());
@@ -240,7 +252,8 @@
       return '<a class="tab" href="' + esc(itemHref(n)) + '"' + attr + ">" +
         (ICONS[n.icon] || "") + "<span>" + esc(navLabel(n)) + "</span></a>";
     }).join("");
-    var desk = items.map(function (n) {
+    var deskItems = items.filter(function (n) { return n.icon !== "home"; });
+    var desk = deskItems.map(function (n) {
       var attr = "";
       if (n.route) attr += ' data-desk="' + esc(n.route) + '"';
       if (n.themes) attr += ' data-themes="1"';
@@ -249,11 +262,12 @@
       return '<a' + (n.wideOnly ? ' class="wide-only"' : "") + ' href="' + esc(itemHref(n)) + '"' + attr + ">" + esc(deskLabel(n)) + "</a>";
     }).join("");
     app.innerHTML =
-      '<header class="appbar">' +
+      '<header class="appbar has-head-search">' +
         '<a class="brand" href="' + esc(brandHref()) + '">' + leafIcon(siteLeaf(), 30, "brand-mark") + wordmark() + '<span class="sub">' + esc(t("brand.sub")) + "</span></a>" +
         '<nav class="desknav">' + desk + "</nav>" +
+        headSearch() +
         '<div class="right">' +
-          '<button class="langbtn" data-lang-toggle aria-label="' + esc(t("lang.aria")) + '">' + esc(t("lang.switch")) + "</button>" +
+          searchIcon() + langIcon() +
           '<button class="iconbtn themebtn" data-themebtn aria-label="' + esc(state.theme === "light" ? t("theme.toDark") : t("theme.toLight")) + '">' + ICONS.sun + ICONS.moon + "</button>" +
         "</div>" +
       "</header>" +
@@ -267,6 +281,9 @@
       "</div>" +
       '<div class="toast" id="toast"></div>';
     bindGlobal();
+    var sc = app.querySelector(".app-scroll");
+    if (sc) sc.addEventListener("scroll", maybeDayLoad, { passive: true });
+    window.addEventListener("scroll", maybeDayLoad, { passive: true });
   }
 
   function bindGlobal() {
@@ -494,7 +511,9 @@
     if (!rows.length) {
       return emptyState("sleepy", t("gallery.emptyTitle"), t("gallery.emptyText"));
     }
-    var r = rows[dailyIndex(rows.length)];
+    var event = todayEvents()[0];
+    var cover = event ? byId(event.cover) : null;
+    var r = cover && imgOf(cover) ? cover : rows[dailyIndex(rows.length)];
     var d = new Date();
     var date = fmtDate(d);
     var related = riverPicks(rows, r.id, 8);
@@ -507,9 +526,7 @@
         '<div class="today-meta"><span>' + esc(r.year || "") + "</span><span>" + esc(loc(r, "place") || tx("region", r.region)) + "</span><span>" + esc(tx("source_short", r.source_short)) + "</span>" + usageTag(r) + "</div>" +
         '<div class="today-actions"><a class="btn gold" href="' + esc(staticHref(r)) + '">' + esc(isPaint ? t("home.openPainting") : t("home.readFrame")) + '</a><button class="btn" data-lb="' + esc(r.id) + '">' + esc(t("common.zoom")) + '</button><a class="btn" href="' + esc(routeHref("gallery")) + '">' + esc(isPaint ? t("home.enterPaintAxis") : t("home.enterPhotoAxis")) + "</a></div>" +
       "</div></section>" +
-      homeSearchBox() +
-      '<div class="section"><div class="section-head"><h2>' + esc(isPaint ? t("home.paintRiver") : t("home.photoRiver")) + '</h2><span class="sub">' + esc(t("home.riverSub")) + "</span></div></div>" +
-      masonry(related) +
+      (dayStreamBlock() || masonry(related)) +
       '<div class="more-wrap"><a class="btn" href="' + esc(routeHref("gallery")) + '">' + esc(t("home.viewAll", { n: SITE_RECORDS.length })) + "</a></div>";
   }
   function dailyThemes() {
@@ -526,6 +543,93 @@
   function todayEvent() {
     var rows = todayEvents();
     return rows.length ? rows[0] : null;
+  }
+  function storyImage(s) {
+    var r = byId(s.cover);
+    if (r && imgOf(r)) return imgOf(r);
+    var ids = s.photo_ids || [];
+    for (var i = 0; i < ids.length; i++) {
+      var x = byId(ids[i]);
+      if (x && imgOf(x)) return imgOf(x);
+    }
+    return "";
+  }
+  function dayParts(s) {
+    var m = String(s.date || "").slice(5, 10).split("-");
+    return m.length === 2 ? { mm: +m[0], dd: +m[1] } : null;
+  }
+  function dayLabel(s) {
+    var p = dayParts(s);
+    if (!p) return "";
+    if (isEn()) return ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][p.mm - 1] + " " + p.dd;
+    return p.mm + "月" + p.dd + "日";
+  }
+  function homeDayItems() {
+    var map = {}, order = [];
+    themeStories().forEach(function (s) {
+      var p = dayParts(s);
+      if (!p || !storyImage(s)) return;
+      var md = (p.mm < 10 ? "0" : "") + p.mm + "-" + (p.dd < 10 ? "0" : "") + p.dd;
+      if (!map[md]) { map[md] = s; order.push(md); }
+    });
+    var now = new Date();
+    var base = new Date(2024, now.getMonth(), now.getDate());
+    var todayMd = ("0" + (now.getMonth() + 1)).slice(-2) + "-" + ("0" + now.getDate()).slice(-2);
+    var out = [];
+    for (var i = 1; i <= 183; i++) {
+      [-i, i].forEach(function (off) {
+        var d = new Date(base.getTime());
+        d.setDate(base.getDate() + off);
+        var md = ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+        if (md !== todayMd && map[md]) out.push({ s: map[md], md: md });
+      });
+    }
+    if (out.length < 12) {
+      order.forEach(function (md) {
+        if (md !== todayMd && map[md] && !out.some(function (x) { return x.md === md; })) out.push({ s: map[md], md: md });
+      });
+    }
+    return out;
+  }
+  function dayCardTitle(s) {
+    var title = loc(s, "title") || s.id;
+    return String(title)
+      .replace(/^\d{4}年\d{1,2}月\d{1,2}日[：:]\s*/, "")
+      .replace(/^[A-Z][a-z]+\s+\d{1,2},\s+\d{4}[：:]\s*/, "");
+  }
+  function dayCard(item) {
+    var s = item.s;
+    var title = dayCardTitle(s);
+    var year = String(s.date || "").slice(0, 4);
+    return '<a class="day-card" href="' + esc(storyStaticHref(s)) + '">' +
+      '<div class="day-pic"><img src="' + esc(storyImage(s)) + '" alt="' + esc(loc(s, "title")) + '" loading="lazy"></div>' +
+      '<div class="day-copy"><span class="day-date">' + esc(dayLabel(s)) + (year ? ' <b>' + esc(year) + "</b>" : "") + "</span><h3>" + esc(title) + "</h3></div></a>";
+  }
+  function dayStreamBlock() {
+    var items = homeDayItems();
+    if (!items.length) return "";
+    state.dayItems = items;
+    state.dayVisible = Math.min(18, items.length);
+    return '<section class="day-stream" id="dayStream"><div class="day-masonry" id="dayMasonry">' +
+      items.slice(0, state.dayVisible).map(dayCard).join("") + "</div></section>";
+  }
+  function appendDayCards() {
+    var wall = q("#dayMasonry");
+    if (!wall || !state.dayItems || !state.dayItems.length) return;
+    if (state.dayVisible >= state.dayItems.length) return;
+    var next = state.dayItems.slice(state.dayVisible, state.dayVisible + 18);
+    state.dayVisible += next.length;
+    wall.insertAdjacentHTML("beforeend", next.map(dayCard).join(""));
+  }
+  function maybeDayLoad() {
+    if (state.route !== "today") return;
+    if (!q("#dayMasonry")) return;
+    var sc = q(".app-scroll");
+    var near = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 560;
+    if (sc && sc.scrollHeight > sc.clientHeight + 8) {
+      near = sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 560;
+    }
+    if (near) appendDayCards();
   }
   function renderThemeFeature(s, isEvent) {
     var cover = byId(s.cover);
@@ -553,33 +657,18 @@
         '<p class="today-note">' + esc(intro) + "</p>" +
         '<div class="today-meta">' + meta + "</div>" +
         '<div class="today-actions"><a class="btn gold" href="' + esc(storyStaticHref(s)) + '">' + esc(isEvent ? t("home.readEvent") : t("home.readTheme")) + '</a><a class="btn" href="' + esc(routeHref("stories")) + '">' + esc(t("story.allStories")) + '</a><a class="btn" href="' + esc(routeHref("timeline")) + '">' + esc(t("timeline.title")) + "</a></div>" +
-      "</div></section>" +
-      homeSearchBox() +
-      '<div class="section"><div class="section-head"><h2>' + esc(isEvent ? t("home.eventPreview") : t("home.themePreview")) + '</h2><span class="sub">' + (s.count || 0) + " " + esc(t("common.frames")) + " · " + chapters.length + " " + esc(t("common.chapters")) + '</span></div></div>' +
-      '<div class="theme-preview">' + preview.map(function (r) {
-        return '<a href="' + esc(staticHref(r)) + '"><img src="' + esc(imgOf(r)) + '" alt="' + esc(loc(r, "title")) + '" loading="lazy"><span>' + esc(loc(r, "title")) + "</span></a>";
-      }).join("") + "</div>" +
-      (chapters.length ? '<div class="section"><div class="section-head"><h2>' + esc(t("home.chapters")) + '</h2><span class="sub">' + esc(isEvent ? t("home.chapterSubEvent") : t("home.chapterSubTheme")) + '</span></div></div><div class="theme-chapters">' + chapters.map(function (title, i) {
-        return "<div><b>" + esc(t("story.chapterN", { n: i + 1 })) + "</b><span>" + esc(title) + "</span></div>";
-      }).join("") + "</div>" : "");
+      "</div></section>";
   }
   function viewTodayTheme() {
     var stories = dailyThemes();
     if (!stories.length) return viewToday();
-    return renderThemeFeature(stories[dailyIndex(stories.length)], false);
+    return renderThemeFeature(stories[dailyIndex(stories.length)], false) + dayStreamBlock();
   }
   function viewTodayEvent() {
     var rows = todayEvents();
     var s = rows.length ? rows[0] : null;
     if (!s) return viewTodayTheme();
-    var more = rows.slice(1);
-    var extra = more.length ? '<div class="section"><div class="section-head"><h2>' + esc(isEn() ? "More from this day" : "同一天，更多故事") + '</h2><span class="sub">' + esc(isEn() ? "A second story from the same date" : "同一天的另一篇故事") + '</span></div></div><div class="story-grid">' + more.map(function (x) {
-      var cover = byId(x.cover);
-      var img = cover ? imgOf(cover) : "";
-      var type = isEn() ? (x.type_en || "Story") : (x.type || "长文");
-      return '<a class="story-card" href="' + esc(storyStaticHref(x)) + '"><div class="pic" style="background-image:url(\'' + esc(img) + '\')"></div><div class="body"><div class="status">' + esc(type + (x.date ? " · " + x.date : "")) + '</div><h3>' + esc(loc(x, "title")) + '</h3><p>' + esc(loc(x, "subtitle")) + '</p><div class="cnt">' + (x.count || 0) + " " + esc(t("common.frames")) + " · " + esc(isEn() ? (x.themes_en || []).join(" / ") : (x.themes || []).join(" / ")) + "</div></div></a>";
-    }).join("") + "</div>" : "";
-    return renderThemeFeature(s, true) + extra;
+    return renderThemeFeature(s, true) + dayStreamBlock();
   }
   function viewTimeline() {
     var items = themeStories().map(function (s) {
@@ -799,7 +888,9 @@
       '</div><div class="section-head"><h2>' + esc(title) + '</h2><span class="sub">' + esc(t("brand.name")) + "</span></div><p class=\"muted\" style=\"font-size:13px;line-height:1.9\">" + esc(text) + "</p></div>";
   }
   function appFoot() {
-    var primary = navItems().map(function (n) {
+    var primary = navItems().filter(function (n) {
+      return n.route === "stories" || n.route === "timeline" || n.route === "today";
+    }).map(function (n) {
       return '<a href="' + esc(itemHref(n)) + '">' + esc(navLabel(n)) + "</a>";
     }).join("");
     return '<footer class="site-foot">' +

@@ -46,6 +46,128 @@
     return document.body ? (document.body.getAttribute(name) || "") : "";
   }
 
+  var HEAD_ICONS = {
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>',
+    lang: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.8 12h16.4M12 3.5c2.1 2.4 3.2 5.4 3.2 8.5s-1.1 6.1-3.2 8.5c-2.1-2.4-3.2-5.4-3.2-8.5S9.9 5.9 12 3.5z"/></svg>'
+  };
+
+  function textOf(el) { return (el.textContent || "").replace(/\s+/g, ""); }
+
+  function findSearchLink() {
+    var nodes = document.querySelectorAll(".desknav a, .masthead-nav a, .g-nav a, .sf-nav a");
+    for (var i = 0; i < nodes.length; i++) {
+      var a = nodes[i];
+      var href = a.getAttribute("href") || "";
+      if (textOf(a).toLowerCase().indexOf("search") >= 0 ||
+          /(^|\/)search\/(?:$|index\.html)|search\/(?:index\.html)?$/.test(href)) {
+        try { return new URL(href, location.href).href; } catch (e) { return href; }
+      }
+    }
+    return "";
+  }
+
+  function removeSearchLinks() {
+    var nodes = document.querySelectorAll(".desknav a, .masthead-nav a, .g-nav a, .sf-nav a");
+    for (var i = nodes.length - 1; i >= 0; i--) {
+      var a = nodes[i];
+      if (textOf(a).toLowerCase().indexOf("search") >= 0 ||
+          /(^|\/)search\/(?:$|index\.html)/.test(a.getAttribute("href") || "")) {
+        if (a.parentNode) a.parentNode.removeChild(a);
+      }
+    }
+  }
+
+  function removeHomeNavLink() {
+    Array.prototype.forEach.call(document.querySelectorAll(".desknav, .masthead-nav, .g-nav"), function (nav) {
+      var first = nav.querySelector("a");
+      if (!first) return;
+      var label = textOf(first);
+      var href = first.getAttribute("href") || "";
+      if (label.indexOf("尘画") >= 0 || label === "Chenhua" ||
+          /^(\.\.\/|\.\.\/\.\.\/dist\/main\/|index\.html|\.\/|\/)$/.test(href)) {
+        nav.removeChild(first);
+      }
+    });
+  }
+
+  function headSearchForm(href) {
+    var label = root.getAttribute("data-lang") === "en" ? "Search archive" : "搜索标题、地点或主题";
+    var form = document.createElement("form");
+    form.className = "head-search";
+    form.setAttribute("role", "search");
+    form.setAttribute("action", href);
+    form.innerHTML = '<input type="search" name="q" autocomplete="off" aria-label="' +
+      (root.getAttribute("data-lang") === "en" ? "Search" : "搜索") + '" placeholder="' + label + '">' +
+      '<button type="submit" aria-label="' + (root.getAttribute("data-lang") === "en" ? "Search" : "搜索") + '">' +
+      HEAD_ICONS.search + "</button>";
+    return form;
+  }
+
+  function normalizeHeader(header, searchHref) {
+    var tools = header.querySelector(".right") || header.querySelector(".topmeta") || header.querySelector(".g-tools");
+    if (!tools) return;
+    var gallery = header.classList.contains("g-head");
+    var iconClass = gallery ? "g-tool" : "iconbtn";
+    if (searchHref) {
+      var form = headSearchForm(searchHref);
+      tools.parentNode.insertBefore(form, tools);
+      header.className += " has-head-search";
+      if (!header.querySelector(".searchbtn")) {
+        var a = document.createElement("a");
+        a.className = iconClass + " searchbtn";
+        a.href = searchHref;
+        a.setAttribute("aria-label", root.getAttribute("data-lang") === "en" ? "Search" : "搜索");
+        a.innerHTML = HEAD_ICONS.search;
+        tools.insertBefore(a, tools.firstChild);
+      }
+    }
+    var langBtn = header.querySelector("[data-lang-toggle]");
+    if (langBtn) {
+      langBtn.innerHTML = HEAD_ICONS.lang;
+      if (gallery) langBtn.className = "g-tool g-lang";
+      langBtn.setAttribute("aria-label", root.getAttribute("data-lang") === "en" ? "Switch to Chinese" : "切换到英文");
+    }
+  }
+
+  function markFooterLinks() {
+    Array.prototype.forEach.call(document.querySelectorAll(".site-foot .sf-nav a"), function (a) {
+      var href = (a.getAttribute("href") || "").toLowerCase();
+      if (/(themes|timeline|today|about|rights|legal)/.test(href)) {
+        a.setAttribute("data-sf-keep", "1");
+      } else {
+        a.setAttribute("data-sf-drop", "1");
+      }
+    });
+  }
+
+  var searchHref = findSearchLink();
+  if (!searchHref) searchHref = "https://www.chenhua.net/search/";
+  removeSearchLinks();
+  removeHomeNavLink();
+  markFooterLinks();
+  Array.prototype.forEach.call(document.querySelectorAll(".appbar, .masthead, .g-head"), function (header) {
+    normalizeHeader(header, searchHref);
+  });
+  var footCss = document.createElement("style");
+  footCss.textContent = ".site-foot .sf-nav a[data-sf-drop]{display:none}";
+  document.head.appendChild(footCss);
+  if (searchHref) {
+    var headCss = document.createElement("style");
+    headCss.textContent =
+      ".head-search{display:flex;align-items:center;gap:3px;height:32px;min-width:92px;max-width:190px;flex:1 1 140px;" +
+      "margin-left:auto;margin-right:3px;padding:0 4px 0 11px;border:1px solid var(--line,var(--rule,#3a332a));border-radius:999px;" +
+      "background:var(--surface,var(--panel,#171412));color:var(--muted)}" +
+      ".head-search input{min-width:0;width:100%;height:100%;border:0;outline:0;background:transparent;color:var(--text,var(--ink,#ede6d6));font:inherit;font-size:11px}" +
+      ".head-search input::placeholder{color:var(--dim,var(--muted,#9b9184))}" +
+      ".head-search button{width:24px;height:24px;flex:none;display:grid;place-items:center;border-radius:50%;color:var(--muted)}" +
+      ".head-search button svg{width:15px;height:15px}" +
+      ".g-tool svg,.iconbtn svg{width:18px;height:18px;flex:none}" +
+      ".masthead.has-head-search .topmeta,.g-head.has-head-search .g-tools{margin-left:0}" +
+      ".g-lang{font-size:0;padding:0;display:grid;place-items:center}" +
+      "@media(max-width:899px){.head-search{display:none}}";
+    document.head.appendChild(headCss);
+  }
+
   function applyLang(lang) {
     root.setAttribute("data-lang", lang);
     root.setAttribute("lang", lang === "en" ? "en" : "zh-CN");
@@ -68,6 +190,15 @@
       var zh = img.getAttribute("data-alt-zh") || img.getAttribute("alt") || "";
       img.setAttribute("alt", lang === "en" ? (img.getAttribute("data-alt-en") || zh) : zh);
     });
+    var hs = document.querySelector(".head-search input");
+    if (hs) {
+      hs.setAttribute("placeholder", lang === "en" ? "Search archive" : "搜索标题、地点或主题");
+      hs.setAttribute("aria-label", lang === "en" ? "Search" : "搜索");
+    }
+    var hsb = document.querySelector(".head-search button");
+    if (hsb) hsb.setAttribute("aria-label", lang === "en" ? "Search" : "搜索");
+    var sbtn = document.querySelector(".head-search + .right .searchbtn, .has-head-search .searchbtn");
+    if (sbtn) sbtn.setAttribute("aria-label", lang === "en" ? "Search" : "搜索");
   }
 
   var initialTheme = readCookie(THEME_KEY);
@@ -129,6 +260,18 @@
         }
       } catch (e) {}
     });
+    function tabIconFor(a) {
+      var href = (a.getAttribute("href") || "").toLowerCase();
+      var label = textOf(a).toLowerCase();
+      if (/netcn\.org/.test(href) || label.indexOf("directory") >= 0 || label.indexOf("导航") >= 0) return 7;
+      if (/\/today\//.test(href)) return 3;
+      if (/\/timeline\//.test(href)) return 2;
+      if (/\/themes\//.test(href)) return 1;
+      if (/photo\.|\/photo\//.test(href)) return 4;
+      if (/paint\.|\/paint\//.test(href)) return 5;
+      if (/\/search\//.test(href)) return 6;
+      return 0;
+    }
     var nav = document.createElement("nav");
     nav.className = "tabbar site-tabbar";
     nav.setAttribute("aria-label", root.getAttribute("data-lang") === "en" ? "Site navigation" : "全站导航");
@@ -137,7 +280,7 @@
       var label = a.innerHTML;
       nav.innerHTML += '<a class="tab' + (i === best ? " on" : "") + '" href="' + href + '"' +
         (i === best ? ' aria-current="page"' : "") + '>' +
-        (TAB_ICONS[i] || "") + '<span class="tab-label">' + label + "</span></a>";
+        (TAB_ICONS[tabIconFor(a)] || "") + '<span class="tab-label">' + label + "</span></a>";
     });
     var style = document.createElement("style");
     style.textContent =
@@ -147,7 +290,7 @@
       "@media(max-width:899px){" +
       "body.has-site-tabbar{padding-bottom:calc(62px + env(safe-area-inset-bottom))}" +
       ".site-tabbar{display:grid;position:fixed;left:0;right:0;bottom:0;z-index:40;" +
-      "grid-template-columns:repeat(8,minmax(0,1fr));gap:2px;align-items:center;" +
+      "grid-template-columns:repeat(" + Math.max(links.length, 1) + ",minmax(0,1fr));gap:2px;align-items:center;" +
       "border-top:1px solid var(--line,var(--rule,#302b25));" +
       "background:var(--tabbar-bg,var(--bg,var(--paper,#0d0c0b)));" +
       "backdrop-filter:blur(20px);padding:5px 4px calc(5px + env(safe-area-inset-bottom))}" +
