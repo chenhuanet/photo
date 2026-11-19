@@ -16,7 +16,7 @@
 <meta property="og:url" content="https://photo.chenhua.net/timeline/">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:locale:alternate" content="en_US">
-<link rel="icon" type="image/svg+xml" href="../../assets/leaf/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="../assets/leaf/favicon.svg">
 <style>
 :root{
   --paper:#f6f2ea; --paper-2:#f1ebdf; --panel:#fffdf8; --ink:#231f19; --muted:#6b6252;
@@ -409,7 +409,7 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
 <header class="masthead">
   <div class="masthead-in">
     <a class="brand" href="../" aria-label="返回尘画主站">
-      <img class="brand-mark" src="../../assets/leaf/think.svg" width="30" height="30" alt="" aria-hidden="true" decoding="async"><span class="wm"><span class="wm-lite">出</span><span class="wm-strong">尘</span><span class="wm-lite">入</span><span class="wm-strong">画</span></span><span class="sub"><span data-l="zh">尘归尘，画归画</span><span data-l="en">Image as history</span></span>
+      <img class="brand-mark" src="../assets/leaf/think.svg" width="30" height="30" alt="" aria-hidden="true" decoding="async"><span class="wm"><span class="wm-lite">出</span><span class="wm-strong">尘</span><span class="wm-lite">入</span><span class="wm-strong">画</span></span><span class="sub"><span data-l="zh">尘归尘，画归画</span><span data-l="en">Image as history</span></span>
     </a>
     <nav class="masthead-nav" aria-label="全站导航">
       <a href="../themes/"><span data-l="zh">主题</span><span data-l="en">Themes</span></a>
@@ -431,7 +431,7 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
 
 <style>
 /* ---------- 主题库：摄影与绘画共用同一种卡片 ---------- */
-.theme-library{max-width:1240px;margin:0 auto;padding:30px 28px 46px}
+.theme-library{max-width:min(100%,1760px);margin:0 auto;padding:28px clamp(18px,3vw,48px) 46px}
 .lib-section{border-top:1px solid var(--rule);padding:23px 0 9px}
 .lib-section:first-of-type{border-top:0;padding-top:4px}
 .lib-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 14px}
@@ -449,55 +449,69 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
 .lib-card h3 span{display:block}
 .lib-card h3 span[data-l="en"]{font-size:10px;letter-spacing:.12em;color:var(--muted);margin-top:4px;font-family:var(--sans,ui-sans-serif,sans-serif);text-transform:none}
 .lib-card p{font-size:11px;line-height:1.75;color:var(--muted);margin:0}
-@media(max-width:1050px){.lib-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:760px){.lib-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lib-thumb img{height:128px}.theme-library{padding:22px 20px 34px}}
+.duo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,2.6vw,42px);align-items:start}
+.duo-col{min-width:0}
+.lib-list{display:grid;grid-template-columns:1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.lib-list .lib-thumb img{height:clamp(180px,16vw,260px)}
+.lib-list .lib-body{min-height:0;padding:13px 15px 15px}
+.lib-list .lib-card h3{font-size:clamp(22px,2vw,28px)}
+.lib-list .lib-card p{font-size:12px;line-height:1.8}
+.movement-index{margin-top:26px;border-top:1px solid var(--rule);padding-top:15px}
+.mi-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 11px}
+.mi-head h3{font-family:var(--serif);font-weight:400;font-size:19px;margin:0}
+.mi-head span{font-size:9px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+.movement-index .movement-links{display:flex;flex-wrap:wrap;gap:7px}
+.movement-index .movement-links a{display:inline-flex;align-items:baseline;gap:6px;border:1px solid var(--line);padding:6px 9px;text-decoration:none;color:var(--muted);font-size:10px;line-height:1.2}
+.movement-index .movement-links a:hover{border-color:var(--accent);color:var(--text)}
+.movement-index .movement-links a b{font-weight:400;color:var(--text);font-family:var(--serif);font-size:13px}
+@media(max-width:1050px){.lib-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.duo-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}}
+@media(max-width:760px){.lib-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lib-thumb img{height:128px}.theme-library{padding:22px 20px 34px}.duo-grid{grid-template-columns:1fr}.lib-list .lib-thumb img{height:160px}}
 @media(max-width:460px){.lib-grid{grid-template-columns:1fr}}
 
 /* ---------- 双轨年代轴：左绘画，右摄影 ---------- */
-.dual-timeline{max-width:1240px;margin:0 auto;padding:28px 28px 50px}
-.dual-timeline h1{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,46px);line-height:1.1;letter-spacing:-.02em;margin:0 0 18px}
-.axis-head{display:grid;grid-template-columns:minmax(0,1fr) 118px minmax(0,1fr);gap:20px;border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);padding:9px 0}
+.dual-timeline{max-width:none;width:min(100%,1760px);margin:0 auto;padding:18px clamp(18px,3vw,48px) 54px}
+.axis-head{display:grid;grid-template-columns:minmax(0,1fr) clamp(96px,8vw,138px) minmax(0,1fr);gap:clamp(16px,2.4vw,36px);border:0;padding:10px 0 4px}
 .axis-head span{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .axis-head span:nth-child(1){text-align:right;color:#b28b5d}
 .axis-head span:nth-child(2){text-align:center}
 .axis-head span:nth-child(3){color:var(--accent)}
 .dual-axis{position:relative}
 .dual-axis:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--rule-strong);transform:translateX(-.5px)}
-.axis-row{display:grid;grid-template-columns:minmax(0,1fr) 118px minmax(0,1fr);gap:20px;border-bottom:1px solid var(--rule);padding:17px 0}
-.axis-side{min-width:0;display:flex;flex-direction:column;gap:9px}
-.axis-side.paint{padding-right:8px}
-.axis-side.photo{padding-left:8px}
+.axis-row{display:grid;grid-template-columns:minmax(0,1fr) clamp(96px,8vw,138px) minmax(0,1fr);gap:clamp(16px,2.4vw,36px);border:0;padding:24px 0}
+.axis-side{min-width:0;display:flex;flex-direction:column;gap:14px}
+.axis-side.paint{padding-right:clamp(4px,1vw,16px)}
+.axis-side.photo{padding-left:clamp(4px,1vw,16px)}
 .axis-year{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding-top:20px;position:relative;z-index:1}
-.axis-year:before{content:"";position:absolute;top:7px;left:50%;width:7px;height:7px;border-radius:50%;background:var(--accent);transform:translateX(-50%);box-shadow:0 0 0 4px var(--paper);z-index:2}
-.axis-year b{font-family:var(--serif);font-weight:400;font-size:15px;line-height:1.2;white-space:nowrap;background:var(--paper);padding:3px 6px}
-.axis-card{display:grid;grid-template-columns:70px minmax(0,1fr);gap:9px;align-items:center;text-decoration:none;color:var(--ink);min-width:0;padding:5px 0;border-bottom:1px dotted var(--rule)}
-.axis-card:last-child{border-bottom:0}
-.axis-card img{width:70px;height:54px;object-fit:cover;display:block;filter:saturate(.92)}
+.axis-year:before{content:"";position:absolute;top:7px;left:50%;width:9px;height:9px;border-radius:50%;background:var(--accent);transform:translateX(-50%);box-shadow:0 0 0 5px var(--paper);z-index:2}
+.axis-year b{font-family:var(--serif);font-weight:400;font-size:clamp(16px,1.4vw,20px);line-height:1.2;white-space:nowrap;background:var(--paper);padding:3px 8px}
+.axis-card{display:grid;grid-template-columns:minmax(0,44%) minmax(0,1fr);gap:16px;align-items:center;text-decoration:none;color:var(--ink);min-width:0;padding:6px 0;border:0}
+.axis-card img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;display:block;filter:saturate(.92)}
 .axis-card .ac{min-width:0;display:flex;flex-direction:column;justify-content:center}
-.axis-card h3{font-family:var(--serif);font-weight:400;font-size:15px;line-height:1.3;margin:0 0 3px}
-.axis-card h3 span[data-l="en"]{font-size:9px;letter-spacing:.06em;color:var(--muted);font-family:var(--sans,ui-sans-serif,sans-serif);margin-top:2px}
-.axis-card .ac span{font-size:9px;color:var(--muted);line-height:1.45}
-.axis-side.paint .axis-card{grid-template-columns:minmax(0,1fr) 70px;text-align:right}
+.axis-card h3{font-family:var(--serif);font-weight:400;font-size:clamp(16px,1.35vw,20px);line-height:1.35;margin:0 0 5px}
+.axis-card h3 span[data-l="en"]{font-size:10.5px;letter-spacing:.06em;color:var(--muted);font-family:var(--sans,ui-sans-serif,sans-serif);margin-top:3px}
+.axis-card .ac span{font-size:11px;color:var(--muted);line-height:1.5}
+.axis-side.paint .axis-card{grid-template-columns:minmax(0,1fr) minmax(0,44%);text-align:right}
 .axis-side.paint .axis-card img{grid-column:2;grid-row:1}
 .axis-side.paint .axis-card .ac{grid-column:1;grid-row:1;align-items:flex-end}
 .axis-empty{min-height:1px}
 @media(max-width:860px){
-  .axis-head{grid-template-columns:1fr 82px 1fr;gap:10px}
-  .axis-row{grid-template-columns:1fr 82px 1fr;gap:10px}
-  .axis-card{grid-template-columns:54px minmax(0,1fr)}
-  .axis-card img{width:54px;height:44px}
-  .axis-side.paint .axis-card{grid-template-columns:minmax(0,1fr) 54px}
-  .axis-card h3{font-size:14px}
+  .axis-head{grid-template-columns:1fr 86px 1fr;gap:12px}
+  .axis-row{grid-template-columns:1fr 86px 1fr;gap:12px}
+  .axis-card{grid-template-columns:minmax(0,40%) minmax(0,1fr);gap:12px}
+  .axis-side.paint .axis-card{grid-template-columns:minmax(0,1fr) minmax(0,40%)}
+  .axis-card h3{font-size:15px}
 }
 @media(max-width:620px){
-  .dual-timeline{padding:22px 20px 34px}
+  .dual-timeline{padding:20px 18px 34px}
   .axis-head{display:none}
-  .dual-axis:before{display:none}
-  .axis-row{grid-template-columns:1fr;gap:0;padding:0 0 14px}
-  .axis-year{align-items:flex-start;text-align:left;padding:12px 0 9px;border-bottom:1px solid var(--rule);margin-bottom:8px}
-  .axis-year b,.axis-year em{background:none;padding:0}
+  .dual-axis:before{display:block;left:8px}
+  .axis-row{grid-template-columns:1fr;gap:0;padding:0 0 20px 28px;position:relative}
+  .axis-row:before{content:"";position:absolute;left:-1px;top:18px;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px var(--paper)}
+  .axis-year{align-items:flex-start;text-align:left;padding:8px 0 10px;border:0;margin-bottom:0}
+  .axis-year:before{display:none}
+  .axis-year b{background:none;padding:0}
   .axis-side{padding:0}
-  .axis-side.paint .axis-card{grid-template-columns:54px minmax(0,1fr);text-align:left}
+  .axis-side.paint .axis-card{grid-template-columns:minmax(0,40%) minmax(0,1fr);text-align:left}
   .axis-side.paint .axis-card img{grid-column:1;grid-row:1}
   .axis-side.paint .axis-card .ac{grid-column:2;grid-row:1;align-items:flex-start}
 }
@@ -519,8 +533,7 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
 @media(max-width:620px){.photo-axis{padding:22px 20px 34px}.p-axis{padding-left:22px}.p-era:before{left:-18px}.p-era-head b{font-size:19px}}
 </style>
 
-<main class="photo-axis">
-<h1><span data-l="zh">摄影时间线</span><span data-l="en">Photography Timeline</span></h1>
+<main class="photo-axis" aria-label="Photography Timeline">
 <div class="p-axis"><section class="p-era"><div class="p-era-head"><b>400–1300</b></div>
 <div class="p-grid"><a class="lib-card" href="https://www.chenhua.net/story/today-07-04-chinese-astronomy.html">
 <div class="lib-thumb"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Crab_Nebula.jpg/1280px-Crab_Nebula.jpg?utm_source=commons.wikimedia.org&amp;utm_campaign=imageinfo&amp;utm_content=thumbnail" alt="1054年7月4日：中国天文学史" loading="eager"></div>
@@ -701,6 +714,6 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
   <div class="sf-right"><a href="../legal/"><span data-l="zh">免责条款</span><span data-l="en">Disclaimer</span></a></div>
 </footer>
 </div>
-<script src="../../assets/site.js?v=1795059372"></script>
+<script src="../assets/site.js?v=202611192300"></script>
 </body>
 </html>

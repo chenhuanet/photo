@@ -167,11 +167,67 @@
     });
   }
 
+  function installGlobalNav() {
+    var host = location.hostname;
+    var kind = host === "photo.chenhua.net" ? "photo" : (host === "paint.chenhua.net" ? "paint" : "main");
+    var path = location.pathname.replace(/\/index\.html$/, "/");
+    function activeFor(href) {
+      if (kind === "main") {
+        if (href.indexOf("/themes/") >= 0) return path.indexOf("/themes") === 0;
+        if (href.indexOf("/timeline/") >= 0) return path.indexOf("/timeline") === 0;
+        if (href.indexOf("/today/") >= 0) return path.indexOf("/today") === 0;
+      } else {
+        if (href === "https://photo.chenhua.net/") return kind === "photo" && path === "/";
+        if (href === "https://paint.chenhua.net/") return kind === "paint" && path === "/";
+      }
+      return false;
+    }
+    function a(href, zh, en) {
+      return '<a href="' + href + '"' + (activeFor(href) ? ' aria-current="page"' : '') +
+        '><span data-l="zh">' + zh + '</span><span data-l="en">' + en + '</span></a>';
+    }
+    var head = kind === "main"
+      ? [a("https://www.chenhua.net/themes/", "主题", "Themes"),
+         a("https://www.chenhua.net/timeline/", "时间线", "Timeline"),
+         a("https://www.chenhua.net/today/calendar.html", "日历", "Calendar"),
+         a("https://photo.chenhua.net/", "摄影", "Photography"),
+         a("https://paint.chenhua.net/", "绘画", "Painting"),
+         a("https://netcn.org/", "导航", "Directory")]
+      : [a("https://photo.chenhua.net/", "摄影", "Photography"),
+         a("https://paint.chenhua.net/", "绘画", "Painting"),
+         a("https://netcn.org/", "导航", "Directory")];
+    var foot = kind === "main"
+      ? [a("https://www.chenhua.net/", "出尘入画", "Frame &amp; Grain"),
+         a("https://www.chenhua.net/themes/", "主题", "Themes"),
+         a("https://www.chenhua.net/timeline/", "时间线", "Timeline"),
+         a("https://www.chenhua.net/today/calendar.html", "日历", "Calendar"),
+         a("https://photo.chenhua.net/", "摄影", "Photography"),
+         a("https://paint.chenhua.net/", "绘画", "Painting"),
+         a("https://netcn.org/", "导航", "Directory")]
+      : [a("https://www.chenhua.net/", "出尘入画", "Frame &amp; Grain"),
+         a("https://photo.chenhua.net/", "摄影", "Photography"),
+         a("https://paint.chenhua.net/", "绘画", "Painting"),
+         a("https://netcn.org/", "导航", "Directory")];
+    var headHtml = head.join("");
+    var footHtml = foot.join("");
+    Array.prototype.forEach.call(document.querySelectorAll(".desknav, .masthead-nav, .g-nav"), function (nav) {
+      nav.innerHTML = headHtml;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".site-foot .sf-nav"), function (nav) {
+      nav.innerHTML = footHtml;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".brand, .g-brand"), function (brand) {
+      var link = brand.closest("a") || brand;
+      if (link && link.tagName === "A") link.setAttribute("href", "https://www.chenhua.net/");
+    });
+  }
+
   var searchHref = findSearchLink();
   if (!searchHref) searchHref = "https://www.chenhua.net/search/";
   removeSearchLinks();
   removeHomeNavLink();
   localizeBrand();
+  installGlobalNav();
   markFooterLinks();
   addFooterCopy();
   Array.prototype.forEach.call(document.querySelectorAll(".appbar, .masthead, .g-head"), function (header) {
@@ -286,7 +342,7 @@
     var foot = document.querySelector(".site-foot .sf-nav");
     if (!foot) return;
     var links = Array.prototype.slice.call(foot.querySelectorAll("a"));
-    if (links.length < 6) return;
+    if (links.length < 4) return;
     var current = location.pathname.replace(/\/index\.html$/, "/");
     var best = -1;
     var bestLen = -1;

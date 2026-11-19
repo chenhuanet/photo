@@ -80,6 +80,10 @@
   function q(sel, root) { return (root || document).querySelector(sel); }
   function qa(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
   function imgOf(r) { return r.preview_image || r.image || ""; }
+  function recordImage(r) {
+    if (r.collection === "paintings" && r.image && /^https?:\/\//.test(r.image)) return r.image;
+    return imgOf(r);
+  }
   function modeOk(r) {
     if (state.mode === "commercial") return r.commercial_ok === true;
     return true;
@@ -543,17 +547,6 @@
       '<button type="submit">' + esc(t("common.search")) + "</button></form>" +
       '<div class="home-search-hint">' + esc(t("search.hints")) + "</div></div>";
   }
-  function homeIndexBlock() {
-    if (CFG.site !== "main") return "";
-    return '<section class="home-index" aria-label="' + esc(isEn() ? "Archive index" : "全站索引") + '">' +
-      '<div class="home-index-head"><p>' + esc(isEn() ? "INDEX / THE WHOLE ARCHIVE" : "索引 / 整座档案") + "</p><h2>" + esc(isEn() ? "Three ways into the archive." : "从三条路进入档案。") + "</h2></div>" +
-      '<div class="home-index-grid">' +
-        '<a href="' + esc(routeHref("themes")) + '"><span class="no">01</span><h3>' + esc(isEn() ? "Themes" : "主题") + "</h3><p>" + esc(isEn() ? "Nine photographic series and eight painted trails, side by side." : "九个摄影系列与八条绘画小径，并排展开。") + "</p></a>" +
-        '<a href="' + esc(routeHref("timeline")) + '"><span class="no">02</span><h3>' + esc(isEn() ? "Timeline" : "时间线") + "</h3><p>" + esc(isEn() ? "One age, two ways of seeing: photography and painting on the same axis." : "同一时代，两种观看：摄影与绘画在同一条时间轴上。") + "</p></a>" +
-        '<a href="' + esc((CFG.base || "/") + "today/calendar.html") + '"><span class="no">03</span><h3>' + esc(isEn() ? "Calendar" : "日历") + "</h3><p>" + esc(isEn() ? "366 days, each with a photograph and a painting." : "三百六十六天，每天一张照片与一幅画。") + "</p></a>" +
-      "</div></section>";
-  }
-
   function viewToday() {
     var isPaint = CFG.site === "paint";
     var rows = filtered().filter(function (r) { return imgOf(r); });
@@ -575,7 +568,6 @@
         '<div class="today-meta"><span>' + esc(r.year || "") + "</span><span>" + esc(loc(r, "place") || tx("region", r.region)) + "</span><span>" + esc(tx("source_short", r.source_short)) + "</span>" + usageTag(r) + "</div>" +
         '<div class="today-actions"><a class="btn gold" href="' + esc(staticHref(r)) + '">' + esc(isPaint ? t("home.openPainting") : t("home.readFrame")) + '</a><button class="btn" data-lb="' + esc(r.id) + '">' + esc(t("common.zoom")) + '</button><a class="btn" href="' + esc(routeHref("gallery")) + '">' + esc(isPaint ? t("home.enterPaintAxis") : t("home.enterPhotoAxis")) + "</a></div>" +
       "</div></section>" +
-      homeIndexBlock() +
       (dayStreamBlock(r.id) || masonry(related)) +
       '<div class="more-wrap"><a class="btn" href="' + esc(routeHref("gallery")) + '">' + esc(t("home.viewAll", { n: SITE_RECORDS.length })) + "</a></div>";
   }
@@ -649,9 +641,10 @@
   }
   function recordDayCard(r) {
     var year = r.year ? String(r.year) : "";
+    var kind = r.collection === "paintings" ? (isEn() ? "Painting" : "绘画") : (isEn() ? "Photography" : "摄影");
     return '<a class="day-card" href="' + esc(staticHref(r)) + '">' +
-      '<div class="day-pic"><img src="' + esc(imgOf(r)) + '" alt="' + esc(loc(r, "title")) + '" loading="lazy"></div>' +
-      '<div class="day-copy"><span class="day-date">' + esc(year || "—") + "</span><h3>" + esc(loc(r, "title") || r.id) + "</h3></div></a>";
+      '<div class="day-pic"><img src="' + esc(recordImage(r)) + '" alt="' + esc(loc(r, "title")) + '" loading="lazy"></div>' +
+      '<div class="day-copy"><span class="day-date">' + esc(year || "—") + ' <i class="day-kind">' + esc(kind) + "</i></span><h3>" + esc(loc(r, "title") || r.id) + "</h3></div></a>";
   }
   function dayCard(item) {
     if (item.r) return recordDayCard(item.r);
@@ -660,10 +653,29 @@
     var year = String(s.date || "").slice(0, 4);
     return '<a class="day-card" href="' + esc(storyStaticHref(s)) + '">' +
       '<div class="day-pic"><img src="' + esc(storyImage(s)) + '" alt="' + esc(loc(s, "title")) + '" loading="lazy"></div>' +
-      '<div class="day-copy"><span class="day-date">' + esc(dayLabel(s)) + (year ? ' <b>' + esc(year) + "</b>" : "") + "</span><h3>" + esc(title) + "</h3></div></a>";
+      '<div class="day-copy"><span class="day-date">' + esc(dayLabel(s)) + (year ? ' <b>' + esc(year) + "</b>" : "") + ' <i class="day-kind">' + esc(isEn() ? "Photography" : "摄影") + "</i></span><h3>" + esc(title) + "</h3></div></a>";
+  }
+  function homeItemYear(item) {
+    if (item.r) return Number(item.r.year) || 0;
+    var s = item.s;
+    return Number(String(s.date || "").slice(0, 4)) || 0;
   }
   function homeStreamItems(skipId) {
     var items = homeDayItems();
+    if (CFG.site === "main") {
+      var paintings = filtered().filter(function (r) {
+        return r.collection === "paintings" && imgOf(r) && r.id !== skipId;
+      }).map(function (r) { return { r: r }; });
+      items = items.concat(paintings);
+      var photos = items.filter(function (x) { return !x.r; }).sort(function (a, b) { return homeItemYear(b) - homeItemYear(a); });
+      var paints = items.filter(function (x) { return !!x.r; }).sort(function (a, b) { return homeItemYear(b) - homeItemYear(a); });
+      var mixed = [], p = 0, q = 0;
+      while (p < photos.length || q < paints.length) {
+        for (var k = 0; k < 2 && p < photos.length; k++) mixed.push(photos[p++]);
+        if (q < paints.length) mixed.push(paints[q++]);
+      }
+      return mixed;
+    }
     if (items.length) return items;
     if (CFG.site !== "paint") return [];
     return filtered().filter(function (r) { return imgOf(r) && r.id !== skipId; })
@@ -726,13 +738,13 @@
   function viewTodayTheme() {
     var stories = dailyThemes();
     if (!stories.length) return viewToday();
-    return renderThemeFeature(stories[dailyIndex(stories.length)], false) + homeIndexBlock() + dayStreamBlock();
+    return renderThemeFeature(stories[dailyIndex(stories.length)], false) + dayStreamBlock();
   }
   function viewTodayEvent() {
     var rows = todayEvents();
     var s = rows.length ? rows[0] : null;
     if (!s) return viewTodayTheme();
-    return renderThemeFeature(s, true) + homeIndexBlock() + dayStreamBlock();
+    return renderThemeFeature(s, true) + dayStreamBlock();
   }
   function viewTimeline() {
     var items = themeStories().map(function (s) {
