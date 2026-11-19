@@ -169,8 +169,10 @@
 
   function installGlobalNav() {
     var host = location.hostname;
-    var kind = host === "photo.chenhua.net" ? "photo" : (host === "paint.chenhua.net" ? "paint" : "main");
     var path = location.pathname.replace(/\/index\.html$/, "/");
+    var kind = (host === "photo.chenhua.net" || path.indexOf("/photo/") === 0)
+      ? "photo"
+      : ((host === "paint.chenhua.net" || path.indexOf("/paint/") === 0) ? "paint" : "main");
     function activeFor(href) {
       if (kind === "main") {
         if (href.indexOf("/themes/") >= 0) return path.indexOf("/themes") === 0;
