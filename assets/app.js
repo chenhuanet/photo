@@ -564,7 +564,7 @@
         '<div class="today-meta"><span>' + esc(r.year || "") + "</span><span>" + esc(loc(r, "place") || tx("region", r.region)) + "</span><span>" + esc(tx("source_short", r.source_short)) + "</span>" + usageTag(r) + "</div>" +
         '<div class="today-actions"><a class="btn gold" href="' + esc(staticHref(r)) + '">' + esc(isPaint ? t("home.openPainting") : t("home.readFrame")) + '</a><button class="btn" data-lb="' + esc(r.id) + '">' + esc(t("common.zoom")) + '</button><a class="btn" href="' + esc(routeHref("gallery")) + '">' + esc(isPaint ? t("home.enterPaintAxis") : t("home.enterPhotoAxis")) + "</a></div>" +
       "</div></section>" +
-      (dayStreamBlock() || masonry(related)) +
+      (dayStreamBlock(r.id) || masonry(related)) +
       '<div class="more-wrap"><a class="btn" href="' + esc(routeHref("gallery")) + '">' + esc(t("home.viewAll", { n: SITE_RECORDS.length })) + "</a></div>";
   }
   function dailyThemes() {
@@ -635,7 +635,14 @@
       .replace(/^\d{4}年\d{1,2}月\d{1,2}日[：:]\s*/, "")
       .replace(/^[A-Z][a-z]+\s+\d{1,2},\s+\d{4}[：:]\s*/, "");
   }
+  function recordDayCard(r) {
+    var year = r.year ? String(r.year) : "";
+    return '<a class="day-card" href="' + esc(staticHref(r)) + '">' +
+      '<div class="day-pic"><img src="' + esc(imgOf(r)) + '" alt="' + esc(loc(r, "title")) + '" loading="lazy"></div>' +
+      '<div class="day-copy"><span class="day-date">' + esc(year || "—") + "</span><h3>" + esc(loc(r, "title") || r.id) + "</h3></div></a>";
+  }
   function dayCard(item) {
+    if (item.r) return recordDayCard(item.r);
     var s = item.s;
     var title = dayCardTitle(s);
     var year = String(s.date || "").slice(0, 4);
@@ -643,8 +650,15 @@
       '<div class="day-pic"><img src="' + esc(storyImage(s)) + '" alt="' + esc(loc(s, "title")) + '" loading="lazy"></div>' +
       '<div class="day-copy"><span class="day-date">' + esc(dayLabel(s)) + (year ? ' <b>' + esc(year) + "</b>" : "") + "</span><h3>" + esc(title) + "</h3></div></a>";
   }
-  function dayStreamBlock() {
+  function homeStreamItems(skipId) {
     var items = homeDayItems();
+    if (items.length) return items;
+    if (CFG.site !== "paint") return [];
+    return filtered().filter(function (r) { return imgOf(r) && r.id !== skipId; })
+      .map(function (r) { return { r: r }; });
+  }
+  function dayStreamBlock(skipId) {
+    var items = homeStreamItems(skipId);
     if (!items.length) return "";
     state.dayItems = items;
     state.dayVisible = Math.min(18, items.length);
