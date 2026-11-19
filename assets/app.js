@@ -543,6 +543,17 @@
       '<button type="submit">' + esc(t("common.search")) + "</button></form>" +
       '<div class="home-search-hint">' + esc(t("search.hints")) + "</div></div>";
   }
+  function homeIndexBlock() {
+    if (CFG.site !== "main") return "";
+    return '<section class="home-index" aria-label="' + esc(isEn() ? "Archive index" : "全站索引") + '">' +
+      '<div class="home-index-head"><p>' + esc(isEn() ? "INDEX / THE WHOLE ARCHIVE" : "索引 / 整座档案") + "</p><h2>" + esc(isEn() ? "Three ways into the archive." : "从三条路进入档案。") + "</h2></div>" +
+      '<div class="home-index-grid">' +
+        '<a href="' + esc(routeHref("themes")) + '"><span class="no">01</span><h3>' + esc(isEn() ? "Themes" : "主题") + "</h3><p>" + esc(isEn() ? "Nine photographic series and eight painted trails, side by side." : "九个摄影系列与八条绘画小径，并排展开。") + "</p></a>" +
+        '<a href="' + esc(routeHref("timeline")) + '"><span class="no">02</span><h3>' + esc(isEn() ? "Timeline" : "时间线") + "</h3><p>" + esc(isEn() ? "One age, two ways of seeing: photography and painting on the same axis." : "同一时代，两种观看：摄影与绘画在同一条时间轴上。") + "</p></a>" +
+        '<a href="' + esc((CFG.base || "/") + "today/") + '"><span class="no">03</span><h3>' + esc(isEn() ? "Calendar" : "日历") + "</h3><p>" + esc(isEn() ? "366 days, each with a photograph and a painting." : "三百六十六天，每天一张照片与一幅画。") + "</p></a>" +
+      "</div></section>";
+  }
+
   function viewToday() {
     var isPaint = CFG.site === "paint";
     var rows = filtered().filter(function (r) { return imgOf(r); });
@@ -564,6 +575,7 @@
         '<div class="today-meta"><span>' + esc(r.year || "") + "</span><span>" + esc(loc(r, "place") || tx("region", r.region)) + "</span><span>" + esc(tx("source_short", r.source_short)) + "</span>" + usageTag(r) + "</div>" +
         '<div class="today-actions"><a class="btn gold" href="' + esc(staticHref(r)) + '">' + esc(isPaint ? t("home.openPainting") : t("home.readFrame")) + '</a><button class="btn" data-lb="' + esc(r.id) + '">' + esc(t("common.zoom")) + '</button><a class="btn" href="' + esc(routeHref("gallery")) + '">' + esc(isPaint ? t("home.enterPaintAxis") : t("home.enterPhotoAxis")) + "</a></div>" +
       "</div></section>" +
+      homeIndexBlock() +
       (dayStreamBlock(r.id) || masonry(related)) +
       '<div class="more-wrap"><a class="btn" href="' + esc(routeHref("gallery")) + '">' + esc(t("home.viewAll", { n: SITE_RECORDS.length })) + "</a></div>";
   }
@@ -714,13 +726,13 @@
   function viewTodayTheme() {
     var stories = dailyThemes();
     if (!stories.length) return viewToday();
-    return renderThemeFeature(stories[dailyIndex(stories.length)], false) + dayStreamBlock();
+    return renderThemeFeature(stories[dailyIndex(stories.length)], false) + homeIndexBlock() + dayStreamBlock();
   }
   function viewTodayEvent() {
     var rows = todayEvents();
     var s = rows.length ? rows[0] : null;
     if (!s) return viewTodayTheme();
-    return renderThemeFeature(s, true) + dayStreamBlock();
+    return renderThemeFeature(s, true) + homeIndexBlock() + dayStreamBlock();
   }
   function viewTimeline() {
     var items = themeStories().map(function (s) {

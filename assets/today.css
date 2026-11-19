@@ -69,3 +69,14 @@
 .today-paint-copy p{font-size:13px;line-height:1.85;color:var(--muted);margin:0 0 10px}
 .today-paint-note{font-size:10px;color:var(--dim);letter-spacing:.03em}
 @media(max-width:760px){.today-paint{grid-template-columns:1fr;gap:12px}.today-paint-img{max-height:230px}}
+
+/* 每日大图：当天第一篇故事的封面成为页头背景 */
+.day-hero.has-cover{position:relative;min-height:380px;padding:0;overflow:hidden;border-bottom:1px solid var(--line);display:flex;align-items:flex-end}
+.day-hero-cover{position:absolute;inset:0;z-index:0}
+.day-hero-cover img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.56) saturate(.86)}
+.day-hero.has-cover::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(13,12,11,.10) 0%,rgba(13,12,11,.38) 48%,rgba(13,12,11,.88) 100%);pointer-events:none}
+.day-hero.has-cover > *:not(.day-hero-cover){position:relative;z-index:2}
+.day-hero.has-cover{padding:64px 0 30px}
+.day-hero.has-cover .eyebrow,.day-hero.has-cover h1,.day-hero.has-cover p{color:#f2ede4;text-shadow:0 1px 18px rgba(0,0,0,.35)}
+@media(max-width:760px){.day-hero.has-cover{min-height:300px;padding:42px 0 22px}}
+

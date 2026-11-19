@@ -34,7 +34,7 @@ img{display:block;max-width:100%}
 #app{position:relative;display:flex;flex-direction:column;height:100dvh;overflow:hidden;background:var(--bg)}
 .app-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
   padding-bottom:calc(20px + var(--safe-bottom))}
-.view{padding-bottom:18px;animation:viewIn .26s ease both}
+.view{padding-bottom:18px;animation:viewIn .26s ease}
 @keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
 /* app bar */
@@ -205,6 +205,18 @@ html[data-theme="light"] .today-hero:after{
 .today-note{color:var(--hero-text);font-size:13px;line-height:1.85;margin:0 0 13px;
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .today-meta{display:flex;gap:6px;flex-wrap:wrap;font-size:10px;color:var(--muted)}
+.home-index{max-width:1184px;margin:0 auto;padding:24px 0 8px}
+.home-index-head{padding:0 0 14px}
+.home-index-head p{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+.home-index-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,34px);line-height:1.2;margin:0;color:var(--text)}
+.home-index-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.home-index-grid a{padding:17px 18px 20px;color:var(--text);text-decoration:none;border-right:1px solid var(--line);transition:background .2s}
+.home-index-grid a:last-child{border-right:0}
+.home-index-grid a:hover{background:var(--surface)}
+.home-index-grid .no{display:block;font-size:10px;letter-spacing:.14em;color:var(--accent);margin-bottom:10px}
+.home-index-grid h3{font-family:var(--serif);font-weight:400;font-size:22px;margin:0 0 7px}
+.home-index-grid p{font-size:12px;line-height:1.7;color:var(--muted);margin:0}
+@media(max-width:899px){.home-index{padding:18px 16px 4px}.home-index-grid{grid-template-columns:1fr}.home-index-grid a{border-right:0;border-bottom:1px solid var(--line)}.home-index-grid a:last-child{border-bottom:0}}
 .today-actions{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}
 .today-caption{padding:14px 18px 0;font-size:10px;color:var(--dim);letter-spacing:.08em}
 
