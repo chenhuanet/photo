@@ -723,8 +723,8 @@
     });
     var chapters = (s.chapters || []).map(function (ch) { return loc(ch, "title"); }).filter(Boolean);
     var meta = isEvent
-      ? '<span>' + esc(dateText) + "</span><span>" + esc(loc(s, "place")) + "</span><span>" + (s.count || 0) + " " + esc(t("common.frames")) + "</span>"
-      : '<span>' + (s.count || 0) + " " + esc(t("common.frames")) + "</span><span>" + chapters.length + " " + esc(t("common.chapters")) + "</span><span>" + esc(tagsText(s)) + "</span>";
+      ? '<span>' + esc(dateText) + "</span><span>" + esc(loc(s, "place")) + "</span>"
+      : '<span>' + esc(tagsText(s)) + "</span>";
     return '<section class="today-hero theme-hero">' +
       '<img class="today-hero-img" src="' + esc(cover ? imgOf(cover) : (preview[0] ? imgOf(preview[0]) : "")) + '" alt="' + esc(loc(s, "title")) + '">' +
       '<div class="today-inner">' +
@@ -764,7 +764,7 @@
           '<div class="tl-year">' + esc(span) + '</div>' +
           '<div class="tl-pic" style="background-image:url(\'' + esc(img) + '\')"></div>' +
           '<div class="tl-body"><div class="status">' + esc(isEn() ? (x.s.type_en || "Story") : (x.s.type || "长文")) + '</div><h3>' + esc(loc(x.s, "title")) + '</h3><p>' + esc(loc(x.s, "subtitle")) + '</p>' +
-          '<div class="cnt">' + (x.s.count || 0) + " " + esc(t("common.frames")) + " · " + (x.s.chapters || []).length + " " + esc(t("common.chapters")) + "</div></div></a>";
+          '</div></a>';
       }).join("") + "</div>";
   }
 
@@ -773,7 +773,7 @@
     var shown = rows.slice(0, state.visible);
     var chips = collectionChips(state.filter.collection, "collection") + topicChips(state.filter.topic);
     var mchips = CFG.site === "paint" ? movementChips(state.filter.movement) : "";
-    return '<div class="section"><div class="section-head"><h2>' + esc(CFG.site === "photo" ? t("gallery.photoTitle") : CFG.site === "paint" ? t("gallery.paintTitle") : t("gallery.mainTitle")) + '</h2><span class="sub">' + rows.length + " " + esc(t("common.items")) + "</span></div></div>" +
+    return '<div class="section"><div class="section-head"><h2>' + esc(CFG.site === "photo" ? t("gallery.photoTitle") : CFG.site === "paint" ? t("gallery.paintTitle") : t("gallery.mainTitle")) + '</h2></div></div>' +
       '<div class="chips">' + chips + "</div>" +
       (mchips ? '<div class="chips chips-movement">' + mchips + "</div>" : "") +
       (state.mode === "commercial" ? '<div class="notice">' + esc(t("gallery.commercialNotice")) + "</div>" : "") +
@@ -795,7 +795,7 @@
         var status = type + (s.date ? " · " + s.date : "") + (s.status === "published" ? " · " + t("stories.published") : "");
         return '<a class="story-card" href="' + esc(storyStaticHref(s)) + '">' +
           '<div class="pic" style="background-image:url(\'' + esc(img) + '\')"></div>' +
-          '<div class="body"><div class="status">' + esc(status) + "</div><h3>" + esc(loc(s, "title")) + "</h3><p>" + esc(loc(s, "subtitle")) + '</p><div class="cnt">' + (s.count || 0) + " " + esc(t("common.frames")) + " · " + esc(tagsText(s)) + "</div></div></a>";
+          '<div class="body"><div class="status">' + esc(status) + "</div><h3>" + esc(loc(s, "title")) + "</h3><p>" + esc(loc(s, "subtitle")) + '</p></div></a>';
       }).join("");
   }
 
