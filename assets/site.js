@@ -235,6 +235,15 @@
   Array.prototype.forEach.call(document.querySelectorAll(".appbar, .masthead, .g-head"), function (header) {
     normalizeHeader(header, searchHref);
   });
+  function refreshGlobalNav() {
+    installGlobalNav();
+    markFooterLinks();
+  }
+  refreshGlobalNav();
+  [0, 180, 700, 1600].forEach(function (delay) {
+    setTimeout(refreshGlobalNav, delay);
+  });
+  window.addEventListener("load", refreshGlobalNav);
   var footCss = document.createElement("style");
   footCss.textContent =
     ".wm-en{display:none;font-family:var(--serif);font-size:18px;line-height:1;letter-spacing:.06em;color:var(--accent,#c8a24a);white-space:nowrap}" +
