@@ -7,13 +7,13 @@
 <title>摄影时间线 · 尘画</title>
 <meta name="description" content="按年代浏览尘画的历史摄影与绘画故事。">
 <meta name="robots" content="index,follow">
-<link rel="canonical" href="https://photo.chenhua.net/timeline/">
-<link rel="alternate" hreflang="zh-CN" href="https://photo.chenhua.net/timeline/">
-<link rel="alternate" hreflang="en" href="https://photo.chenhua.net/timeline/?lang=en">
+<link rel="canonical" href="https://www.chenhua.net/timeline/">
+<link rel="alternate" hreflang="zh-CN" href="https://www.chenhua.net/timeline/">
+<link rel="alternate" hreflang="en" href="https://www.chenhua.net/timeline/?lang=en">
 <meta property="og:type" content="website">
 <meta property="og:title" content="时间线 · 尘画">
 <meta property="og:description" content="按年代浏览尘画的历史摄影与绘画故事。">
-<meta property="og:url" content="https://photo.chenhua.net/timeline/">
+<meta property="og:url" content="https://www.chenhua.net/timeline/">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:locale:alternate" content="en_US">
 <link rel="icon" type="image/svg+xml" href="../../assets/leaf/favicon.svg">
@@ -456,6 +456,8 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
 .lib-list .lib-body{min-height:0;padding:13px 15px 15px}
 .lib-list .lib-card h3{font-size:clamp(22px,2vw,28px)}
 .lib-list .lib-card p{font-size:12px;line-height:1.8}
+.theme-mosaic .lib-thumb img{height:clamp(170px,14vw,230px)}
+.theme-mosaic .lib-body{min-height:150px}
 .movement-index{margin-top:26px;border-top:1px solid var(--rule);padding-top:15px}
 .mi-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 11px}
 .mi-head h3{font-family:var(--serif);font-weight:400;font-size:19px;margin:0}
@@ -470,6 +472,9 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
 
 /* ---------- 双轨年代轴：左绘画，右摄影 ---------- */
 .dual-timeline{max-width:none;width:min(100%,1760px);margin:0 auto;padding:18px clamp(18px,3vw,48px) 54px}
+.axis-tools{display:flex;justify-content:flex-end;padding:0 0 2px}
+.axis-shuffle{border:0;border-bottom:1px solid var(--line);background:none;color:var(--muted);font:10px/1.4 var(--sans,ui-sans-serif,sans-serif);letter-spacing:.08em;text-transform:uppercase;padding:5px 0;cursor:pointer}
+.axis-shuffle:hover{color:var(--accent);border-color:var(--accent)}
 .axis-head{display:grid;grid-template-columns:minmax(0,1fr) clamp(96px,8vw,138px) minmax(0,1fr);gap:clamp(16px,2.4vw,36px);border:0;padding:10px 0 4px}
 .axis-head span{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .axis-head span:nth-child(1){text-align:right;color:#b28b5d}
@@ -714,6 +719,6 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
   <div class="sf-right"><a href="../legal/"><span data-l="zh">免责条款</span><span data-l="en">Disclaimer</span></a></div>
 </footer>
 </div>
-<script src="../assets/site.js?v=1795064262"></script>
+<script src="../../assets/site.js?v=20261119d"></script>
 </body>
 </html>

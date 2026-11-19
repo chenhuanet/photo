@@ -107,7 +107,7 @@
   }
 
   function headSearchForm(href) {
-    var label = root.getAttribute("data-lang") === "en" ? "Search archive" : "搜索标题、地点或主题";
+    var label = root.getAttribute("data-lang") === "en" ? "Search themes, people, places" : "搜主题、人物、地点";
     var form = document.createElement("form");
     form.className = "head-search";
     form.setAttribute("role", "search");
@@ -125,6 +125,9 @@
     var gallery = header.classList.contains("g-head");
     var iconClass = gallery ? "g-tool" : "iconbtn";
     if (searchHref) {
+      Array.prototype.forEach.call(header.querySelectorAll(".head-search"), function (old) {
+        if (old.parentNode) old.parentNode.removeChild(old);
+      });
       var form = headSearchForm(searchHref);
       tools.parentNode.insertBefore(form, tools);
       header.className += " has-head-search";
@@ -174,39 +177,27 @@
       ? "photo"
       : ((host === "paint.chenhua.net" || path.indexOf("/paint/") === 0) ? "paint" : "main");
     function activeFor(href) {
-      if (kind === "main") {
-        if (href.indexOf("/themes/") >= 0) return path.indexOf("/themes") === 0;
-        if (href.indexOf("/timeline/") >= 0) return path.indexOf("/timeline") === 0;
-        if (href.indexOf("/today/") >= 0) return path.indexOf("/today") === 0;
-      } else {
-        if (href === "https://photo.chenhua.net/") return kind === "photo" && path === "/";
-        if (href === "https://paint.chenhua.net/") return kind === "paint" && path === "/";
-      }
+      if (href.indexOf("www.chenhua.net/themes/") >= 0) return kind === "main" && path.indexOf("/themes") >= 0;
+      if (href.indexOf("www.chenhua.net/timeline/") >= 0) return kind === "main" && path.indexOf("/timeline") >= 0;
+      if (href.indexOf("www.chenhua.net/today/") >= 0) return kind === "main" && path.indexOf("/today") >= 0;
+      if (href === "https://photo.chenhua.net/") return kind === "photo";
+      if (href === "https://paint.chenhua.net/") return kind === "paint";
       return false;
     }
     function a(href, zh, en) {
       return '<a href="' + href + '"' + (activeFor(href) ? ' aria-current="page"' : '') +
         '><span data-l="zh">' + zh + '</span><span data-l="en">' + en + '</span></a>';
     }
-    var head = kind === "main"
-      ? [a("https://www.chenhua.net/themes/", "主题", "Themes"),
+    var head = [a("https://www.chenhua.net/themes/", "主题", "Themes"),
          a("https://www.chenhua.net/timeline/", "时间线", "Timeline"),
          a("https://www.chenhua.net/today/calendar.html", "日历", "Calendar"),
          a("https://photo.chenhua.net/", "摄影", "Photography"),
          a("https://paint.chenhua.net/", "绘画", "Painting"),
-         a("https://netcn.org/", "导航", "Directory")]
-      : [a("https://photo.chenhua.net/", "摄影", "Photography"),
-         a("https://paint.chenhua.net/", "绘画", "Painting"),
          a("https://netcn.org/", "导航", "Directory")];
-    var foot = kind === "main"
-      ? [a("https://www.chenhua.net/", "出尘入画", "Frame &amp; Grain"),
+    var foot = [a("https://www.chenhua.net/", "出尘入画", "Frame &amp; Grain"),
          a("https://www.chenhua.net/themes/", "主题", "Themes"),
          a("https://www.chenhua.net/timeline/", "时间线", "Timeline"),
          a("https://www.chenhua.net/today/calendar.html", "日历", "Calendar"),
-         a("https://photo.chenhua.net/", "摄影", "Photography"),
-         a("https://paint.chenhua.net/", "绘画", "Painting"),
-         a("https://netcn.org/", "导航", "Directory")]
-      : [a("https://www.chenhua.net/", "出尘入画", "Frame &amp; Grain"),
          a("https://photo.chenhua.net/", "摄影", "Photography"),
          a("https://paint.chenhua.net/", "绘画", "Painting"),
          a("https://netcn.org/", "导航", "Directory")];
@@ -221,6 +212,10 @@
     Array.prototype.forEach.call(document.querySelectorAll(".brand, .g-brand"), function (brand) {
       var link = brand.closest("a") || brand;
       if (link && link.tagName === "A") link.setAttribute("href", "https://www.chenhua.net/");
+      var sub = brand.querySelector(".sub");
+      if (sub) sub.innerHTML = '<span data-l="zh">尘归尘，画归画</span><span data-l="en">Image as history</span>';
+      var mark = brand.querySelector("img.brand-mark");
+      if (mark) mark.setAttribute("src", "https://www.chenhua.net/assets/leaf/joy.svg");
     });
   }
 
@@ -299,7 +294,7 @@
     });
     var hs = document.querySelector(".head-search input");
     if (hs) {
-      hs.setAttribute("placeholder", lang === "en" ? "Search archive" : "搜索标题、地点或主题");
+      hs.setAttribute("placeholder", lang === "en" ? "Search themes, people, places" : "搜主题、人物、地点");
       hs.setAttribute("aria-label", lang === "en" ? "Search" : "搜索");
     }
     var hsb = document.querySelector(".head-search button");
