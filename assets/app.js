@@ -550,7 +550,7 @@
       '<div class="home-index-grid">' +
         '<a href="' + esc(routeHref("themes")) + '"><span class="no">01</span><h3>' + esc(isEn() ? "Themes" : "主题") + "</h3><p>" + esc(isEn() ? "Nine photographic series and eight painted trails, side by side." : "九个摄影系列与八条绘画小径，并排展开。") + "</p></a>" +
         '<a href="' + esc(routeHref("timeline")) + '"><span class="no">02</span><h3>' + esc(isEn() ? "Timeline" : "时间线") + "</h3><p>" + esc(isEn() ? "One age, two ways of seeing: photography and painting on the same axis." : "同一时代，两种观看：摄影与绘画在同一条时间轴上。") + "</p></a>" +
-        '<a href="' + esc((CFG.base || "/") + "today/") + '"><span class="no">03</span><h3>' + esc(isEn() ? "Calendar" : "日历") + "</h3><p>" + esc(isEn() ? "366 days, each with a photograph and a painting." : "三百六十六天，每天一张照片与一幅画。") + "</p></a>" +
+        '<a href="' + esc((CFG.base || "/") + "today/calendar.html") + '"><span class="no">03</span><h3>' + esc(isEn() ? "Calendar" : "日历") + "</h3><p>" + esc(isEn() ? "366 days, each with a photograph and a painting." : "三百六十六天，每天一张照片与一幅画。") + "</p></a>" +
       "</div></section>";
   }
 

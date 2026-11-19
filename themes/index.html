@@ -420,7 +420,7 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
     <nav class="masthead-nav" aria-label="全站导航">
       <a href="../themes/" aria-current="page"><span data-l="zh">主题</span><span data-l="en">Themes</span></a>
       <a href="../timeline/"><span data-l="zh">时间线</span><span data-l="en">Timeline</span></a>
-      <a href="../today/"><span data-l="zh">日历</span><span data-l="en">Calendar</span></a>
+      <a href="../today/calendar.html"><span data-l="zh">日历</span><span data-l="en">Calendar</span></a>
       <a href="https://photo.chenhua.net/"><span data-l="zh">摄影</span><span data-l="en">Photography</span></a>
       <a href="https://paint.chenhua.net/"><span data-l="zh">绘画</span><span data-l="en">Painting</span></a>
       <a href="https://netcn.org/"><span data-l="zh">导航</span><span data-l="en">Directory</span></a>
@@ -435,6 +435,87 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
   </div>
 </header>
 
+<!-- combined-sections -->
+
+<style>
+/* ---------- 摄影 / 绘画 分栏 ---------- */
+.split-lead{max-width:1240px;margin:0 auto;padding:44px 28px 16px}
+.split-kicker{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
+.split-lead h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5vw,68px);line-height:1.04;letter-spacing:-.03em;margin:0 0 14px;max-width:980px}
+.split-lead .intro{max-width:780px;color:var(--muted);font-size:13px;line-height:1.9;margin:0}
+.split-index{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin:26px 0 0}
+.split-index a{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;background:var(--paper);padding:17px 18px;text-decoration:none;color:var(--text);min-width:0}
+.split-index a:hover{background:var(--panel)}
+.split-index .no{font-size:10px;color:var(--accent);letter-spacing:.12em;padding-top:4px}
+.split-index b{display:block;font-family:var(--serif);font-weight:400;font-size:19px;line-height:1.3}
+.split-index em{display:block;font-style:normal;color:var(--muted);font-size:10px;line-height:1.6;margin-top:3px}
+.part-head{max-width:1240px;margin:0 auto;padding:30px 28px 12px;display:flex;align-items:baseline;justify-content:space-between;gap:18px;border-top:1px solid var(--line)}
+.part-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,38px);line-height:1.1;margin:0}
+.part-head p{margin:0;color:var(--muted);font-size:11px;line-height:1.7;max-width:520px;text-align:right}
+.part-head .part-kicker{display:block;font-size:9px;letter-spacing:.2em;color:var(--accent);margin-bottom:7px}
+.paint-part{max-width:1240px;margin:10px auto 0;padding:8px 28px 34px;border-top:1px solid var(--line)}
+.trail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:18px}
+.trail-card{display:flex;flex-direction:column;min-width:0;background:var(--paper);color:var(--text);text-decoration:none;overflow:hidden}
+.trail-card:hover{background:var(--panel)}
+.trail-card img{width:100%;height:148px;object-fit:cover;display:block}
+.trail-card .tc-body{padding:15px 16px 16px;display:flex;flex-direction:column;min-height:150px}
+.trail-card .tc-meta{display:flex;justify-content:space-between;gap:10px;font-size:9px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.trail-card h3{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2;margin:0 0 5px}
+.trail-card .tc-en{font-size:9px;letter-spacing:.12em;color:var(--muted);margin-bottom:9px}
+.trail-card p{font-size:11px;line-height:1.75;color:var(--muted);margin:0 0 12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.trail-card .tc-more{margin-top:auto;font-size:10px;color:var(--accent);letter-spacing:.06em}
+.movement-strip{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+.movement-strip h3{font-family:var(--serif);font-weight:400;font-size:20px;margin:0 0 12px}
+.movement-links{display:flex;flex-wrap:wrap;gap:7px}
+.movement-links a{display:inline-flex;align-items:baseline;gap:6px;border:1px solid var(--line);padding:6px 9px;text-decoration:none;color:var(--muted);font-size:10px;line-height:1.2}
+.movement-links a:hover{border-color:var(--accent);color:var(--text)}
+.movement-links a b{font-weight:400;color:var(--text);font-family:var(--serif);font-size:13px}
+.paint-more{display:inline-flex;margin-top:16px;border:1px solid var(--accent);color:var(--accent);padding:9px 15px;font-size:11px;text-decoration:none}
+.paint-more:hover{background:var(--accent);color:var(--paper)}
+
+/* ---------- 双轨时间线 ---------- */
+.combined-timeline{max-width:1240px;margin:0 auto;padding:20px 28px 6px}
+.ct-lead{display:flex;justify-content:space-between;gap:20px;align-items:end;border-bottom:1px solid var(--line);padding:26px 0 14px}
+.ct-lead h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.6vw,44px);line-height:1.1;margin:0}
+.ct-lead p{max-width:520px;margin:0;color:var(--muted);font-size:11px;line-height:1.8;text-align:right}
+.ct-legend{display:flex;gap:18px;font-size:9px;letter-spacing:.14em;color:var(--muted);padding:10px 0 4px}
+.ct-legend i{display:inline-block;width:7px;height:7px;margin-right:6px;background:var(--accent)}
+.ct-legend i.paint{background:#8b6b45}
+.ct-row{display:grid;grid-template-columns:minmax(0,1fr) 96px minmax(0,1fr);gap:16px;border-top:1px solid var(--line);padding:18px 0}
+.ct-side{min-width:0}
+.ct-side-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.ct-side-label.photo{color:var(--accent)}
+.ct-side-label.paint{color:#b28b5d}
+.ct-axis{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:20px;color:var(--muted)}
+.ct-axis b{font-family:var(--serif);font-weight:400;font-size:14px;white-space:nowrap}
+.ct-axis em{font-style:normal;font-size:9px;letter-spacing:.08em;margin-top:4px}
+.ct-axis .ct-line{width:1px;height:46px;background:var(--line);margin-top:8px}
+.ct-photo-card,.ct-paint-card{display:grid;grid-template-columns:76px minmax(0,1fr);gap:10px;text-decoration:none;color:var(--text);border-bottom:1px solid var(--line);padding:8px 0;min-width:0}
+.ct-photo-card:last-child,.ct-paint-card:last-child{border-bottom:0}
+.ct-photo-card img,.ct-paint-card img{width:76px;height:60px;object-fit:cover;display:block;filter:saturate(.9)}
+.ct-photo-card .cc,.ct-paint-card .cc{min-width:0;display:flex;flex-direction:column;justify-content:center}
+.ct-photo-card h3,.ct-paint-card h3{font-family:var(--serif);font-weight:400;font-size:16px;line-height:1.3;margin:0 0 3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ct-photo-card span,.ct-paint-card span{font-size:9px;color:var(--muted);letter-spacing:.04em}
+.ct-empty{border:1px dashed var(--line);padding:14px;color:var(--dim);font-size:10px;line-height:1.7;min-height:68px;display:flex;align-items:center}
+.ct-more{font-size:9px;color:var(--accent);text-decoration:none;margin-top:7px;display:inline-block}
+@media(max-width:1050px){.trail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ct-row{grid-template-columns:1fr 70px 1fr;gap:10px}.ct-lead{display:block}.ct-lead p{text-align:left;margin-top:10px}}
+@media(max-width:680px){.split-index{grid-template-columns:1fr}.trail-grid{grid-template-columns:1fr}.ct-row{grid-template-columns:1fr;padding:16px 0}.ct-axis{flex-direction:row;gap:8px;padding:0;align-items:center;justify-content:flex-start}.ct-axis .ct-line{width:30px;height:1px;margin:0}.ct-lead h2{font-size:28px}.part-head{display:block}.part-head p{text-align:left;margin-top:7px}}
+</style>
+
+<section class="split-lead">
+<p class="split-kicker"><span data-l="zh">ARCHIVE ATLAS / 摄影 · 绘画</span><span data-l="en">ARCHIVE ATLAS / PHOTOGRAPHY · PAINTING</span></p>
+<h1><span data-l="zh">摄影与绘画，<br>两种观看世界的方法。</span><span data-l="en">Photography and painting,<br>two ways of seeing the world.</span></h1>
+<p class="intro"><span data-l="zh">摄影把世界留在感光层上，绘画把世界放回构图里。这里不再把绘画当作一条附注：九个摄影主题与八条绘画小径并排展开，先看照片，再看画。</span><span data-l="en">Photography fixes the world onto a sensitive surface; painting puts it back into a composition. Painting is no longer an appendix: nine photographic themes and eight painted trails are laid out side by side.</span></p>
+<div class="split-index">
+<a href="#photo-themes"><span class="no">01</span><span><b><span data-l="zh">摄影 · 九个主题</span><span data-l="en">Photography · Nine themes</span></b><em><span data-l="zh">379 篇故事 / 9 个系列 / 366 天</span><span data-l="en">379 stories / 9 series / 366 days</span></em></span></a>
+<a href="#paint-themes"><span class="no">02</span><span><b><span data-l="zh">绘画 · 八条小径</span><span data-l="en">Painting · Eight trails</span></b><em><span data-l="zh">101 件作品 / 15 个流派 / 400–1930</span><span data-l="en">101 works / 15 movements / 400–1930</span></em></span></a>
+</div>
+</section>
+<section class="part-head" id="photo-themes">
+<div><span class="part-kicker">PHOTOGRAPHY / 9 THEMES</span><h2><span data-l="zh">摄影：九个主题</span><span data-l="en">Photography: nine themes</span></h2></div>
+<p><span data-l="zh">点一张主题卡进入摄影叙事；下面的年代尺会把同一个主题放回它发生的年代。</span><span data-l="en">Choose a theme card to enter the photographic narrative; the decade ruler below puts it back into its own time.</span></p>
+</section>
+<!-- /combined-sections -->
 <main class="shell">
 <section class="photo-lead">
 <p class="photo-kicker">PHOTOGRAPHY / NINE THEMES</p>
@@ -446,6 +527,60 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
     <div id="stageView"></div>
   </section>
 </main>
+<!-- paint-themes-section -->
+<section class="paint-part" id="paint-themes">
+<div class="part-head" style="padding-left:0;padding-right:0;border-top:0">
+<div><span class="part-kicker">PAINTING / 8 TRAILS</span><h2><span data-l="zh">绘画：八条可以走的小径</span><span data-l="en">Painting: eight trails you can walk</span></h2></div>
+<p><span data-l="zh">光、身体、城市、自然、信仰、战争、肖像、日常。每一条都从一件作品走到另一件作品。</span><span data-l="en">Light, body, city, nature, faith, war, portrait, everyday. Each trail moves from one work to another.</span></p>
+</div>
+<div class="trail-grid"><a class="trail-card" href="https://paint.chenhua.net/history/trail-light.html">
+<img src="https://19century.chenhua.net/paintings/1830s/turner-fighting-temeraire-1839-23ed12a1.jpg?v=canon77" alt="光" loading="lazy">
+<div class="tc-body"><div class="tc-meta"><span>PAINTING TRAIL</span><span>5 <span data-l="zh">站</span><span data-l="en">stops</span></span></div>
+<h3><span data-l="zh">光</span><span data-l="en">Light</span></h3><div class="tc-en">Light</div>
+<p><span data-l="zh">画家不画光本身，他们画光落在什么上面。这条小径从烛光、圣光走到日光、火光和电光，看光如何从神的属性变成画家的工具。</span><span data-l="en">Painters do not paint light itself; they paint what light falls on. This trail moves from candle, holy light and sunlight to fire and electric light, tracing how light becomes a painter&#x27;s instrument.</span></p><span class="tc-more"><span data-l="zh">走这条小径 →</span><span data-l="en">Walk this trail →</span></span></div></a>
+<a class="trail-card" href="https://paint.chenhua.net/history/trail-body.html">
+<img src="https://19century.chenhua.net/paintings/1530s/titian-venus-of-urbino-1538-a958ecd4.jpg?v=canon77" alt="身体" loading="lazy">
+<div class="tc-body"><div class="tc-meta"><span>PAINTING TRAIL</span><span>5 <span data-l="zh">站</span><span data-l="en">stops</span></span></div>
+<h3><span data-l="zh">身体</span><span data-l="en">Body</span></h3><div class="tc-en">Body</div>
+<p><span data-l="zh">身体是绘画最古老的题目，也是最难诚实的题目。这条小径从神性身体走到劳动身体、欲望身体和变形身体。</span><span data-l="en">The body is painting&#x27;s oldest subject and its hardest honesty. This trail moves from divine body to labouring, desiring and distorted body.</span></p><span class="tc-more"><span data-l="zh">走这条小径 →</span><span data-l="en">Walk this trail →</span></span></div></a>
+<a class="trail-card" href="https://paint.chenhua.net/history/trail-city.html">
+<img src="https://19century.chenhua.net/paintings/1880s/manet-bar-folies-bergere-1882-4397cb99.jpg?v=canon77" alt="城市" loading="lazy">
+<div class="tc-body"><div class="tc-meta"><span>PAINTING TRAIL</span><span>5 <span data-l="zh">站</span><span data-l="en">stops</span></span></div>
+<h3><span data-l="zh">城市</span><span data-l="en">The city</span></h3><div class="tc-en">The city</div>
+<p><span data-l="zh">城市在画里先是背景，后来变成主角。这条小径从汴京的桥走到巴黎的酒吧，看画家如何把人群、建筑和速度组织成一张图。</span><span data-l="en">The city begins as background and becomes protagonist. This trail moves from the Bianjing bridge to a Paris bar, tracing how painters organise crowd, architecture and speed.</span></p><span class="tc-more"><span data-l="zh">走这条小径 →</span><span data-l="en">Walk this trail →</span></span></div></a>
+<a class="trail-card" href="https://paint.chenhua.net/history/trail-nature.html">
+<img src="https://19century.chenhua.net/paintings/1810s/friedrich-wanderer-1818-07b2a4d8.jpg?v=canon77" alt="自然" loading="lazy">
+<div class="tc-body"><div class="tc-meta"><span>PAINTING TRAIL</span><span>5 <span data-l="zh">站</span><span data-l="en">stops</span></span></div>
+<h3><span data-l="zh">自然</span><span data-l="en">Nature</span></h3><div class="tc-en">Nature</div>
+<p><span data-l="zh">自然在画里有时是神的书，有时是人的对立面，有时只是光和天气。这条小径从北宋主峰走到浪漫主义的雾海。</span><span data-l="en">Nature in painting is sometimes God&#x27;s book, sometimes man&#x27;s opposite, sometimes only light and weather. This trail moves from a Northern Song peak to a Romantic sea of fog.</span></p><span class="tc-more"><span data-l="zh">走这条小径 →</span><span data-l="en">Walk this trail →</span></span></div></a>
+<a class="trail-card" href="https://paint.chenhua.net/history/trail-faith.html">
+<img src="https://19century.chenhua.net/paintings/1300s/duccio-maesta-1308-3658b927.jpg?v=canon77" alt="信仰" loading="lazy">
+<div class="tc-body"><div class="tc-meta"><span>PAINTING TRAIL</span><span>5 <span data-l="zh">站</span><span data-l="en">stops</span></span></div>
+<h3><span data-l="zh">信仰</span><span data-l="en">Faith</span></h3><div class="tc-en">Faith</div>
+<p><span data-l="zh">从圣像到祭坛画，从敦煌到西斯廷，信仰给了绘画最稳定的题目，也给了它最严格的规则。这条小径看画家如何在规则里加入人的温度。</span><span data-l="en">From icon to altarpiece, from Dunhuang to the Sistine, faith gave painting its most stable subject and its strictest rules. This trail looks at how painters add human warmth inside those rules.</span></p><span class="tc-more"><span data-l="zh">走这条小径 →</span><span data-l="en">Walk this trail →</span></span></div></a>
+<a class="trail-card" href="https://paint.chenhua.net/history/trail-war.html">
+<img src="https://19century.chenhua.net/paintings/1830s/delacroix-liberty-1830-6ea9fb95.jpg?v=canon77" alt="战争" loading="lazy">
+<div class="tc-body"><div class="tc-meta"><span>PAINTING TRAIL</span><span>4 <span data-l="zh">站</span><span data-l="en">stops</span></span></div>
+<h3><span data-l="zh">战争</span><span data-l="en">War</span></h3><div class="tc-en">War</div>
+<p><span data-l="zh">战争画很少真的在画战争，它更多在画战争之后：尸体、幸存者、审判、纪念。这条小径从枪口走到纪念碑。</span><span data-l="en">War painting rarely paints war itself; it paints what comes after: bodies, survivors, judgment, memorial. This trail moves from rifle muzzles to monuments.</span></p><span class="tc-more"><span data-l="zh">走这条小径 →</span><span data-l="en">Walk this trail →</span></span></div></a>
+<a class="trail-card" href="https://paint.chenhua.net/history/trail-portrait.html">
+<img src="https://19century.chenhua.net/paintings/1660s/rembrandt-self-portrait-1669-83b19577.jpg?v=canon77" alt="肖像" loading="lazy">
+<div class="tc-body"><div class="tc-meta"><span>PAINTING TRAIL</span><span>5 <span data-l="zh">站</span><span data-l="en">stops</span></span></div>
+<h3><span data-l="zh">肖像</span><span data-l="en">Portrait</span></h3><div class="tc-en">Portrait</div>
+<p><span data-l="zh">肖像不是脸的照片，它是一份关于“这个人为什么值得被记住”的提案。这条小径从皇帝、商人、画家自己走到一个回头的少女。</span><span data-l="en">A portrait is not a photograph of a face; it is a proposal about why this person deserves to be remembered. This trail moves from emperor and merchant to the painter himself and a girl turning her head.</span></p><span class="tc-more"><span data-l="zh">走这条小径 →</span><span data-l="en">Walk this trail →</span></span></div></a>
+<a class="trail-card" href="https://paint.chenhua.net/history/trail-everyday.html">
+<img src="https://19century.chenhua.net/paintings/1720s/chardin-the-ray-1728-e5aff698.jpg?v=canon77" alt="日常" loading="lazy">
+<div class="tc-body"><div class="tc-meta"><span>PAINTING TRAIL</span><span>5 <span data-l="zh">站</span><span data-l="en">stops</span></span></div>
+<h3><span data-l="zh">日常</span><span data-l="en">The everyday</span></h3><div class="tc-en">The everyday</div>
+<p><span data-l="zh">日常画不靠神话、历史或奇观，它靠一双愿意停下来的眼睛。这条小径从厨房的鱼走到卧室、街道和餐桌。</span><span data-l="en">Everyday painting relies on no myth, history or spectacle, only an eye willing to stop. This trail moves from a kitchen fish to bedroom, street and table.</span></p><span class="tc-more"><span data-l="zh">走这条小径 →</span><span data-l="en">Walk this trail →</span></span></div></a></div>
+<div class="movement-strip"><h3><span data-l="zh">十五个流派，作为索引</span><span data-l="en">Fifteen movements, as an index</span></h3><div class="movement-links"><a href="https://paint.chenhua.net/history/movement-early-renaissance.html"><b><span data-l="zh">早期文艺复兴</span><span data-l="en">Early Renaissance</span></b></a><a href="https://paint.chenhua.net/history/movement-high-renaissance.html"><b><span data-l="zh">盛期文艺复兴</span><span data-l="en">High Renaissance</span></b></a><a href="https://paint.chenhua.net/history/movement-northern-renaissance.html"><b><span data-l="zh">北方文艺复兴</span><span data-l="en">Northern Renaissance</span></b></a><a href="https://paint.chenhua.net/history/movement-mannerism.html"><b><span data-l="zh">矫饰主义</span><span data-l="en">Mannerism</span></b></a><a href="https://paint.chenhua.net/history/movement-baroque.html"><b><span data-l="zh">巴洛克</span><span data-l="en">Baroque</span></b></a><a href="https://paint.chenhua.net/history/movement-rococo.html"><b><span data-l="zh">洛可可</span><span data-l="en">Rococo</span></b></a><a href="https://paint.chenhua.net/history/movement-neoclassicism.html"><b><span data-l="zh">新古典主义</span><span data-l="en">Neoclassicism</span></b></a><a href="https://paint.chenhua.net/history/movement-romanticism.html"><b><span data-l="zh">浪漫主义</span><span data-l="en">Romanticism</span></b></a><a href="https://paint.chenhua.net/history/movement-realism.html"><b><span data-l="zh">现实主义</span><span data-l="en">Realism</span></b></a><a href="https://paint.chenhua.net/history/movement-impressionism.html"><b><span data-l="zh">印象主义</span><span data-l="en">Impressionism</span></b></a><a href="https://paint.chenhua.net/history/movement-post-impressionism.html"><b><span data-l="zh">后印象主义</span><span data-l="en">Post-Impressionism</span></b></a><a href="https://paint.chenhua.net/history/movement-symbolism.html"><b><span data-l="zh">象征主义</span><span data-l="en">Symbolism</span></b></a><a href="https://paint.chenhua.net/history/movement-yuan-literati.html"><b><span data-l="zh">元代文人山水</span><span data-l="en">Yuan Literati Landscape</span></b></a><a href="https://paint.chenhua.net/history/movement-ukiyo-e.html"><b><span data-l="zh">浮世绘</span><span data-l="en">Ukiyo-e</span></b></a><a href="https://paint.chenhua.net/history/movement-expressionism.html"><b><span data-l="zh">表现主义</span><span data-l="en">Expressionism</span></b></a></div></div>
+<a class="paint-more" href="https://paint.chenhua.net/history/"><span data-l="zh">进入绘画史 →</span><span data-l="en">Enter painting history →</span></a>
+</section>
+<!-- /paint-themes-section -->
+
+
+
+
 </div>
 
 <footer class="site-foot">
@@ -454,7 +589,7 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
     <a href="../"><span data-l="zh">出尘入画</span><span data-l="en"><span class="sf-brand-long">Frame &amp; Grain</span><span class="sf-brand-short">Frame</span></span></a>
     <a href="../themes/"><span data-l="zh">主题</span><span data-l="en">Themes</span></a>
     <a href="../timeline/"><span data-l="zh">时间线</span><span data-l="en">Timeline</span></a>
-    <a href="../today/"><span data-l="zh">日历</span><span data-l="en">Calendar</span></a>
+    <a href="../today/calendar.html"><span data-l="zh">日历</span><span data-l="en">Calendar</span></a>
     <a href="https://photo.chenhua.net/"><span data-l="zh">摄影</span><span data-l="en">Photography</span></a>
     <a href="https://paint.chenhua.net/"><span data-l="zh">绘画</span><span data-l="en">Painting</span></a>
     <a href="https://netcn.org/"><span data-l="zh">导航</span><span data-l="en">Directory</span></a>
@@ -651,6 +786,6 @@ new MutationObserver(()=>{
 }).observe(document.documentElement,{attributes:true,attributeFilter:["data-lang"]});
 renderAll();
 </script>
-<script src="../assets/site.js?v=1795053839"></script>
+<script src="../assets/site.js?v=1795054308"></script>
 </body>
 </html>
