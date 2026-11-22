@@ -153,8 +153,8 @@
       if (foot.querySelector(".sf-copy") || foot.querySelector(".sf-left")) return;
       var copy = document.createElement("span");
       copy.className = "sf-copy";
-      copy.innerHTML = '<span data-l="zh">© 2026 尘画 · <a href="https://www.chenhua.net">chenhua.net</a></span>' +
-        '<span data-l="en">© 2026 Frame & Grain · <a href="https://www.chenhua.net">chenhua.net</a></span>';
+      copy.innerHTML = '<span data-l="zh">© 2026 尘画 · <a href="https://chenhua.net">chenhua.net</a></span>' +
+        '<span data-l="en">© 2026 Frame & Grain · <a href="https://chenhua.net">chenhua.net</a></span>';
       foot.appendChild(copy);
     });
   }
@@ -170,6 +170,24 @@
     });
   }
 
+  var HEAD_NAV = [
+    ["https://chenhua.net/themes/", "主题", "Themes"],
+    ["https://chenhua.net/timeline/", "时间线", "Timeline"],
+    ["https://chenhua.net/today/calendar.html", "日历", "Calendar"],
+    ["https://photo.chenhua.net/", "摄影", "Photography"],
+    ["https://paint.chenhua.net/", "绘画", "Painting"],
+    ["https://netcn.org/", "导航", "Directory"]
+  ];
+  var FOOT_NAV = [
+    ["https://chenhua.net/", "出尘入画", '<span class="sf-brand-long">Frame &amp; Grain</span><span class="sf-brand-short">Frame</span>'],
+    ["https://chenhua.net/themes/", "主题", "Themes"],
+    ["https://chenhua.net/timeline/", "时间线", "Timeline"],
+    ["https://chenhua.net/today/calendar.html", "日历", "Calendar"],
+    ["https://photo.chenhua.net/", "摄影", "Photography"],
+    ["https://paint.chenhua.net/", "绘画", "Painting"],
+    ["https://netcn.org/", "导航", "Directory"]
+  ];
+
   function installGlobalNav() {
     var host = location.hostname;
     var path = location.pathname.replace(/\/index\.html$/, "/");
@@ -177,30 +195,20 @@
       ? "photo"
       : ((host === "paint.chenhua.net" || path.indexOf("/paint/") === 0) ? "paint" : "main");
     function activeFor(href) {
-      if (href.indexOf("www.chenhua.net/themes/") >= 0) return kind === "main" && path.indexOf("/themes") >= 0;
-      if (href.indexOf("www.chenhua.net/timeline/") >= 0) return kind === "main" && path.indexOf("/timeline") >= 0;
-      if (href.indexOf("www.chenhua.net/today/") >= 0) return kind === "main" && path.indexOf("/today") >= 0;
+      if (href.indexOf("chenhua.net/themes/") >= 0) return kind === "main" && path.indexOf("/themes") >= 0;
+      if (href.indexOf("chenhua.net/timeline/") >= 0) return kind === "main" && path.indexOf("/timeline") >= 0;
+      if (href.indexOf("chenhua.net/today/") >= 0) return kind === "main" && path.indexOf("/today") >= 0;
       if (href === "https://photo.chenhua.net/") return kind === "photo";
       if (href === "https://paint.chenhua.net/") return kind === "paint";
       return false;
     }
-    function a(href, zh, en) {
+    function a(item) {
+      var href = item[0];
       return '<a href="' + href + '"' + (activeFor(href) ? ' aria-current="page"' : '') +
-        '><span data-l="zh">' + zh + '</span><span data-l="en">' + en + '</span></a>';
+        '><span data-l="zh">' + item[1] + '</span><span data-l="en">' + item[2] + '</span></a>';
     }
-    var head = [a("https://www.chenhua.net/themes/", "主题", "Themes"),
-         a("https://www.chenhua.net/timeline/", "时间线", "Timeline"),
-         a("https://www.chenhua.net/today/calendar.html", "日历", "Calendar"),
-         a("https://photo.chenhua.net/", "摄影", "Photography"),
-         a("https://paint.chenhua.net/", "绘画", "Painting"),
-         a("https://netcn.org/", "导航", "Directory")];
-    var foot = [a("https://www.chenhua.net/", "出尘入画", "Frame &amp; Grain"),
-         a("https://www.chenhua.net/themes/", "主题", "Themes"),
-         a("https://www.chenhua.net/timeline/", "时间线", "Timeline"),
-         a("https://www.chenhua.net/today/calendar.html", "日历", "Calendar"),
-         a("https://photo.chenhua.net/", "摄影", "Photography"),
-         a("https://paint.chenhua.net/", "绘画", "Painting"),
-         a("https://netcn.org/", "导航", "Directory")];
+    var head = HEAD_NAV.map(a);
+    var foot = FOOT_NAV.map(a);
     var headHtml = head.join("");
     var footHtml = foot.join("");
     Array.prototype.forEach.call(document.querySelectorAll(".desknav, .masthead-nav, .g-nav"), function (nav) {
@@ -211,16 +219,16 @@
     });
     Array.prototype.forEach.call(document.querySelectorAll(".brand, .g-brand"), function (brand) {
       var link = brand.closest("a") || brand;
-      if (link && link.tagName === "A") link.setAttribute("href", "https://www.chenhua.net/");
+      if (link && link.tagName === "A") link.setAttribute("href", "https://chenhua.net/");
       var sub = brand.querySelector(".sub");
       if (sub) sub.innerHTML = '<span data-l="zh">尘归尘，画归画</span><span data-l="en">Image as history</span>';
       var mark = brand.querySelector("img.brand-mark");
-      if (mark) mark.setAttribute("src", "https://www.chenhua.net/assets/leaf/joy.svg");
+      if (mark) mark.setAttribute("src", "https://chenhua.net/assets/leaf/joy.svg");
     });
   }
 
   var searchHref = findSearchLink();
-  if (!searchHref) searchHref = "https://www.chenhua.net/search/";
+  if (!searchHref) searchHref = "https://chenhua.net/search/";
   removeSearchLinks();
   removeHomeNavLink();
   localizeBrand();
@@ -344,24 +352,37 @@
   ];
 
   function addTabbar() {
-    if (document.querySelector(".tabbar")) return;
-    var foot = document.querySelector(".site-foot .sf-nav");
-    if (!foot) return;
-    var links = Array.prototype.slice.call(foot.querySelectorAll("a"));
-    if (links.length < 4) return;
+    Array.prototype.forEach.call(document.querySelectorAll(".tabbar"), function (el) {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    });
+    var links = FOOT_NAV.map(function (item) {
+      var a = document.createElement("a");
+      a.setAttribute("href", item[0]);
+      a.innerHTML = '<span data-l="zh">' + item[1] + '</span><span data-l="en">' + item[2] + "</span>";
+      return a;
+    });
     var current = location.pathname.replace(/\/index\.html$/, "/");
     var best = -1;
     var bestLen = -1;
     links.forEach(function (a, i) {
       try {
         var u = new URL(a.href, location.href);
-        if (u.origin === location.origin && u.pathname !== "/" &&
+        var sameHost = u.hostname === location.hostname;
+        if (!sameHost && kind === "main") {
+          sameHost = u.hostname.replace(/^www\./, "") === location.hostname.replace(/^www\./, "");
+        }
+        if (sameHost && u.pathname !== "/" &&
             current.indexOf(u.pathname) === 0 && u.pathname.length > bestLen) {
           best = i;
           bestLen = u.pathname.length;
         }
       } catch (e) {}
     });
+    if (best < 0) {
+      if (location.hostname === "photo.chenhua.net") best = 4;
+      else if (location.hostname === "paint.chenhua.net") best = 5;
+      else best = 0;
+    }
     function tabIconFor(a) {
       var href = (a.getAttribute("href") || "").toLowerCase();
       var label = textOf(a).toLowerCase();
@@ -389,7 +410,10 @@
         (i === best ? ' aria-current="page"' : "") + '>' +
         (TAB_ICONS[tabIconFor(a)] || "") + '<span class="tab-label">' + label + "</span></a>";
     });
-    var style = document.createElement("style");
+    var style = document.getElementById("site-tabbar-style");
+    if (!style) {
+    style = document.createElement("style");
+    style.id = "site-tabbar-style";
     style.textContent =
       ".site-tabbar{display:none}" +
       "html[data-lang=\"en\"] .site-tabbar [data-l=\"zh\"]{display:none}" +
@@ -412,8 +436,28 @@
       "body.has-site-tabbar .site-foot{margin-top:18px}" +
       "}";
     document.head.appendChild(style);
+    }
     document.body.appendChild(nav);
     document.body.classList.add("has-site-tabbar");
   }
-  addTabbar();
+
+  function ensureTabbar() {
+    var bars = document.querySelectorAll(".tabbar");
+    if (bars.length === 1 && bars[0].classList.contains("site-tabbar") &&
+        bars[0].querySelectorAll("a").length === FOOT_NAV.length) return;
+    addTabbar();
+  }
+
+  function bootTabbar() {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", ensureTabbar);
+    } else {
+      ensureTabbar();
+    }
+    window.addEventListener("load", ensureTabbar);
+    [0, 180, 700, 1600].forEach(function (delay) {
+      setTimeout(ensureTabbar, delay);
+    });
+  }
+  bootTabbar();
 })();

@@ -976,8 +976,8 @@
     }).join("");
     var navAria = isEn() ? "Site navigation" : "站内导航";
     return '<footer class="site-foot">' +
-      '<div class="sf-left"><span data-l="zh">© 2026 尘画 · <a href="https://www.chenhua.net">chenhua.net</a></span>' +
-      '<span data-l="en">© 2026 <span class="sf-brand-long">Frame &amp; Grain</span><span class="sf-brand-short">Frame</span> · <a href="https://www.chenhua.net">chenhua.net</a></span></div>' +
+      '<div class="sf-left"><span data-l="zh">© 2026 尘画 · <a href="https://chenhua.net">chenhua.net</a></span>' +
+      '<span data-l="en">© 2026 <span class="sf-brand-long">Frame &amp; Grain</span><span class="sf-brand-short">Frame</span> · <a href="https://chenhua.net">chenhua.net</a></span></div>' +
       '<nav class="sf-nav" aria-label="' + navAria + '">' + links + "</nav>" +
       '<div class="sf-right"><a href="' + esc(routeHref("legal")) + '">' + (isEn() ? "Disclaimer" : "免责条款") + "</a></div>" +
       "</footer>";
