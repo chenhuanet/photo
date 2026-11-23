@@ -81,7 +81,7 @@
   }
   function q(sel, root) { return (root || document).querySelector(sel); }
   function qa(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
-  function imgOf(r) { return r.preview_image || r.image || ""; }
+  function imgOf(r) { return r.image || r.preview_image || ""; }
   function todayNoteHtml(r) {
     var n = NOTES[r.id] || {};
     if (isEn()) return esc(n.note_en || n.note || loc(r, "note"));
