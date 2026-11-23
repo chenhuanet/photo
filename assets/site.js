@@ -180,6 +180,7 @@
   ];
   var FOOT_NAV = [
     ["https://chenhua.net/", "出尘入画", '<span class="sf-brand-long">Frame &amp; Grain</span><span class="sf-brand-short">Frame</span>'],
+    ["https://chenhua.net/images/", "图片库", "Image Library"],
     ["https://chenhua.net/themes/", "主题", "Themes"],
     ["https://chenhua.net/timeline/", "时间线", "Timeline"],
     ["https://chenhua.net/today/calendar.html", "日历", "Calendar"],
