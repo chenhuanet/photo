@@ -497,6 +497,10 @@ body.phone-mode .app-scroll{padding-bottom:calc(20px + var(--safe-bottom))}
   .masonry{columns:5}
   .day-masonry{columns:5}
 }
+.static-splash{min-height:100vh;display:flex;flex-direction:column}
+.static-splash .appbar{position:relative;top:auto}
+.static-splash-main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 20px;
+color:var(--muted);font-family:var(--serif);font-size:15px;letter-spacing:.12em}
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
