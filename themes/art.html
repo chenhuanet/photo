@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-lang="zh">
+<head>
+<script>(function(){try{function ck(n){var m=document.cookie.match(new RegExp("(?:^|; )"+n+"=([^;]*)"));return m?decodeURIComponent(m[1]):""}var q=new URLSearchParams(location.search).get("lang");var l=q||ck("chenhua-lang")||localStorage.getItem("chenhua-lang")||"zh";if(l==="en"){document.documentElement.setAttribute("data-lang","en");document.documentElement.lang="en"}else{document.documentElement.setAttribute("data-lang","zh");document.documentElement.lang="zh-CN"}var t=ck("chenhua-theme")||localStorage.getItem("chenhua-theme");if(t!=="light"&&t!=="dark")t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>艺术与图像 · 摄影主题 · 尘画</title>
+<meta name="description" content="按主题浏览尘画的历史摄影与绘画故事。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://photo.chenhua.net/themes/art.html">
+<link rel="alternate" hreflang="zh-CN" href="https://photo.chenhua.net/themes/art.html">
+<link rel="alternate" hreflang="en" href="https://photo.chenhua.net/themes/art.html?lang=en">
+<meta property="og:type" content="website">
+<meta property="og:title" content="主题 · 尘画">
+<meta property="og:description" content="按主题浏览尘画的历史摄影与绘画故事。">
+<meta property="og:url" content="https://photo.chenhua.net/themes/art.html">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:locale:alternate" content="en_US">
+<link rel="icon" type="image/svg+xml" href="/assets/leaf/favicon.svg">
+<style>
+:root{
+  --paper:#f6f2ea; --paper-2:#f1ebdf; --panel:#fffdf8; --ink:#231f19; --muted:#6b6252;
+  --rule:#ded5c5; --rule-strong:#b8ab95; --accent:#8b6520; --accent-ink:#6d4f18;
+  --surface2:#efe9dd;
+  --blue:#234c5d; --blue-soft:#d8e1e1; --ok:#395d4e; --shadow:none;
+  --serif:"Noto Serif CJK SC","Songti SC","STSong","SimSun",Georgia,serif; --sans:"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  --stage:calc(100vw - clamp(32px,8vw,108px));
+}
+html[data-theme="dark"]{
+  --paper:#0d0c0b; --paper-2:#151311; --panel:#1c1916; --surface2:#1c1916; --ink:#ebe5da; --muted:#9b9184;
+  --rule:#302b25; --rule-strong:#4a4238; --accent:#c8a24a; --accent-ink:#d8b25e;
+  --blue:#82a8b2; --blue-soft:#26393d; --ok:#93b7a4;
+}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scrollbar-gutter:stable}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.28;background-image:linear-gradient(to right,transparent 0 96%,color-mix(in srgb,var(--rule) 40%,transparent) 96% 100%),linear-gradient(to bottom,transparent 0 96%,color-mix(in srgb,var(--rule) 32%,transparent) 96% 100%);background-size:64px 64px;mask-image:linear-gradient(to bottom,black,transparent 80%)}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{width:100%;max-width:1240px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+.masthead{position:sticky;top:0;z-index:20;height:60px;box-sizing:border-box;margin:0 -28px;padding:0 28px;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+.masthead-in{display:flex;align-items:center;gap:24px;height:59px;min-height:59px;padding:0}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:0 0 auto}
+.brand .brand-mark{width:30px;height:30px;flex:none;object-fit:contain;margin-right:-2px}
+.brand .wm{display:inline-flex;align-items:baseline;gap:1px;white-space:nowrap;flex:none;font-weight:400;font-size:24px;letter-spacing:.12em}
+.brand .wm-lite{font-family:var(--serif);font-size:17px;color:var(--muted);letter-spacing:.03em}
+.brand .wm-strong{font-family:var(--serif);font-size:24px;color:var(--accent);letter-spacing:.03em}
+.brand .sub{font-size:9px;letter-spacing:.12em;color:var(--muted);text-transform:none}
+.topmeta{display:flex;align-items:center;gap:7px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+.masthead.has-head-search .topmeta{margin-left:0}
+.head-search{display:flex;align-items:center;gap:3px;height:32px;min-width:92px;max-width:190px;flex:1 1 140px;
+  margin-left:auto;margin-right:3px;padding:0 4px 0 11px;border:1px solid var(--rule);border-radius:999px;
+  background:var(--panel);color:var(--muted)}
+.head-search input{min-width:0;width:100%;height:100%;border:0;outline:0;background:transparent;color:var(--ink);font:inherit;font-size:11px}
+.head-search input::placeholder{color:var(--muted)}
+.head-search button{width:24px;height:24px;flex:none;display:grid;place-items:center;border-radius:50%;color:var(--muted)}
+.head-search button svg{width:15px;height:15px}
+@media(max-width:899px){.head-search{display:none}}
+.masthead-nav{display:flex;align-items:center;gap:2px;flex-wrap:wrap}
+.masthead-nav a{font-size:12px;letter-spacing:normal;color:var(--muted);padding:7px 10px;border-radius:999px;text-decoration:none;white-space:nowrap}
+.masthead-nav a:hover{color:var(--ink)}
+.masthead-nav a[aria-current="page"]{background:var(--surface2);color:var(--ink)}
+@media (max-width:1100px){.topmeta .tag,.topmeta .ghost{display:none}}
+.langbtn{width:34px;height:34px;padding:0;border:1px solid var(--rule);border-radius:50%;background:var(--panel);font-size:0;letter-spacing:0;color:var(--muted);display:grid;place-items:center}
+.langbtn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6}
+.langbtn:hover{border-color:var(--ink);color:var(--ink)}
+html[data-lang="en"] [data-l="zh"]{display:none}
+html[data-lang="zh"] [data-l="en"]{display:none}
+.tag,.ghost{font-size:11px;letter-spacing:.08em;border:1px solid var(--rule);background:transparent;padding:6px 9px;text-decoration:none;line-height:1.2;white-space:nowrap}
+.tag{border-color:var(--accent);color:var(--accent-ink)}
+.ghost:hover,.tag:hover{border-color:var(--ink)}
+.iconbtn{width:34px;height:34px;border:1px solid var(--rule);border-radius:50%;background:var(--panel);color:var(--muted);display:grid;place-items:center;padding:0}
+.iconbtn:hover{border-color:var(--ink);color:var(--ink)}
+.iconbtn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6}
+html[data-theme="light"] .moon{display:none}
+html[data-theme="dark"] .sun{display:none}
+
+.lede{padding:clamp(28px,5vw,66px) 0 26px;border-bottom:1px solid var(--rule)}
+.kicker{font-size:11px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;display:flex;gap:12px;align-items:center;margin-bottom:18px}
+.kicker:before{content:"";width:34px;height:1px;background:var(--accent);display:block}
+h1{font-family:var(--serif);font-size:clamp(38px,6vw,82px);line-height:1.08;font-weight:900;letter-spacing:-.04em;margin:0 0 20px;max-width:12em}
+.lede p{max-width:760px;font-size:clamp(14px,1.4vw,17px);color:var(--muted);margin:0 0 28px}
+.axis-key{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.axis-key>div{padding:14px 16px 15px;border-right:1px solid var(--rule);display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:baseline}
+.axis-key>div:last-child{border-right:0}
+.axis-key b{font-family:var(--serif);font-size:17px;font-weight:700;white-space:nowrap}
+.axis-key em{font-style:normal;font-size:10px;letter-spacing:.14em;color:var(--muted);grid-column:2}
+.axis-key p{grid-column:2;font-size:12px;line-height:1.55;color:var(--muted);margin:4px 0 0}
+.axis-key .n{grid-row:1/3;font-family:var(--serif);font-size:28px;font-weight:600;color:var(--accent);line-height:1;align-self:center}
+
+.shell{display:block;padding:clamp(20px,2.5vw,32px) 0 28px}
+.rail{position:sticky;top:82px}
+.rail-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--ink);padding-bottom:7px;margin-bottom:14px}
+.rail-head span{font-size:10px;letter-spacing:.16em;color:var(--muted)}
+.focus-card{border:1px solid var(--rule);background:var(--panel);padding:10px;margin-bottom:14px}
+.focus-card img{display:block;width:100%;height:118px;object-fit:cover;filter:saturate(.85)}
+.focus-kicker{font-size:9px;letter-spacing:.14em;color:var(--accent);margin:9px 0 2px}
+.focus-title{font-family:var(--serif);font-size:15px;line-height:1.35;font-weight:700;margin:0}
+.focus-meta{font-size:10px;color:var(--muted);margin:5px 0 0}
+.coord{display:block;width:100%;text-align:left;border:0;border-top:1px solid var(--rule);background:transparent;padding:9px 0 8px;display:grid;grid-template-columns:58px 1fr auto;gap:8px;align-items:baseline;font-size:11px}
+.coord:hover .coord-v{color:var(--accent-ink)}
+.coord-k{color:var(--muted);letter-spacing:.08em}
+.coord-v{font-weight:500}
+.coord-a{color:var(--accent);font-size:12px}
+.axis-svg{width:100%;height:64px;display:block;margin:8px 0 5px;border:1px solid var(--rule);background:var(--paper-2)}
+.axis-svg text{font-family:var(--sans);font-size:8px;fill:var(--muted)}
+.axis-svg .line{stroke:var(--rule-strong);stroke-width:1}
+.axis-svg .dot{fill:var(--accent)}
+.rail-note{font-size:10px;color:var(--muted);line-height:1.6;margin:8px 0 0}
+.reset{width:100%;margin-top:12px;border:1px solid var(--rule);background:transparent;padding:8px;font-size:10px;letter-spacing:.1em;color:var(--muted)}
+.reset:hover{border-color:var(--ink);color:var(--ink)}
+
+.stage{min-width:0}
+
+/* directory cards: themes and eras */
+.directory-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+.theme-band,.timeline-band{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--rule);border-top:1px solid var(--ink);margin-bottom:1px}
+.theme-band-item,.timeline-band-item{display:block;min-width:0;height:150px;padding:0;border:0;overflow:hidden;background:var(--paper-2);cursor:pointer}
+.theme-band-item img,.timeline-band-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s}
+.theme-band-item:hover img,.timeline-band-item:hover img{transform:scale(1.035)}
+.theme-card{display:flex;flex-direction:column;align-items:flex-start;min-width:0;min-height:196px;border:0;background:var(--paper);padding:18px;text-align:left}
+.theme-cover{display:block;width:calc(100% + 36px);height:92px;margin:-18px -18px 14px;overflow:hidden;background:var(--paper-2)}
+.theme-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.theme-card:hover{background:var(--panel)}
+.theme-card .card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin-bottom:15px}
+.theme-card .card-id{display:inline-flex;align-items:center;gap:7px;min-width:0}
+.theme-card .card-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex:none;background:var(--dot,var(--accent))}
+.theme-card .card-count{font-size:10px;color:var(--muted);white-space:nowrap}
+.theme-card .name{font-family:var(--serif);font-size:clamp(19px,1.7vw,24px);font-weight:700;line-height:1.22;letter-spacing:-.02em;display:block}
+.theme-card .en{display:block;font-size:9px;letter-spacing:.11em;color:var(--muted);margin-top:4px}
+.theme-card .desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:11px;line-height:1.65;color:var(--muted);margin:12px 0 15px}
+.theme-card .spark{display:grid;gap:2px;align-items:end;width:100%;height:24px;margin-top:auto;overflow:hidden}
+.theme-card .spark i{display:block;background:var(--rule-strong);height:2px}
+.theme-card .spark i.on{background:var(--accent);height:var(--h)}
+.era-card{display:flex;flex-direction:column;min-width:0;min-height:196px;background:var(--paper);padding:18px}
+.era-cover{width:calc(100% + 36px);height:86px;margin:-18px -18px 14px;overflow:hidden;background:var(--paper-2)}
+.era-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.era-card:hover{background:var(--panel)}
+.era-card .era-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;width:100%;border:0;background:transparent;padding:0;text-align:left}
+.era-card .era-name{font-family:var(--serif);font-size:clamp(20px,1.8vw,26px);font-weight:700;line-height:1.2}
+.era-card .era-count{font-size:10px;color:var(--muted);white-space:nowrap}
+.era-samples{display:grid;gap:0;margin-top:12px}
+.era-sample{display:grid;gap:2px;width:100%;border:0;border-top:1px solid var(--rule);background:transparent;padding:8px 0 7px;text-align:left}
+.era-sample:hover .era-sample-title{color:var(--accent-ink)}
+.era-sample .era-sample-title{font-family:var(--serif);font-size:13px;font-weight:600;line-height:1.4;color:var(--ink)}
+.era-sample .era-sample-meta{font-size:9.5px;color:var(--muted);line-height:1.45}
+.era-open{align-self:flex-start;margin-top:auto;border:0;background:transparent;color:var(--accent-ink);font-size:10px;letter-spacing:.06em;padding:9px 0 0}
+.era-open:hover{color:var(--ink)}
+.drill-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:22px;align-items:start;border-bottom:1px solid var(--ink);padding:2px 0 22px;margin-bottom:22px}
+.drill-back{border:1px solid var(--rule);border-radius:999px;background:var(--panel);padding:6px 10px;font-size:10px;letter-spacing:.04em;color:var(--muted);white-space:nowrap;margin-top:22px}
+.drill-back:hover{border-color:var(--ink);color:var(--ink)}
+.drill-kicker{display:block;font-size:9px;letter-spacing:.14em;color:var(--accent);margin-bottom:6px;text-transform:uppercase}
+.drill-head h2{font-family:var(--serif);font-size:clamp(28px,3.2vw,42px);font-weight:700;line-height:1.14;letter-spacing:-.02em;margin:0 0 7px}
+.drill-desc{font-size:11px;line-height:1.65;color:var(--muted);margin:0;max-width:58em}
+.drill-count{font-size:10px;color:var(--muted);white-space:nowrap;padding-top:28px}
+.story-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--rule);border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+.story-grid .story-card{background:var(--paper);padding:12px;grid-template-columns:96px minmax(0,1fr);gap:14px}
+.story-grid .story-card img{width:96px;height:72px}
+.story-grid .story-card:hover{background:var(--panel)}
+
+.stage-top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;border-bottom:1px solid var(--ink);padding-bottom:0;margin-bottom:18px;flex-wrap:wrap}
+.viewtabs{display:flex;align-items:stretch;gap:0}
+.viewtab{position:relative;border:0;border-bottom:4px solid transparent;background:transparent;padding:10px 16px 10px 0;margin-right:22px;text-align:left;text-decoration:none}
+.viewtab-top{display:flex;align-items:center;gap:6px}
+.view-mark{width:19px;height:19px;object-fit:contain;opacity:.9}
+.viewtab b{font-family:var(--serif);font-size:18px;font-weight:700;display:block;line-height:1.2}
+.viewtab small{font-size:9px;letter-spacing:.12em;color:var(--muted);display:block;margin-top:2px}
+.viewtab .c{font-size:10px;color:var(--accent);margin-left:5px;font-family:var(--sans);font-weight:500}
+.viewtab[aria-selected="true"]{border-bottom-color:var(--accent)}
+.viewtab[aria-selected="true"] b{color:var(--accent-ink)}
+.viewtab:hover b{color:var(--accent-ink)}
+.filterline{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:7px 0 10px;min-height:36px}
+.filter-none{font-size:10px;letter-spacing:.08em;color:var(--muted)}
+.chip{border:1px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent);color:var(--accent-ink);font-size:10px;padding:4px 7px;display:flex;align-items:center;gap:6px}
+.chip span.close{font-size:12px;line-height:1}
+.chip:hover{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.clear-all{border:0;background:transparent;text-decoration:underline;text-underline-offset:3px;font-size:10px;color:var(--muted);padding:4px 3px}
+
+.section-head{display:flex;justify-content:space-between;gap:16px;align-items:baseline;margin:2px 0 13px;flex-wrap:wrap}
+.section-head h2{font-family:var(--serif);font-size:22px;font-weight:700;margin:0;letter-spacing:-.02em}
+.section-head p{font-size:11px;color:var(--muted);margin:0;max-width:44em;line-height:1.6}
+.rule-top{border-top:1px solid var(--rule);padding-top:14px}
+
+/* theme ledger */
+.theme-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:20px}
+.theme-list{border-top:1px solid var(--ink)}
+.theme-row{width:100%;display:grid;grid-template-columns:minmax(0,1fr) 92px 26px;gap:8px;align-items:center;border:0;border-bottom:1px solid var(--rule);background:transparent;padding:11px 2px 10px;text-align:left}
+.theme-row:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.theme-row.is-active{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.theme-row .idx{font-family:var(--serif);font-size:19px;color:var(--muted);line-height:1}
+.theme-row .name{font-family:var(--serif);font-size:16px;font-weight:700;line-height:1.2;display:block}
+.theme-row .en{display:block;font-size:9px;letter-spacing:.1em;color:var(--muted);margin-top:3px}
+.theme-row .count{font-size:10px;color:var(--muted);text-align:right}
+.spark{display:grid;grid-template-columns:repeat(21,1fr);gap:2px;align-items:end;height:22px}
+.spark i{display:block;background:var(--rule-strong);height:2px}
+.spark i.on{background:var(--accent);height:var(--h)}
+.theme-row .arrow{font-size:14px;color:var(--muted);text-align:right}
+.theme-panel{border:1px solid var(--rule);background:var(--panel);padding:18px}
+.theme-panel .story-stack{max-height:560px;overflow:auto;padding-right:6px}
+.theme-row .count{white-space:nowrap}
+.panel-kicker{font-size:9px;letter-spacing:.16em;color:var(--muted);margin:0 0 6px}
+.panel-title{font-family:var(--serif);font-size:27px;font-weight:700;line-height:1.15;margin:0 0 6px}
+.panel-desc{font-size:11px;color:var(--muted);line-height:1.65;margin:0 0 16px;max-width:34em}
+.story-stack{display:grid;gap:1px;background:var(--rule)}
+.story-card{display:grid;grid-template-columns:82px minmax(0,1fr);gap:12px;background:var(--panel);border:0;padding:10px;text-align:left;align-items:center}
+.story-card:hover{background:var(--paper-2)}
+.story-card.is-focus{outline:2px solid var(--accent);outline-offset:-2px}
+.story-card img{width:82px;height:64px;object-fit:cover;display:block;filter:saturate(.88)}
+.story-card h4{font-family:var(--serif);font-size:14px;line-height:1.35;margin:0 0 4px;font-weight:600}
+.story-card p{font-size:10px;color:var(--muted);margin:0;line-height:1.45}
+.story-card .dotline{font-size:9px;color:var(--accent-ink);margin-top:5px;display:flex;gap:7px;align-items:center}
+.tdot{width:5px;height:5px;display:inline-block;border-radius:50%;background:var(--dot,var(--accent))}
+.empty{border:1px dashed var(--rule);padding:22px;color:var(--muted);font-size:12px;line-height:1.7}
+
+/* timeline */
+.timeline-note{border:1px solid var(--rule);background:var(--paper-2);padding:11px 13px;font-size:11px;color:var(--muted);line-height:1.65;margin-bottom:16px}
+.timeline-note b{color:var(--ink);font-weight:500}
+.dim-note{display:inline-block;border-left:1px solid var(--line);padding-left:8px;margin-left:4px}
+.ruler{position:relative;margin:0 0 10px;padding:0 0 0 0;overflow:hidden}
+.ruler-line{height:1px;background:var(--rule-strong);margin:25px 0 0}
+.ruler-grid{display:grid;grid-template-columns:repeat(21,minmax(180px,1fr));min-width:3780px;position:relative;top:-1px}
+.ruler-grid button{border:0;background:transparent;text-align:left;padding:6px 0 0 0;position:relative;font-size:10px;color:var(--muted);font-family:var(--sans)}
+.ruler-grid button:before{content:"";position:absolute;left:0;top:-7px;width:1px;height:7px;background:var(--rule-strong)}
+.ruler-grid button[aria-current="true"]{color:var(--accent-ink);font-weight:600}
+.ruler-grid button[aria-current="true"]:after{content:"";position:absolute;left:-3px;top:-11px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.timeline-scroll{overflow-x:auto;padding-bottom:8px}
+.decade-track{display:grid;grid-template-columns:repeat(21,minmax(180px,1fr));min-width:3780px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--rule);gap:1px}
+.decade-col{background:var(--paper);padding:12px 11px 14px;min-height:260px;position:relative}
+.decade-col.is-active{background:var(--paper-2)}
+.decade-col.empty-col{opacity:.55}
+.decade-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.decade-head b{font-family:var(--serif);font-size:18px;line-height:1}
+.decade-head span{font-size:9px;color:var(--muted)}
+.decade-line{height:1px;background:var(--rule);margin:0 0 10px}
+.tcard{display:block;border:0;border-top:1px solid var(--rule);background:transparent;padding:9px 0;text-align:left;width:100%}
+.tcard:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.tcard.is-focus{background:color-mix(in srgb,var(--accent) 9%,transparent);border-top-color:var(--accent)}
+.tcard.is-dim{opacity:.32}
+.tcard.is-dim:hover{opacity:.7}
+.tcard h4{font-family:var(--serif);font-size:13px;line-height:1.35;margin:0 0 3px;font-weight:600}
+.tcard p{font-size:9px;color:var(--muted);margin:0;line-height:1.45}
+.tcard .tdot{width:5px;height:5px;margin-right:4px;display:inline-block;background:var(--dot);vertical-align:middle}
+.axis-caption{font-size:9px;color:var(--muted);display:flex;justify-content:space-between;margin-top:7px}
+.timeline-foot{display:flex;gap:16px;flex-wrap:wrap;font-size:10px;color:var(--muted);margin-top:12px}
+.timeline-foot b{color:var(--ink);font-weight:500}
+
+/* calendar */
+.calendar-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.months{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.month{border-top:1px solid var(--ink);padding-top:7px}
+.month h3{font-family:var(--serif);font-size:15px;margin:0 0 5px;display:flex;justify-content:space-between;align-items:baseline;font-weight:600}
+.month h3 span{font-size:9px;color:var(--muted);font-family:var(--sans);font-weight:400}
+.weekdays,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.weekdays span{font-size:8px;color:var(--muted);text-align:center;padding:1px 0}
+.day{height:24px;border:0;background:transparent;color:var(--muted);font-size:9px;padding:0;display:grid;place-items:center;position:relative;font-variant-numeric:tabular-nums}
+.day.is-blank{visibility:hidden}
+.day.has-story{color:var(--ink);font-weight:600;background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.day.has-story:after{content:"";position:absolute;left:50%;bottom:2px;width:3px;height:3px;border-radius:50%;background:var(--accent);transform:translateX(-50%)}
+.day.is-active{background:var(--accent);color:var(--paper)}
+.day.is-active:after{background:var(--paper)}
+.day.is-dim{opacity:.28}
+.day:hover{outline:1px solid var(--accent)}
+.day-detail{border:1px solid var(--rule);background:var(--panel);padding:14px}
+.day-detail .panel-title{font-size:20px}
+.day-detail .panel-desc{font-size:10px;margin-bottom:10px}
+.day-detail .story-card{grid-template-columns:62px minmax(0,1fr);padding:8px}
+.day-detail .story-card img{width:62px;height:52px}
+.day-detail .story-card h4{font-size:12px}
+.day-detail .story-stack{background:var(--rule)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:9px;color:var(--muted);margin-top:10px}
+.legend span{display:flex;gap:4px;align-items:center}
+.legend i{width:6px;height:6px;border-radius:50%;background:var(--accent);display:block}
+
+/* matrix */
+.matrix-section{max-width:1240px;margin:28px auto 50px;border-top:1px solid var(--ink);padding:18px 28px 0}
+.matrix-wrap{overflow-x:auto}
+.matrix{display:grid;grid-template-columns:126px repeat(21,minmax(56px,1fr));min-width:1300px;border-top:1px solid var(--rule);border-left:1px solid var(--rule)}
+.mcell{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:7px 6px;min-height:38px;font-size:10px;background:transparent;text-align:center;position:relative;color:var(--muted)}
+.mhead{background:var(--paper-2);font-size:9px;letter-spacing:.04em;color:var(--muted);display:flex;align-items:center;justify-content:center;min-height:32px}
+.mtheme{background:var(--paper-2);text-align:left;display:flex;align-items:center;gap:6px;justify-content:flex-start;font-family:var(--serif);font-size:12px;color:var(--ink);padding-left:9px}
+.mtheme .mdot{width:6px;height:6px;border-radius:50%;background:var(--dot);flex:0 0 auto}
+.mstat{cursor:pointer;border:0;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);min-height:38px;background:var(--paper);font-size:11px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.mstat.has{color:var(--ink);font-weight:600}
+.mstat:hover{outline:2px solid var(--accent);outline-offset:-2px}
+.mstat.is-active{box-shadow:inset 0 0 0 2px var(--accent);color:var(--accent-ink)}
+.mnote{font-size:10px;color:var(--muted);line-height:1.6;margin-top:8px}
+.mnote b{color:var(--ink);font-weight:500}
+
+/* detail */
+.detail{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:18px;background:color-mix(in srgb,var(--ink) 35%,transparent);backdrop-filter:blur(3px)}
+.detail[hidden]{display:none}
+.detail-card{width:min(760px,100%);max-height:90vh;overflow:auto;background:var(--paper);border:1px solid var(--ink);padding:0}
+.detail-top{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid var(--rule);font-size:9px;letter-spacing:.16em;color:var(--muted)}
+.detail-close{border:0;background:transparent;font-size:16px;line-height:1;padding:2px 4px;color:var(--muted)}
+.detail-close:hover{color:var(--ink)}
+.detail-body{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:0}
+.detail-body img{width:100%;height:100%;min-height:300px;object-fit:cover;display:block;filter:saturate(.9)}
+.detail-copy{padding:20px 20px 18px}
+.detail-copy h3{font-family:var(--serif);font-size:26px;line-height:1.2;margin:0 0 6px;font-weight:700}
+.detail-copy p{font-size:11px;color:var(--muted);line-height:1.65;margin:0 0 14px}
+.coord-buttons{display:grid;gap:6px;margin:12px 0}
+.coord-buttons button{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:8px;align-items:baseline;text-align:left;border:1px solid var(--rule);background:var(--panel);padding:8px 9px;font-size:11px}
+.coord-buttons button:hover{border-color:var(--accent)}
+.coord-buttons .k{font-size:9px;letter-spacing:.1em;color:var(--muted)}
+.coord-buttons .v{font-weight:500}
+.coord-buttons .go{color:var(--accent);font-size:13px}
+.detail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:7px 11px;font-size:10px;letter-spacing:.08em;text-decoration:none;display:inline-block}
+.btn.secondary{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn:hover{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.foot{border-top:1px solid var(--rule);padding:16px 0 30px;font-size:10px;color:var(--muted);display:block;text-align:center}
+.foot .foot-brand{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px}
+.foot .foot-mark{display:flex;align-items:center;flex:none}
+.foot .foot-mark img{width:22px;height:22px;opacity:.9}
+.foot b{color:var(--ink);font-weight:500}
+.foot-nav{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-bottom:7px}
+.foot-nav a,.foot-utility a{color:var(--muted);text-decoration:none}
+.foot-nav a:hover,.foot-utility a:hover{color:var(--ink)}
+.foot-utility{display:flex;justify-content:center;flex-wrap:wrap;gap:11px;font-size:9px;margin-bottom:8px}
+.foot-note{margin:0;line-height:1.8}
+.site-foot{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px 16px;
+  width:calc(100% - 56px);max-width:1184px;margin:24px auto 0;padding:11px 18px;border-top:1px solid var(--rule);font-size:10.5px;color:var(--muted)}
+.site-foot a{color:var(--muted);text-decoration:none}
+.site-foot a:hover{color:var(--accent)}
+.site-foot .sf-left{justify-self:start;display:inline-flex;align-items:center;gap:3px;font-size:9.5px;color:var(--muted);white-space:nowrap;letter-spacing:.01em}
+.site-foot .sf-left a{color:inherit;border-bottom:1px solid transparent}
+.site-foot .sf-left a:hover{color:var(--accent);border-color:var(--accent)}
+.site-foot .sf-nav{justify-self:center;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+.site-foot .sf-right{justify-self:end;display:inline-flex;align-items:center;font-size:9.5px;white-space:nowrap}
+.site-foot .sf-right a{border-bottom:1px solid transparent}
+.site-foot .sf-right a:hover{color:var(--accent);border-color:var(--accent)}
+.site-foot .sf-brand-short{display:none}
+.site-foot .sf-copy{display:inline-flex;align-items:center;font-size:9.5px;color:var(--muted);white-space:nowrap;letter-spacing:.01em}
+.site-foot .sf-copy a{color:inherit;text-decoration:none;border-bottom:1px solid transparent}
+.site-foot .sf-copy a:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:899px){.masthead-nav{display:none}}
+@media (min-width:900px) and (max-width:1099px){.masthead-nav a{font-size:12px;padding:7px 10px}.masthead-in{gap:14px}}
+@media (min-width:900px) and (max-width:1099px){
+  html[data-lang="en"] .masthead-nav a{font-size:11px;padding:6px 7px}
+  html[data-lang="en"] .head-search{max-width:140px;min-width:84px;flex:0 1 140px}
+  html[data-lang="en"] .brand .sub{display:none}
+}
+
+@media (max-width:1100px){
+  .shell{grid-template-columns:1fr}
+  .directory-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .rail{position:relative;top:0;order:2;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+  .rail-head,.axis-svg,.reset,.rail-note{grid-column:1/-1}
+  .focus-card{margin-bottom:0}
+  .stage{order:1}
+  .theme-grid{grid-template-columns:1fr}
+  .calendar-wrap{grid-template-columns:1fr}
+  .day-detail{position:relative}
+}
+@media (max-width:899px){
+  .masthead-nav{display:none}
+  .wrap{padding:0 23.5px}
+  .masthead{margin:0 -23.5px;padding:0 18px}
+}
+@media (max-width:760px){
+  .wrap{padding:0 23.5px}
+  .masthead{margin:0 -23.5px;padding:0 18px}
+  .masthead-in{gap:10px;height:59px;min-height:59px;padding:0}
+  .directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .theme-card,.era-card{min-height:180px;padding:16px}
+  .theme-band-item,.timeline-band-item{height:96px}
+  .theme-cover{width:calc(100% + 32px);height:78px;margin:-16px -16px 12px}
+  .era-cover{width:calc(100% + 32px);height:72px;margin:-16px -16px 12px}
+  .story-grid{grid-template-columns:1fr}
+  .drill-head{grid-template-columns:1fr;gap:10px;padding-bottom:18px}
+  .drill-back{margin-top:0;justify-self:start}
+  .drill-count{padding-top:0}
+  .site-foot{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;margin:18px 0 0;gap:6px 10px;width:calc(100% - 14px)}
+  .site-foot .sf-nav{display:none}
+  html[data-lang="en"] .site-foot .sf-brand-long{display:none}
+  html[data-lang="en"] .site-foot .sf-brand-short{display:inline}
+  .matrix-section{padding-left:18px;padding-right:18px}
+  .brand .sub{display:none}
+  .tag{display:none}
+  .lede{padding-top:28px}
+  .axis-key{grid-template-columns:1fr}
+  .axis-key>div{border-right:0;border-bottom:1px solid var(--rule)}
+  .axis-key>div:last-child{border-bottom:0}
+  .stage-top{display:block}
+  .viewtabs{overflow-x:auto;padding-bottom:1px}
+  .viewtab{margin-right:14px;padding-right:10px}
+  .filterline{padding-top:10px}
+  .months{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .detail-body{grid-template-columns:1fr}
+  .detail-body img{height:220px;min-height:0}
+  .rail{grid-template-columns:1fr}
+  .theme-row{grid-template-columns:35px minmax(0,1fr) 66px 18px}
+  .theme-row .idx{font-size:16px}
+  .spark{height:18px}
+  .matrix{grid-template-columns:104px repeat(21,minmax(52px,1fr))}
+}
+@media (max-width:480px){
+  .directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* unified serif hierarchy: match the app's normal-weight card titles */
+h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-head h2,
+.theme-row .name,.panel-title,.story-card h4,.tcard h4,.month h3,.viewtab b,
+.detail-copy h3,.axis-key b,.axis-key .n{font-weight:400}
+</style>
+</head>
+<body data-title-zh="艺术与图像 · 摄影主题 · 尘画" data-title-en="Art &amp; Image · Photography Theme · Frame &amp; Grain">
+<div class="wrap">
+<header class="masthead">
+  <div class="masthead-in">
+    <a class="brand" href="https://photo.chenhua.net/" aria-label="返回尘画主站">
+      <img class="brand-mark" src="/assets/leaf/think.svg" width="30" height="30" alt="" aria-hidden="true" decoding="async"><span class="wm"><span class="wm-lite">出</span><span class="wm-strong">尘</span><span class="wm-lite">入</span><span class="wm-strong">画</span></span><span class="sub"><span data-l="zh">尘归尘，画归画</span><span data-l="en">Image as history</span></span>
+    </a>
+    <nav class="masthead-nav desknav" aria-label="全站导航">
+      <a href="https://photo.chenhua.net/themes/" aria-current="page"><span data-l="zh">主题</span><span data-l="en">Themes</span></a>
+      <a href="https://photo.chenhua.net/timeline/"><span data-l="zh">时间线</span><span data-l="en">Timeline</span></a>
+      <a href="https://photo.chenhua.net/today/calendar.html"><span data-l="zh">日历</span><span data-l="en">Calendar</span></a>
+      <a href="https://photo.chenhua.net/"><span data-l="zh">摄影</span><span data-l="en">Photography</span></a>
+      <a href="https://paint.chenhua.net/"><span data-l="zh">绘画</span><span data-l="en">Painting</span></a>
+      <a href="https://netcn.org/"><span data-l="zh">导航</span><span data-l="en">Directory</span></a>
+    </nav>
+    <div class="topmeta">
+      <button class="langbtn" type="button" data-lang-toggle aria-label="切换到英文"><span data-l="zh">EN</span><span data-l="en">中文</span></button>
+      <button class="iconbtn themebtn" id="themeBtn" data-themebtn type="button" aria-label="切换明暗">
+        <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+/* ---------- 主题库：摄影与绘画共用同一种卡片 ---------- */
+.theme-library{max-width:min(100%,1760px);margin:0 auto;padding:28px clamp(18px,3vw,48px) 46px}
+.lib-section{border-top:1px solid var(--rule);padding:23px 0 9px}
+.lib-section:first-of-type{border-top:0;padding-top:4px}
+.lib-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 14px}
+.lib-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(23px,2.8vw,34px);line-height:1.15;letter-spacing:-.01em;margin:0}
+.lib-head .lib-sub{font-size:9px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
+.lib-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.lib-card{display:flex;flex-direction:column;min-width:0;background:var(--paper);color:var(--ink);text-decoration:none;overflow:hidden}
+.lib-card:hover{background:var(--panel)}
+.lib-thumb{overflow:hidden;background:var(--panel)}
+.lib-thumb img{width:100%;height:150px;object-fit:cover;display:block;transition:transform .45s ease}
+.lib-card:hover .lib-thumb img{transform:scale(1.025)}
+.lib-body{padding:14px 15px 16px;display:flex;flex-direction:column;min-height:142px}
+.lib-meta{font-size:9px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.lib-card h3{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.2;margin:0 0 7px}
+.lib-card h3 span{display:block}
+.lib-card h3 span[data-l="en"]{font-size:10px;letter-spacing:.12em;color:var(--muted);margin-top:4px;font-family:var(--sans,ui-sans-serif,sans-serif);text-transform:none}
+.lib-card p{font-size:11px;line-height:1.75;color:var(--muted);margin:0}
+.duo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,2.6vw,42px);align-items:start}
+.duo-col{min-width:0}
+.lib-list{display:grid;grid-template-columns:1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.lib-list .lib-thumb img{height:clamp(180px,16vw,260px)}
+.lib-list .lib-body{min-height:0;padding:13px 15px 15px}
+.lib-list .lib-card h3{font-size:clamp(22px,2vw,28px)}
+.lib-list .lib-card p{font-size:12px;line-height:1.8}
+.theme-mosaic .lib-thumb img{height:clamp(170px,14vw,230px)}
+.theme-mosaic .lib-body{min-height:150px}
+.index-photo{grid-template-columns:repeat(5,minmax(0,1fr))}
+.story-trails{margin:24px 0 34px;border-top:1px solid var(--ink);padding-top:18px}
+.theme-library .lib-head{align-items:flex-end;flex-wrap:wrap}
+.theme-library .lib-head p{font-size:11px;line-height:1.8;color:var(--muted);margin:0;max-width:52em}
+.story-trails .lib-head p{font-size:11px;line-height:1.8;color:var(--muted);margin:0;max-width:46em}
+.trail-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.story-trail{background:var(--paper);padding:16px 15px 18px;min-width:0}
+.story-trail .lib-meta{margin-bottom:7px}
+.story-trail h3{font-family:var(--serif);font-weight:400;font-size:clamp(19px,1.7vw,24px);line-height:1.2;margin:0 0 6px}
+.story-trail h3 span[data-l="en"]{display:block;font-size:9px;letter-spacing:.12em;color:var(--muted);font-family:var(--sans,ui-sans-serif,sans-serif);margin-top:4px}
+.story-trail p{font-size:11px;line-height:1.75;color:var(--muted);margin:0 0 11px}
+.trail-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.trail-list li{display:flex;align-items:baseline;gap:8px;border-bottom:1px solid var(--rule);padding:7px 0}
+.trail-list li:last-child{border-bottom:0}
+.trail-list a{min-width:0;flex:1;font-size:11px;line-height:1.55;color:var(--ink);text-decoration:none}
+.trail-list a:hover{color:var(--accent)}
+.trail-list span{font-size:9px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+@media(max-width:1050px){.trail-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.trail-grid{grid-template-columns:1fr}.story-trails{margin-top:24px}}
+.movement-index{margin-top:26px;border-top:1px solid var(--rule);padding-top:15px}
+.mi-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 11px}
+.mi-head h3{font-family:var(--serif);font-weight:400;font-size:19px;margin:0}
+.mi-head span{font-size:9px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+.movement-index .movement-links{display:flex;flex-wrap:wrap;gap:7px}
+.movement-index .movement-links a{display:inline-flex;align-items:baseline;gap:6px;border:1px solid var(--line);padding:6px 9px;text-decoration:none;color:var(--muted);font-size:10px;line-height:1.2}
+.movement-index .movement-links a:hover{border-color:var(--accent);color:var(--text)}
+.movement-index .movement-links a b{font-weight:400;color:var(--text);font-family:var(--serif);font-size:13px}
+@media(max-width:1050px){.lib-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.duo-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}}
+@media(max-width:760px){.lib-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lib-thumb img{height:128px}.theme-library{padding:22px 20px 34px}.duo-grid{grid-template-columns:1fr}.lib-list .lib-thumb img{height:160px}}
+@media(max-width:460px){.lib-grid{grid-template-columns:1fr}}
+
+/* ---------- 双轨年代轴：左绘画，右摄影 ---------- */
+.dual-timeline{max-width:none;width:min(100%,1760px);margin:0 auto;padding:18px clamp(18px,3vw,48px) 54px}
+.axis-tools{display:flex;justify-content:flex-end;padding:0 0 2px}
+.axis-shuffle{border:0;border-bottom:1px solid var(--line);background:none;color:var(--muted);font:10px/1.4 var(--sans,ui-sans-serif,sans-serif);letter-spacing:.08em;text-transform:uppercase;padding:5px 0;cursor:pointer}
+.axis-shuffle:hover{color:var(--accent);border-color:var(--accent)}
+.axis-head{display:grid;grid-template-columns:minmax(0,1fr) clamp(96px,8vw,138px) minmax(0,1fr);gap:clamp(16px,2.4vw,36px);border:0;padding:10px 0 4px}
+.axis-head span{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.axis-head span:nth-child(1){text-align:right;color:#b28b5d}
+.axis-head span:nth-child(2){text-align:center}
+.axis-head span:nth-child(3){color:var(--accent)}
+.dual-axis{position:relative}
+.dual-axis:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--rule-strong);transform:translateX(-.5px)}
+.axis-row{display:grid;grid-template-columns:minmax(0,1fr) clamp(96px,8vw,138px) minmax(0,1fr);gap:clamp(16px,2.4vw,36px);border:0;padding:24px 0}
+.axis-side{min-width:0;display:flex;flex-direction:column;gap:14px}
+.axis-side.paint{padding-right:clamp(4px,1vw,16px)}
+.axis-side.photo{padding-left:clamp(4px,1vw,16px)}
+.axis-year{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding-top:20px;position:relative;z-index:1}
+.axis-year:before{content:"";position:absolute;top:7px;left:50%;width:9px;height:9px;border-radius:50%;background:var(--accent);transform:translateX(-50%);box-shadow:0 0 0 5px var(--paper);z-index:2}
+.axis-year b{font-family:var(--serif);font-weight:400;font-size:clamp(16px,1.4vw,20px);line-height:1.2;white-space:nowrap;background:var(--paper);padding:3px 8px}
+.axis-card{display:grid;grid-template-columns:minmax(0,44%) minmax(0,1fr);gap:16px;align-items:center;text-decoration:none;color:var(--ink);min-width:0;padding:6px 0;border:0}
+.axis-card img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;display:block;filter:saturate(.92)}
+.axis-card .ac{min-width:0;display:flex;flex-direction:column;justify-content:center}
+.axis-card h3{font-family:var(--serif);font-weight:400;font-size:clamp(16px,1.35vw,20px);line-height:1.35;margin:0 0 5px}
+.axis-card h3 span[data-l="en"]{font-size:10.5px;letter-spacing:.06em;color:var(--muted);font-family:var(--sans,ui-sans-serif,sans-serif);margin-top:3px}
+.axis-card .ac span{font-size:11px;color:var(--muted);line-height:1.5}
+.axis-side.paint .axis-card{grid-template-columns:minmax(0,1fr) minmax(0,44%);text-align:right}
+.axis-side.paint .axis-card img{grid-column:2;grid-row:1}
+.axis-side.paint .axis-card .ac{grid-column:1;grid-row:1;align-items:flex-end}
+.axis-empty{min-height:1px}
+@media(max-width:860px){
+  .axis-head{grid-template-columns:1fr 86px 1fr;gap:12px}
+  .axis-row{grid-template-columns:1fr 86px 1fr;gap:12px}
+  .axis-card{grid-template-columns:minmax(0,40%) minmax(0,1fr);gap:12px}
+  .axis-side.paint .axis-card{grid-template-columns:minmax(0,1fr) minmax(0,40%)}
+  .axis-card h3{font-size:15px}
+}
+@media(max-width:620px){
+  .dual-timeline{padding:20px 18px 34px}
+  .axis-head{display:none}
+  .dual-axis:before{display:block;left:8px}
+  .axis-row{grid-template-columns:1fr;gap:0;padding:0 0 20px 28px;position:relative}
+  .axis-row:before{content:"";position:absolute;left:-1px;top:18px;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px var(--paper)}
+  .axis-year{align-items:flex-start;text-align:left;padding:8px 0 10px;border:0;margin-bottom:0}
+  .axis-year:before{display:none}
+  .axis-year b{background:none;padding:0}
+  .axis-side{padding:0}
+  .axis-side.paint .axis-card{grid-template-columns:minmax(0,40%) minmax(0,1fr);text-align:left}
+  .axis-side.paint .axis-card img{grid-column:1;grid-row:1}
+  .axis-side.paint .axis-card .ac{grid-column:2;grid-row:1;align-items:flex-start}
+}
+</style>
+
+<style>
+.pt-detail{max-width:1240px;margin:0 auto;padding:30px 28px 60px}
+.pt-detail .pt-sub{font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin:0 0 18px}
+.pt-detail .pt-intro{max-width:760px;font-size:13px;line-height:1.95;color:var(--muted);margin:0 0 14px}
+.pt-detail .pt-stats{font-size:9px;letter-spacing:.13em;color:var(--accent);margin:0 0 12px}
+.pt-detail .pt-rule{display:flex;align-items:center;gap:12px;margin:26px 0 14px;color:var(--muted);font-size:9px;letter-spacing:.14em;text-transform:uppercase}
+.pt-detail .pt-rule:after{content:"";height:1px;background:var(--rule);flex:1}
+.pt-ix{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 30px;border-top:1px solid var(--rule)}
+.pt-ix-row{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--text);align-items:baseline}
+.pt-ix-row:hover{color:var(--accent)}
+.pt-ix-year{font-size:9px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pt-ix-title{font-family:var(--serif);font-size:14px;line-height:1.45}
+@media(max-width:680px){.pt-detail{padding:22px 20px 44px}.pt-ix{grid-template-columns:1fr}}
+</style>
+<main class="pt-detail">
+<p class="lib-meta">PHOTOGRAPHY THEME</p>
+<h1 class="pt-title" style="font-family:var(--serif);font-weight:400;font-size:clamp(32px,5vw,58px);line-height:1.08;margin:6px 0 8px">艺术与图像</h1>
+<p class="pt-sub">Art &amp; Image</p>
+<p class="pt-intro"><span data-l="zh">从摄影术的前五十年到街头与无名者：图像不只是作品，也是谁被看见、谁被留下的证据。</span><span data-l="en">From photography&#x27;s first fifty years to the street and the unnamed: an image is not only a work but evidence of who was seen and who was left out.</span></p>
+<div class="pt-stats">130 STORIES · 1492–2020 · CURATED 7</div>
+<div class="lib-grid" style="margin-top:6px;grid-template-columns:repeat(4,minmax(0,1fr))"><a class="lib-card" href="https://chenhua.net/story/china-1850-1930.html">
+<div class="lib-thumb"><img src="https://20century.chenhua.net/photos/1930s/commons-1930-shanghai-c11273b3.jpg" alt="中国，1850–1930" loading="eager"></div>
+<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY · </div>
+<h3><span data-l="zh">中国，1850–1930</span><span data-l="en">China, 1850–1930</span></h3><p><span data-l="zh"> · 艺术与图像</span><span data-l="en"> · Art &amp; Image</span></p></div></a><a class="lib-card" href="https://chenhua.net/story/hands-at-work.html">
+<div class="lib-thumb"><img src="https://19century.chenhua.net/photos/1880s/1888-eiffel-construction-7bc167a0.jpg" alt="手上的工作" loading="eager"></div>
+<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY · </div>
+<h3><span data-l="zh">手上的工作</span><span data-l="en">Hands at work</span></h3><p><span data-l="zh"> · 艺术与图像</span><span data-l="en"> · Art &amp; Image</span></p></div></a><a class="lib-card" href="https://chenhua.net/story/first-fifty-years.html">
+<div class="lib-thumb"><img src="https://19century.chenhua.net/photos/1840s/1843-daguerreotype-4b2a9b00.jpg" alt="摄影术的前五十年" loading="eager"></div>
+<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY · </div>
+<h3><span data-l="zh">摄影术的前五十年</span><span data-l="en">The first fifty years of photography</span></h3><p><span data-l="zh"> · 艺术与图像</span><span data-l="en"> · Art &amp; Image</span></p></div></a><a class="lib-card" href="https://chenhua.net/story/unnamed-faces.html">
+<div class="lib-thumb"><img src="https://20century.chenhua.net/photos/1900s/1900-women-91e3cdf6.jpg" alt="没有留下名字的人" loading="eager"></div>
+<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY · </div>
+<h3><span data-l="zh">没有留下名字的人</span><span data-l="en">The people without names</span></h3><p><span data-l="zh"> · 艺术与图像</span><span data-l="en"> · Art &amp; Image</span></p></div></a><a class="lib-card" href="https://chenhua.net/story/street-a-day.html">
+<div class="lib-thumb"><img src="https://19century.chenhua.net/photos/1860s/cle-62a7a7c2-81e2ee24.jpg" alt="街角的一天" loading="eager"></div>
+<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY · </div>
+<h3><span data-l="zh">街角的一天</span><span data-l="en">A day on the street corner</span></h3><p><span data-l="zh"> · 艺术与图像</span><span data-l="en"> · Art &amp; Image</span></p></div></a><a class="lib-card" href="https://chenhua.net/story/today-06-15-eadweard-muybridge.html">
+<div class="lib-thumb"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Alaska_Ter._-_Fort_Tongass._Group_of_Indians%2C_by_Muybridge%2C_Eadweard%2C_1830-1904.jpg/1280px-Alaska_Ter._-_Fort_Tongass._Group_of_Indians%2C_by_Muybridge%2C_Eadweard%2C_1830-1904.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail" alt="1878年6月15日：埃德沃德·迈布里奇" loading="eager"></div>
+<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY · 1878</div>
+<h3><span data-l="zh">1878年6月15日：埃德沃德·迈布里奇</span><span data-l="en">June 15, 1878: Eadweard Muybridge</span></h3><p><span data-l="zh">1878 · 艺术与图像</span><span data-l="en">1878 · Art &amp; Image</span></p></div></a><a class="lib-card" href="https://chenhua.net/story/today-10-14-louis-le-prince.html">
+<div class="lib-thumb"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Leprince-roundhay-framescopy-1930-nmpft.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled" alt="1888年10月14日：路易·普林斯" loading="eager"></div>
+<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY · 1888</div>
+<h3><span data-l="zh">1888年10月14日：路易·普林斯</span><span data-l="en">October 14, 1888: Louis Le Prince</span></h3><p><span data-l="zh">1888 · 艺术与图像</span><span data-l="en">1888 · Art &amp; Image</span></p></div></a></div>
+<div class="pt-rule"><span data-l="zh">全部 130 篇</span><span data-l="en">All 130 stories</span></div>
+<div class="pt-ix"><a class="pt-ix-row" href="https://chenhua.net/story/today-09-06-christopher-columbus.html">
+<span class="pt-ix-year">1492</span><span class="pt-ix-title"><span data-l="zh">1492年9月6日：克里斯托弗·哥伦布</span><span data-l="en">September 6, 1492: Christopher Columbus</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-15-christopher-columbus-2.html">
+<span class="pt-ix-year">1493</span><span class="pt-ix-title"><span data-l="zh">1493年2月15日：克里斯托弗·哥伦布</span><span data-l="en">February 15, 1493: Christopher Columbus</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-04-22-pedro-alvares-cabral-2.html">
+<span class="pt-ix-year">1500</span><span class="pt-ix-title"><span data-l="zh">1500年4月22日：佩德罗·阿尔瓦雷斯·卡布拉尔</span><span data-l="en">April 22, 1500: Pedro Álvares Cabral</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-06-04-old-st-paul-s-cathedral.html">
+<span class="pt-ix-year">1561</span><span class="pt-ix-title"><span data-l="zh">1561年6月4日：舊聖保羅座堂</span><span data-l="en">June 4, 1561: Old St Paul&#x27;s Cathedral</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-09-26-francis-drake.html">
+<span class="pt-ix-year">1580</span><span class="pt-ix-title"><span data-l="zh">1580年9月26日：法蘭西斯·德瑞克</span><span data-l="en">September 26, 1580: Francis Drake</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-04-28-university-of-santo-tomas-2.html">
+<span class="pt-ix-year">1611</span><span class="pt-ix-title"><span data-l="zh">1611年4月28日：聖多默大學 (菲律賓)</span><span data-l="en">April 28, 1611: University of Santo Tomas</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-05-07-tre-kronor-castle-2.html">
+<span class="pt-ix-year">1697</span><span class="pt-ix-title"><span data-l="zh">1697年5月7日：三王冠宮</span><span data-l="en">May 7, 1697: Tre Kronor (castle)</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-01-08-george-frideric-handel-2.html">
+<span class="pt-ix-year">1735</span><span class="pt-ix-title"><span data-l="zh">1735年1月8日：格奥尔格·弗里德里希·亨德尔</span><span data-l="en">January 8, 1735: George Frideric Handel</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-01-12-mission-santa-clara-de-asis-2.html">
+<span class="pt-ix-year">1777</span><span class="pt-ix-title"><span data-l="zh">1777年1月12日：圣克拉拉传教所</span><span data-l="en">January 12, 1777: Mission Santa Clara de Asís</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-03-13-william-herschel-2.html">
+<span class="pt-ix-year">1781</span><span class="pt-ix-title"><span data-l="zh">1781年3月13日：威廉·赫歇爾</span><span data-l="en">March 13, 1781: William Herschel</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-08-10-louvre.html">
+<span class="pt-ix-year">1793</span><span class="pt-ix-title"><span data-l="zh">1793年8月10日：卢浮宫博物馆</span><span data-l="en">August 10, 1793: Louvre</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-24-theatre-royal-drury-lane-2.html">
+<span class="pt-ix-year">1809</span><span class="pt-ix-title"><span data-l="zh">1809年2月24日：皇家劇院 (德魯里巷)</span><span data-l="en">February 24, 1809: Theatre Royal, Drury Lane</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-11-26-university-of-notre-dame.html">
+<span class="pt-ix-year">1842</span><span class="pt-ix-title"><span data-l="zh">1842年11月26日：聖母大學</span><span data-l="en">November 26, 1842: University of Notre Dame</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-07-edgar-allan-poe.html">
+<span class="pt-ix-year">1849</span><span class="pt-ix-title"><span data-l="zh">1849年10月7日：艾德加·愛倫·坡</span><span data-l="en">October 7, 1849: Edgar Allan Poe</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-13-covering-of-the-senne-2.html">
+<span class="pt-ix-year">1867</span><span class="pt-ix-title"><span data-l="zh">1867年2月13日：覆蓋塞訥河</span><span data-l="en">February 13, 1867: Covering of the Senne</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-26-thespis-opera.html">
+<span class="pt-ix-year">1871</span><span class="pt-ix-title"><span data-l="zh">1871年12月26日：泰斯庇斯</span><span data-l="en">December 26, 1871: Thespis (opera)</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-08-13-das-rheingold.html">
+<span class="pt-ix-year">1876</span><span class="pt-ix-title"><span data-l="zh">1876年8月13日：萊茵的黃金</span><span data-l="en">August 13, 1876: Das Rheingold</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-08-17-gotterdammerung.html">
+<span class="pt-ix-year">1876</span><span class="pt-ix-title"><span data-l="zh">1876年8月17日：諸神的黃昏 (歌劇)</span><span data-l="en">August 17, 1876: Götterdämmerung</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-04-texas-a-m-university.html">
+<span class="pt-ix-year">1876</span><span class="pt-ix-title"><span data-l="zh">1876年10月4日：得克萨斯农工大学</span><span data-l="en">October 4, 1876: Texas A&amp;M University</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-05-25-gilbert-and-sullivan.html">
+<span class="pt-ix-year">1878</span><span class="pt-ix-title"><span data-l="zh">1878年5月25日：吉爾伯特與薩利文</span><span data-l="en">May 25, 1878: Gilbert and Sullivan</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-11-25-banff-national-park.html">
+<span class="pt-ix-year">1885</span><span class="pt-ix-title"><span data-l="zh">1885年11月25日：班夫国家公园</span><span data-l="en">November 25, 1885: Banff National Park</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-09-03-royal-exhibition-building.html">
+<span class="pt-ix-year">1901</span><span class="pt-ix-title"><span data-l="zh">1901年9月3日：皇家展览馆</span><span data-l="en">September 3, 1901: Royal Exhibition Building</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-05-17-antikythera-mechanism.html">
+<span class="pt-ix-year">1902</span><span class="pt-ix-title"><span data-l="zh">1902年5月17日：安迪基西拉机械装置</span><span data-l="en">May 17, 1902: Antikythera mechanism</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-09-01-science-fiction-film.html">
+<span class="pt-ix-year">1902</span><span class="pt-ix-title"><span data-l="zh">1902年9月1日：科幻电影</span><span data-l="en">September 1, 1902: Science fiction film</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-07-folies-bergere.html">
+<span class="pt-ix-year">1907</span><span class="pt-ix-title"><span data-l="zh">1907年7月7日：女神遊樂廳</span><span data-l="en">July 7, 1907: Folies Bergère</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-17-armory-show-2.html">
+<span class="pt-ix-year">1913</span><span class="pt-ix-title"><span data-l="zh">1913年2月17日：军械库展览会</span><span data-l="en">February 17, 1913: Armory Show</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-05-13-igor-sikorsky.html">
+<span class="pt-ix-year">1913</span><span class="pt-ix-title"><span data-l="zh">1913年5月13日：伊戈爾·西科斯基</span><span data-l="en">May 13, 1913: Igor Sikorsky</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-29-river-monitor.html">
+<span class="pt-ix-year">1914</span><span class="pt-ix-title"><span data-l="zh">1914年7月29日：内河重炮舰</span><span data-l="en">July 29, 1914: River monitor</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-05-imperial-trans-antarctic-expedition.html">
+<span class="pt-ix-year">1914</span><span class="pt-ix-title"><span data-l="zh">1914年12月5日：大英帝國橫越南極遠征</span><span data-l="en">December 5, 1914: Imperial Trans-Antarctic Expedition</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-14-giacomo-puccini.html">
+<span class="pt-ix-year">1918</span><span class="pt-ix-title"><span data-l="zh">1918年12月14日：贾科莫·普契尼</span><span data-l="en">December 14, 1918: Giacomo Puccini</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-26-chicago-theatre.html">
+<span class="pt-ix-year">1921</span><span class="pt-ix-title"><span data-l="zh">1921年10月26日：芝加哥劇院</span><span data-l="en">October 26, 1921: Chicago Theatre</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-06-10-united-church-of-canada.html">
+<span class="pt-ix-year">1925</span><span class="pt-ix-title"><span data-l="zh">1925年6月10日：加拿大联合教会</span><span data-l="en">June 10, 1925: United Church of Canada</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-11-28-grand-ole-opry.html">
+<span class="pt-ix-year">1925</span><span class="pt-ix-title"><span data-l="zh">1925年11月28日：大奥普里</span><span data-l="en">November 28, 1925: Grand Ole Opry</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-01-11-louis-b-mayer-2.html">
+<span class="pt-ix-year">1927</span><span class="pt-ix-title"><span data-l="zh">1927年1月11日：路易·B·梅耶</span><span data-l="en">January 11, 1927: Louis B. Mayer</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-03-15-university-of-oxford-2.html">
+<span class="pt-ix-year">1927</span><span class="pt-ix-title"><span data-l="zh">1927年3月15日：牛津大学</span><span data-l="en">March 15, 1927: University of Oxford</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-04-30-douglas-fairbanks-2.html">
+<span class="pt-ix-year">1927</span><span class="pt-ix-title"><span data-l="zh">1927年4月30日：范朋克</span><span data-l="en">April 30, 1927: Douglas Fairbanks</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-06-09-charles-kingsford-smith.html">
+<span class="pt-ix-year">1928</span><span class="pt-ix-title"><span data-l="zh">1928年6月9日：查尔斯·金斯福德·史密斯</span><span data-l="en">June 9, 1928: Charles Kingsford Smith</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-27-radio-city-music-hall.html">
+<span class="pt-ix-year">1932</span><span class="pt-ix-title"><span data-l="zh">1932年12月27日：无线电城音乐厅</span><span data-l="en">December 27, 1932: Radio City Music Hall</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-01-grant-park-music-festival.html">
+<span class="pt-ix-year">1935</span><span class="pt-ix-title"><span data-l="zh">1935年7月1日：格蘭特公園音樂節</span><span data-l="en">July 1, 1935: Grant Park Music Festival</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-09-13-chicago-public-schools.html">
+<span class="pt-ix-year">1937</span><span class="pt-ix-title"><span data-l="zh">1937年9月13日：芝加哥公立學校</span><span data-l="en">September 13, 1937: Chicago Public Schools</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-05-the-queen-s-college-oxford.html">
+<span class="pt-ix-year">1937</span><span class="pt-ix-title"><span data-l="zh">1937年10月5日：牛津大学王后学院</span><span data-l="en">October 5, 1937: The Queen&#x27;s College, Oxford</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-11-bbc-2.html">
+<span class="pt-ix-year">1938</span><span class="pt-ix-title"><span data-l="zh">1938年2月11日：英国广播公司</span><span data-l="en">February 11, 1938: BBC</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-07-walt-disney-2.html">
+<span class="pt-ix-year">1940</span><span class="pt-ix-title"><span data-l="zh">1940年2月7日：華特·迪士尼</span><span data-l="en">February 7, 1940: Walt Disney</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-11-13-walt-disney.html">
+<span class="pt-ix-year">1940</span><span class="pt-ix-title"><span data-l="zh">1940年11月13日：華特·迪士尼</span><span data-l="en">November 13, 1940: Walt Disney</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-11-01-ansel-adams.html">
+<span class="pt-ix-year">1941</span><span class="pt-ix-title"><span data-l="zh">1941年11月1日：安塞尔·亚当斯</span><span data-l="en">November 1, 1941: Ansel Adams</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/dday-1944.html">
+<span class="pt-ix-year">1944</span><span class="pt-ix-title"><span data-l="zh">1944 年 6 月 6 日：诺曼底</span><span data-l="en">6 June 1944: Normandy</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-04-16-oecd-2.html">
+<span class="pt-ix-year">1948</span><span class="pt-ix-title"><span data-l="zh">1948年4月16日：经济合作与发展组织</span><span data-l="en">April 16, 1948: OECD</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-21-bengali-language-movement-2.html">
+<span class="pt-ix-year">1952</span><span class="pt-ix-title"><span data-l="zh">1952年2月21日：孟加拉語言運動</span><span data-l="en">February 21, 1952: Bengali language movement</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-24-north-island.html">
+<span class="pt-ix-year">1953</span><span class="pt-ix-title"><span data-l="zh">1953年12月24日：北島 (紐西蘭)</span><span data-l="en">December 24, 1953: North Island</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-11-03-godzilla-1954-film.html">
+<span class="pt-ix-year">1954</span><span class="pt-ix-title"><span data-l="zh">1954年11月3日：哥吉拉 (1954年)</span><span data-l="en">November 3, 1954: Godzilla (1954 film)</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-24-nikita-khrushchev.html">
+<span class="pt-ix-year">1959</span><span class="pt-ix-title"><span data-l="zh">1959年7月24日：尼基塔·赫魯曉夫</span><span data-l="en">July 24, 1959: Nikita Khrushchev</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-12-japan-socialist-party.html">
+<span class="pt-ix-year">1960</span><span class="pt-ix-title"><span data-l="zh">1960年10月12日：日本社会党</span><span data-l="en">October 12, 1960: Japan Socialist Party</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-10-roy-lichtenstein-2.html">
+<span class="pt-ix-year">1962</span><span class="pt-ix-title"><span data-l="zh">1962年2月10日：罗伊·利希滕斯坦</span><span data-l="en">February 10, 1962: Roy Lichtenstein</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-09-pop-art.html">
+<span class="pt-ix-year">1962</span><span class="pt-ix-title"><span data-l="zh">1962年7月9日：波普藝術</span><span data-l="en">July 9, 1962: Pop art</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-03-05-country-music-2.html">
+<span class="pt-ix-year">1963</span><span class="pt-ix-title"><span data-l="zh">1963年3月5日：乡村音乐</span><span data-l="en">March 5, 1963: Country music</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-05-08-hue-2.html">
+<span class="pt-ix-year">1963</span><span class="pt-ix-title"><span data-l="zh">1963年5月8日：順化市</span><span data-l="en">May 8, 1963: Huế</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-06-11-university-of-alabama.html">
+<span class="pt-ix-year">1963</span><span class="pt-ix-title"><span data-l="zh">1963年6月11日：阿拉巴马大学</span><span data-l="en">June 11, 1963: University of Alabama</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-09-28-whaam.html">
+<span class="pt-ix-year">1963</span><span class="pt-ix-title"><span data-l="zh">1963年9月28日：空中火力</span><span data-l="en">September 28, 1963: Whaam!</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-01-16-hello-dolly-musical-2.html">
+<span class="pt-ix-year">1964</span><span class="pt-ix-title"><span data-l="zh">1964年1月16日：你好，多莉！</span><span data-l="en">January 16, 1964: Hello, Dolly! (musical)</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-03-02-the-sound-of-music-film-2.html">
+<span class="pt-ix-year">1965</span><span class="pt-ix-title"><span data-l="zh">1965年3月2日：音乐之声 (电影)</span><span data-l="en">March 2, 1965: The Sound of Music (film)</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-04-11-midwestern-united-states-2.html">
+<span class="pt-ix-year">1965</span><span class="pt-ix-title"><span data-l="zh">1965年4月11日：美國中西部</span><span data-l="en">April 11, 1965: Midwestern United States</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-28-st-louis.html">
+<span class="pt-ix-year">1965</span><span class="pt-ix-title"><span data-l="zh">1965年10月28日：圣路易斯 (密苏里州)</span><span data-l="en">October 28, 1965: St. Louis</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-09-08-elizabeth-ii.html">
+<span class="pt-ix-year">1966</span><span class="pt-ix-title"><span data-l="zh">1966年9月8日：伊丽莎白二世</span><span data-l="en">September 8, 1966: Elizabeth II</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-03-elvis-presley.html">
+<span class="pt-ix-year">1968</span><span class="pt-ix-title"><span data-l="zh">1968年12月3日：艾維斯·皮禮士利</span><span data-l="en">December 3, 1968: Elvis Presley</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-06-28-stonewall-inn.html">
+<span class="pt-ix-year">1969</span><span class="pt-ix-title"><span data-l="zh">1969年6月28日：石牆酒吧</span><span data-l="en">June 28, 1969: Stonewall Inn</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-05-brian-jones.html">
+<span class="pt-ix-year">1969</span><span class="pt-ix-title"><span data-l="zh">1969年7月5日：布萊恩·瓊斯</span><span data-l="en">July 5, 1969: Brian Jones</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-08-08-zebra-crossing.html">
+<span class="pt-ix-year">1969</span><span class="pt-ix-title"><span data-l="zh">1969年8月8日：斑馬線</span><span data-l="en">August 8, 1969: Zebra crossing</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-11-10-sesame-street.html">
+<span class="pt-ix-year">1969</span><span class="pt-ix-title"><span data-l="zh">1969年11月10日：芝麻街</span><span data-l="en">November 10, 1969: Sesame Street</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-01-09-rms-queen-elizabeth-2.html">
+<span class="pt-ix-year">1972</span><span class="pt-ix-title"><span data-l="zh">1972年1月9日：伊利沙伯皇后號郵輪</span><span data-l="en">January 9, 1972: RMS Queen Elizabeth</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-06-16-david-bowie.html">
+<span class="pt-ix-year">1972</span><span class="pt-ix-title"><span data-l="zh">1972年6月16日：大卫·鲍伊</span><span data-l="en">June 16, 1972: David Bowie</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-31-the-troubles.html">
+<span class="pt-ix-year">1972</span><span class="pt-ix-title"><span data-l="zh">1972年7月31日：北爱尔兰问题</span><span data-l="en">July 31, 1972: The Troubles</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-01-14-elvis-presley-2.html">
+<span class="pt-ix-year">1973</span><span class="pt-ix-title"><span data-l="zh">1973年1月14日：艾維斯·皮禮士利</span><span data-l="en">January 14, 1973: Elvis Presley</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-03-david-bowie.html">
+<span class="pt-ix-year">1973</span><span class="pt-ix-title"><span data-l="zh">1973年7月3日：大卫·鲍伊</span><span data-l="en">July 3, 1973: David Bowie</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-06-20-steven-spielberg.html">
+<span class="pt-ix-year">1975</span><span class="pt-ix-title"><span data-l="zh">1975年6月20日：斯蒂芬·斯皮尔伯格</span><span data-l="en">June 20, 1975: Steven Spielberg</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-08-14-the-rocky-horror-picture-show.html">
+<span class="pt-ix-year">1975</span><span class="pt-ix-title"><span data-l="zh">1975年8月14日：洛基恐怖秀</span><span data-l="en">August 14, 1975: The Rocky Horror Picture Show</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-04-01-steve-jobs-2.html">
+<span class="pt-ix-year">1976</span><span class="pt-ix-title"><span data-l="zh">1976年4月1日：史蒂夫·乔布斯</span><span data-l="en">April 1, 1976: Steve Jobs</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-03-30-annie-hall-2.html">
+<span class="pt-ix-year">1977</span><span class="pt-ix-title"><span data-l="zh">1977年3月30日：安妮·霍尔</span><span data-l="en">March 30, 1977: Annie Hall</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-08-16-elvis-presley.html">
+<span class="pt-ix-year">1977</span><span class="pt-ix-title"><span data-l="zh">1977年8月16日：艾維斯·皮禮士利</span><span data-l="en">August 16, 1977: Elvis Presley</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-05-23-the-shining-film.html">
+<span class="pt-ix-year">1980</span><span class="pt-ix-title"><span data-l="zh">1980年5月23日：闪灵 (电影)</span><span data-l="en">May 23, 1980: The Shining (film)</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-05-31-sinhalese-people.html">
+<span class="pt-ix-year">1981</span><span class="pt-ix-title"><span data-l="zh">1981年5月31日：僧伽羅人</span><span data-l="en">May 31, 1981: Sinhalese people</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-10-raul-alfonsin.html">
+<span class="pt-ix-year">1983</span><span class="pt-ix-title"><span data-l="zh">1983年12月10日：劳尔·阿方辛</span><span data-l="en">December 10, 1983: Raúl Alfonsín</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-23-vanessa-williams.html">
+<span class="pt-ix-year">1984</span><span class="pt-ix-title"><span data-l="zh">1984年7月23日：凡妮莎·威廉斯</span><span data-l="en">July 23, 1984: Vanessa Williams</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-03-steve-jobs-2.html">
+<span class="pt-ix-year">1986</span><span class="pt-ix-title"><span data-l="zh">1986年2月3日：史蒂夫·乔布斯</span><span data-l="en">February 3, 1986: Steve Jobs</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-03-03-metallica-2.html">
+<span class="pt-ix-year">1986</span><span class="pt-ix-title"><span data-l="zh">1986年3月3日：金属乐队</span><span data-l="en">March 3, 1986: Metallica</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-09-the-phantom-of-the-opera-1986-musical.html">
+<span class="pt-ix-year">1986</span><span class="pt-ix-title"><span data-l="zh">1986年10月9日：歌劇魅影 (音樂劇)</span><span data-l="en">October 9, 1986: The Phantom of the Opera (1986 musical)</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-22-john-adams-composer.html">
+<span class="pt-ix-year">1987</span><span class="pt-ix-title"><span data-l="zh">1987年10月22日：约翰·库利奇·亚当斯</span><span data-l="en">October 22, 1987: John Adams (composer)</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-03-06-the-troubles-2.html">
+<span class="pt-ix-year">1988</span><span class="pt-ix-title"><span data-l="zh">1988年3月6日：北爱尔兰问题</span><span data-l="en">March 6, 1988: The Troubles</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-05-15-vincent-van-gogh.html">
+<span class="pt-ix-year">1990</span><span class="pt-ix-title"><span data-l="zh">1990年5月15日：文森特·梵高</span><span data-l="en">May 15, 1990: Vincent van Gogh</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-09-29-walt-disney-animation-studios.html">
+<span class="pt-ix-year">1991</span><span class="pt-ix-title"><span data-l="zh">1991年9月29日：華特迪士尼動畫工作室</span><span data-l="en">September 29, 1991: Walt Disney Animation Studios</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-04-29-rodney-king-2.html">
+<span class="pt-ix-year">1992</span><span class="pt-ix-title"><span data-l="zh">1992年4月29日：罗德尼·金</span><span data-l="en">April 29, 1992: Rodney King</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-03-sinead-o-connor.html">
+<span class="pt-ix-year">1992</span><span class="pt-ix-title"><span data-l="zh">1992年10月3日：希妮德·奥康娜</span><span data-l="en">October 3, 1992: Sinéad O&#x27;Connor</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-12-edvard-munch-2.html">
+<span class="pt-ix-year">1994</span><span class="pt-ix-title"><span data-l="zh">1994年2月12日：爱德华·蒙克</span><span data-l="en">February 12, 1994: Edvard Munch</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-13-the-troubles.html">
+<span class="pt-ix-year">1994</span><span class="pt-ix-title"><span data-l="zh">1994年10月13日：北爱尔兰问题</span><span data-l="en">October 13, 1994: The Troubles</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-21-solomon-r-guggenheim-museum-alt.html">
+<span class="pt-ix-year">1994</span><span class="pt-ix-title"><span data-l="zh">1994年10月21日：所羅門·古根漢美術館</span><span data-l="en">October 21, 1994: Solomon R. Guggenheim Museum</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-21-seoul.html">
+<span class="pt-ix-year">1994</span><span class="pt-ix-title"><span data-l="zh">1994年10月21日：首爾特別市</span><span data-l="en">October 21, 1994: Seoul</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-11-22-toy-story.html">
+<span class="pt-ix-year">1995</span><span class="pt-ix-title"><span data-l="zh">1995年11月22日：玩具总动员</span><span data-l="en">November 22, 1995: Toy Story</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-12-hayao-miyazaki.html">
+<span class="pt-ix-year">1997</span><span class="pt-ix-title"><span data-l="zh">1997年7月12日：宫崎骏</span><span data-l="en">July 12, 1997: Hayao Miyazaki</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-09-23-u2.html">
+<span class="pt-ix-year">1997</span><span class="pt-ix-title"><span data-l="zh">1997年9月23日：U2樂團</span><span data-l="en">September 23, 1997: U2</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-11-18-texas-a-m-university.html">
+<span class="pt-ix-year">1999</span><span class="pt-ix-title"><span data-l="zh">1999年11月18日：得克萨斯农工大学</span><span data-l="en">November 18, 1999: Texas A&amp;M University</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-06-21-bill-clinton.html">
+<span class="pt-ix-year">2000</span><span class="pt-ix-title"><span data-l="zh">2000年6月21日：比尔·克林顿</span><span data-l="en">June 21, 2000: Bill Clinton</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-03-24-74th-academy-awards-2.html">
+<span class="pt-ix-year">2002</span><span class="pt-ix-title"><span data-l="zh">2002年3月24日：第74届奥斯卡金像奖</span><span data-l="en">March 24, 2002: 74th Academy Awards</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-16-millennium-park.html">
+<span class="pt-ix-year">2004</span><span class="pt-ix-title"><span data-l="zh">2004年7月16日：千禧公園</span><span data-l="en">July 16, 2004: Millennium Park</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-01-19-antonov-an-24-2.html">
+<span class="pt-ix-year">2006</span><span class="pt-ix-title"><span data-l="zh">2006年1月19日：安托諾夫An-24</span><span data-l="en">January 19, 2006: Antonov An-24</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-30-saddam-hussein.html">
+<span class="pt-ix-year">2006</span><span class="pt-ix-title"><span data-l="zh">2006年12月30日：萨达姆·侯赛因</span><span data-l="en">December 30, 2006: Saddam Hussein</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-20-pablo-picasso.html">
+<span class="pt-ix-year">2007</span><span class="pt-ix-title"><span data-l="zh">2007年12月20日：巴勃羅·畢卡索</span><span data-l="en">December 20, 2007: Pablo Picasso</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-25-longford.html">
+<span class="pt-ix-year">2009</span><span class="pt-ix-title"><span data-l="zh">2009年12月25日：朗福德</span><span data-l="en">December 25, 2009: Longford</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-01-25-avatar-2009-film-2.html">
+<span class="pt-ix-year">2010</span><span class="pt-ix-title"><span data-l="zh">2010年1月25日：阿凡达</span><span data-l="en">January 25, 2010: Avatar (2009 film)</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-03-11-sebastian-pinera-2.html">
+<span class="pt-ix-year">2010</span><span class="pt-ix-title"><span data-l="zh">2010年3月11日：塞瓦斯蒂安·皮涅拉</span><span data-l="en">March 11, 2010: Sebastián Piñera</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-03-20-eyjafjallajokull-2.html">
+<span class="pt-ix-year">2010</span><span class="pt-ix-title"><span data-l="zh">2010年3月20日：埃亚菲亚德拉冰盖</span><span data-l="en">March 20, 2010: Eyjafjallajökull</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-09-07-fishing-trawler.html">
+<span class="pt-ix-year">2010</span><span class="pt-ix-title"><span data-l="zh">2010年9月7日：拖網漁船</span><span data-l="en">September 7, 2010: Fishing trawler</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-08-ikaros.html">
+<span class="pt-ix-year">2010</span><span class="pt-ix-title"><span data-l="zh">2010年12月8日：IKAROS</span><span data-l="en">December 8, 2010: IKAROS</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-29-tokyo-skytree-2.html">
+<span class="pt-ix-year">2012</span><span class="pt-ix-title"><span data-l="zh">2012年2月29日：東京晴空塔</span><span data-l="en">February 29, 2012: Tokyo Skytree</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-04-03-buenos-aires-province-2.html">
+<span class="pt-ix-year">2013</span><span class="pt-ix-title"><span data-l="zh">2013年4月3日：布宜诺斯艾利斯省</span><span data-l="en">April 3, 2013: Buenos Aires Province</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-13-beyonce.html">
+<span class="pt-ix-year">2013</span><span class="pt-ix-title"><span data-l="zh">2013年12月13日：碧昂絲</span><span data-l="en">December 13, 2013: Beyoncé</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-04-25-flint-water-crisis-2.html">
+<span class="pt-ix-year">2014</span><span class="pt-ix-title"><span data-l="zh">2014年4月25日：弗林特水危机</span><span data-l="en">April 25, 2014: Flint water crisis</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-18-silvio-berlusconi.html">
+<span class="pt-ix-year">2014</span><span class="pt-ix-title"><span data-l="zh">2014年7月18日：西尔维奥·贝卢斯科尼</span><span data-l="en">July 18, 2014: Silvio Berlusconi</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-12-16-lindt-cafe-siege.html">
+<span class="pt-ix-year">2014</span><span class="pt-ix-title"><span data-l="zh">2014年12月16日：2014年悉尼人质事件</span><span data-l="en">December 16, 2014: Lindt Cafe siege</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-01-20-taliban-2.html">
+<span class="pt-ix-year">2018</span><span class="pt-ix-title"><span data-l="zh">2018年1月20日：塔利班</span><span data-l="en">January 20, 2018: Taliban</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-10-association-football.html">
+<span class="pt-ix-year">2018</span><span class="pt-ix-title"><span data-l="zh">2018年7月10日：足球</span><span data-l="en">July 10, 2018: Association football</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-07-15-mario-mandzukic.html">
+<span class="pt-ix-year">2018</span><span class="pt-ix-title"><span data-l="zh">2018年7月15日：马里奥·曼朱基奇</span><span data-l="en">July 15, 2018: Mario Mandžukić</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-10-02-the-washington-post.html">
+<span class="pt-ix-year">2018</span><span class="pt-ix-title"><span data-l="zh">2018年10月2日：华盛顿邮报</span><span data-l="en">October 2, 2018: The Washington Post</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-02-09-yuzuru-hanyu-2.html">
+<span class="pt-ix-year">2020</span><span class="pt-ix-title"><span data-l="zh">2020年2月9日：羽生結弦</span><span data-l="en">February 9, 2020: Yuzuru Hanyu</span></span></a><a class="pt-ix-row" href="https://chenhua.net/story/today-05-26-george-floyd-protests.html">
+<span class="pt-ix-year">2020</span><span class="pt-ix-title"><span data-l="zh">2020年5月26日：乔治·弗洛伊德之死引发的示威活动</span><span data-l="en">May 26, 2020: George Floyd protests</span></span></a></div>
+</main>
+<footer class="site-foot">
+  <div class="sf-left"><span data-l="zh">© 2026 尘画 · <a href="https://chenhua.net">chenhua.net</a></span><span data-l="en">© 2026 <span class="sf-brand-long">Frame &amp; Grain</span><span class="sf-brand-short">Frame</span> · <a href="https://chenhua.net">chenhua.net</a></span></div>
+  <nav class="sf-nav" aria-label="站内导航">
+    <a href="https://photo.chenhua.net/"><span data-l="zh">出尘入画</span><span data-l="en"><span class="sf-brand-long">Frame &amp; Grain</span><span class="sf-brand-short">Frame</span></span></a>
+    <a href="https://photo.chenhua.net/themes/"><span data-l="zh">主题</span><span data-l="en">Themes</span></a>
+    <a href="https://photo.chenhua.net/timeline/"><span data-l="zh">时间线</span><span data-l="en">Timeline</span></a>
+    <a href="https://photo.chenhua.net/today/"><span data-l="zh">日历</span><span data-l="en">Calendar</span></a>
+    <a href="https://photo.chenhua.net/"><span data-l="zh">摄影</span><span data-l="en">Photography</span></a>
+    <a href="https://paint.chenhua.net/"><span data-l="zh">绘画</span><span data-l="en">Painting</span></a>
+    <a href="https://netcn.org/"><span data-l="zh">导航</span><span data-l="en">Directory</span></a>
+  </nav>
+  <div class="sf-right"><a href="https://photo.chenhua.net/legal/"><span data-l="zh">免责条款</span><span data-l="en">Disclaimer</span></a></div>
+</footer>
+</div>
+<script src="/assets/site.js?v=20261124a"></script>
+</body>
+</html>

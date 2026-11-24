@@ -7,13 +7,13 @@
 <title>摄影主题 · 尘画</title>
 <meta name="description" content="按主题浏览尘画的历史摄影与绘画故事。">
 <meta name="robots" content="index,follow">
-<link rel="canonical" href="https://chenhua.net/themes/">
-<link rel="alternate" hreflang="zh-CN" href="https://chenhua.net/themes/">
-<link rel="alternate" hreflang="en" href="https://chenhua.net/themes/?lang=en">
+<link rel="canonical" href="https://photo.chenhua.net/themes/">
+<link rel="alternate" hreflang="zh-CN" href="https://photo.chenhua.net/themes/">
+<link rel="alternate" hreflang="en" href="https://photo.chenhua.net/themes/?lang=en">
 <meta property="og:type" content="website">
 <meta property="og:title" content="主题 · 尘画">
 <meta property="og:description" content="按主题浏览尘画的历史摄影与绘画故事。">
-<meta property="og:url" content="https://chenhua.net/themes/">
+<meta property="og:url" content="https://photo.chenhua.net/themes/">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:locale:alternate" content="en_US">
 <link rel="icon" type="image/svg+xml" href="/assets/leaf/favicon.svg">
@@ -430,6 +430,42 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
 </header>
 
 <style>
+.photo-themes{max-width:min(100%,1600px);margin:0 auto;padding:26px clamp(18px,3vw,48px) 48px}
+.pt-lead{display:flex;align-items:end;justify-content:space-between;gap:20px;border-bottom:1px solid var(--rule);padding:0 0 18px;margin:0 0 22px}
+.pt-lead h1{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4.5vw,62px);line-height:1.02;letter-spacing:-.03em;margin:0}
+.pt-lead p{max-width:420px;font-size:11px;line-height:1.8;color:var(--muted);margin:0;text-align:right}
+.pt-feature{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:1px;background:var(--rule);border:1px solid var(--rule);text-decoration:none;color:var(--text);min-height:360px}
+.pt-feature .pic{overflow:hidden;background:var(--panel)}
+.pt-feature .pic img{width:100%;height:100%;min-height:360px;object-fit:cover;display:block;transition:transform .6s}
+.pt-feature:hover .pic img{transform:scale(1.025)}
+.pt-feature .txt{background:var(--paper);padding:clamp(22px,3vw,42px);display:flex;flex-direction:column;justify-content:end}
+.pt-feature .meta{font-size:9px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin:0 0 12px}
+.pt-feature h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,52px);line-height:1.06;margin:0 0 8px}
+.pt-feature .en{font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin:0 0 16px}
+.pt-feature p{font-size:12px;line-height:1.9;color:var(--muted);margin:0 0 18px}
+.pt-feature .more{font-size:10px;color:var(--accent);letter-spacing:.08em}
+.pt-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:26px 0 0}
+.pt-row-card{display:grid;grid-template-columns:120px minmax(0,1fr);background:var(--paper);text-decoration:none;color:var(--text);min-width:0}
+.pt-row-card:hover{background:var(--panel)}
+.pt-row-card img{width:120px;height:150px;object-fit:cover;display:block}
+.pt-row-card .body{padding:14px 15px}
+.pt-row-card .meta{font-size:8px;letter-spacing:.15em;color:var(--accent);text-transform:uppercase;margin:0 0 6px}
+.pt-row-card h3{font-family:var(--serif);font-weight:400;font-size:20px;line-height:1.2;margin:0 0 5px}
+.pt-row-card p{font-size:10px;line-height:1.7;color:var(--muted);margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pt-band{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.62fr);gap:clamp(18px,3vw,46px);align-items:center;border-top:1px solid var(--rule);margin:30px 0 0;padding:28px 0 0;text-decoration:none;color:var(--text)}
+.pt-band .txt h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3vw,38px);line-height:1.1;margin:0 0 5px}
+.pt-band .txt .en{font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin:0 0 12px}
+.pt-band .txt p{font-size:12px;line-height:1.9;color:var(--muted);max-width:620px;margin:0 0 12px}
+.pt-band .pic{overflow:hidden;border:1px solid var(--rule);background:var(--panel)}
+.pt-band .pic img{width:100%;height:220px;object-fit:cover;display:block}
+@media(max-width:900px){
+ .pt-lead{display:block}.pt-lead p{text-align:left;margin-top:12px}
+ .pt-feature{grid-template-columns:1fr}.pt-feature .pic img{min-height:240px}
+ .pt-row{grid-template-columns:1fr}.pt-band{grid-template-columns:1fr}.pt-band .pic img{height:200px}
+}
+</style>
+
+<style>
 /* ---------- 主题库：摄影与绘画共用同一种卡片 ---------- */
 .theme-library{max-width:min(100%,1760px);margin:0 auto;padding:28px clamp(18px,3vw,48px) 46px}
 .lib-section{border-top:1px solid var(--rule);padding:23px 0 9px}
@@ -541,24 +577,24 @@ h1,.focus-title,.theme-card .name,.era-card .era-name,.drill-head h2,.section-he
 }
 </style>
 
-<main class="theme-library"><h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0"><span data-l="zh">摄影主题</span><span data-l="en">Photography themes</span></h1>
-<div class="lib-head"><h2><span data-l="zh">摄影主题</span><span data-l="en">Photography Themes</span></h2></div>
-<div class="lib-grid theme-mosaic"><a class="lib-card" href="https://photo.chenhua.net/search/?q=%E5%A4%AA%E7%A9%BA%E6%8E%A2%E7%B4%A2&scope=photos">
-<div class="lib-thumb"><img src="https://20century.chenhua.net/photos/1960s/commons-1969-aldrin-ba21857c.jpg" data-covers="https://20century.chenhua.net/photos/1960s/commons-1969-aldrin-ba21857c.jpg" alt="太空探索" loading="lazy"></div>
-<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY</div>
-<h3><span data-l="zh">太空探索</span><span data-l="en">Space Exploration</span></h3><p><span data-l="zh">火箭、卫星与深空探测器。</span><span data-l="en">Rockets, satellites and deep-space probes.</span></p></div></a><a class="lib-card" href="https://photo.chenhua.net/search/?q=%E7%81%BE%E9%9A%BE%E4%B8%8E%E8%B0%83%E6%9F%A5&scope=photos">
-<div class="lib-thumb"><img src="https://20century.chenhua.net/photos/1910s/commons-1912-titanic-b33c2b16.png" data-covers="https://20century.chenhua.net/photos/1910s/commons-1912-titanic-b33c2b16.png" alt="灾难与调查" loading="lazy"></div>
-<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY</div>
-<h3><span data-l="zh">灾难与调查</span><span data-l="en">Disaster &amp; Investigation</span></h3><p><span data-l="zh">火灾、空难、地震、战争与事故调查。</span><span data-l="en">Fires, air disasters, earthquakes, war and investigations.</span></p></div></a><a class="lib-card" href="https://photo.chenhua.net/search/?q=%E5%B7%A5%E7%A8%8B%E4%B8%8E%E5%9F%8E%E5%B8%82&scope=photos">
-<div class="lib-thumb"><img src="https://19century.chenhua.net/photos/1880s/auto-c804a5a8-38153dab.jpg" data-covers="https://19century.chenhua.net/photos/1880s/auto-c804a5a8-38153dab.jpg" alt="工程与城市" loading="lazy"></div>
-<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY</div>
-<h3><span data-l="zh">工程与城市</span><span data-l="en">Engineering &amp; City</span></h3><p><span data-l="zh">桥梁、隧道、铁塔、城市天际线与技术系统。</span><span data-l="en">Bridges, tunnels, towers, skylines and technical systems.</span></p></div></a><a class="lib-card" href="https://photo.chenhua.net/search/?q=%E9%93%81%E8%B7%AF%E4%B8%8E%E5%B7%A5%E4%B8%9A&scope=photos">
-<div class="lib-thumb"><img src="https://20century.chenhua.net/photos/1900s/auto-ad949d8d-aa8ee4c3.jpg" data-covers="https://20century.chenhua.net/photos/1900s/auto-ad949d8d-aa8ee4c3.jpg" alt="铁路与工业" loading="lazy"></div>
-<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY</div>
-<h3><span data-l="zh">铁路与工业</span><span data-l="en">Rail &amp; Industry</span></h3><p><span data-l="zh">蒸汽、钢轨、工厂与机械。</span><span data-l="en">Steam, steel rails, factories and machines.</span></p></div></a><a class="lib-card" href="https://photo.chenhua.net/search/?q=%E8%89%BA%E6%9C%AF%E4%B8%8E%E5%9B%BE%E5%83%8F&scope=photos">
-<div class="lib-thumb"><img src="https://20century.chenhua.net/photos/1930s/commons-1930-shanghai-c11273b3.jpg" data-covers="https://20century.chenhua.net/photos/1930s/commons-1930-shanghai-c11273b3.jpg" alt="艺术与图像" loading="lazy"></div>
-<div class="lib-body"><div class="lib-meta">PHOTOGRAPHY</div>
-<h3><span data-l="zh">艺术与图像</span><span data-l="en">Art &amp; Image</span></h3><p><span data-l="zh">摄影家、画家、电影、音乐与美术馆。</span><span data-l="en">Photographers, painters, film, music and museums.</span></p></div></a></div>
+<main class="photo-themes">
+<div class="pt-lead"><h1><span data-l="zh">摄影主题</span><span data-l="en">Photography Themes</span></h1><p><span data-l="zh">五个主题各自有独立入口：先看一个重点，再沿三条短线和一条长读进入。每个主题页只收与它直接相关的照片和故事。</span><span data-l="en">Five themes, five addresses: one feature, three short trails and one long read. Each theme page keeps only the photographs and stories that belong to it.</span></p></div>
+<a class="pt-feature" href="https://photo.chenhua.net/themes/space.html">
+<div class="pic"><img src="https://20century.chenhua.net/photos/1960s/commons-1969-aldrin-ba21857c.jpg" alt="太空探索" loading="eager"></div>
+<div class="txt"><div class="meta">FEATURED · PHOTOGRAPHY THEME</div>
+<h2><span data-l="zh">太空探索</span><span data-l="en">Space Exploration</span></h2><p><span data-l="zh">火箭、卫星与深空探测器。</span><span data-l="en">Rockets, satellites and deep-space probes.</span></p>
+<div class="more">66 篇故事 · 1–2026 →</div></div></a>
+<div class="pt-row"><a class="pt-row-card" href="https://photo.chenhua.net/themes/disaster.html">
+<img src="https://20century.chenhua.net/photos/1910s/commons-1912-titanic-b33c2b16.png" alt="灾难与调查" loading="lazy"><div class="body"><div class="meta">PHOTOGRAPHY</div>
+<h3><span data-l="zh">灾难与调查</span><span data-l="en">Disaster &amp; Investigation</span></h3><p><span data-l="zh">火灾、空难、地震、战争与事故调查。</span><span data-l="en">Fires, air disasters, earthquakes, war and investigations.</span></p><div class="lib-meta" style="margin:8px 0 0">121 篇 · 1666–2025</div></div></a><a class="pt-row-card" href="https://photo.chenhua.net/themes/engineering.html">
+<img src="https://19century.chenhua.net/photos/1880s/auto-c804a5a8-38153dab.jpg" alt="工程与城市" loading="lazy"><div class="body"><div class="meta">PHOTOGRAPHY</div>
+<h3><span data-l="zh">工程与城市</span><span data-l="en">Engineering &amp; City</span></h3><p><span data-l="zh">桥梁、隧道、铁塔、城市天际线与技术系统。</span><span data-l="en">Bridges, tunnels, towers, skylines and technical systems.</span></p><div class="lib-meta" style="margin:8px 0 0">48 篇 · 1864–2024</div></div></a><a class="pt-row-card" href="https://photo.chenhua.net/themes/rail.html">
+<img src="https://20century.chenhua.net/photos/1900s/auto-ad949d8d-aa8ee4c3.jpg" alt="铁路与工业" loading="lazy"><div class="body"><div class="meta">PHOTOGRAPHY</div>
+<h3><span data-l="zh">铁路与工业</span><span data-l="en">Rail &amp; Industry</span></h3><p><span data-l="zh">蒸汽、钢轨、工厂与机械。</span><span data-l="en">Steam, steel rails, factories and machines.</span></p><div class="lib-meta" style="margin:8px 0 0">14 篇 · 1825–2023</div></div></a></div>
+<a class="pt-band" href="https://photo.chenhua.net/themes/art.html">
+<div class="txt"><div class="meta">LONG READING</div><h2><span data-l="zh">艺术与图像</span><span data-l="en">Art &amp; Image</span></h2>
+<p><span data-l="zh">摄影家、画家、电影、音乐与美术馆。</span><span data-l="en">Photographers, painters, film, music and museums.</span></p><div class="more">130 篇故事 · 1492–2020 →</div></div>
+<div class="pic"><img src="https://20century.chenhua.net/photos/1930s/commons-1930-shanghai-c11273b3.jpg" alt="艺术与图像" loading="lazy"></div></a>
 </main>
 <footer class="site-foot">
   <div class="sf-left"><span data-l="zh">© 2026 尘画 · <a href="https://chenhua.net">chenhua.net</a></span><span data-l="en">© 2026 <span class="sf-brand-long">Frame &amp; Grain</span><span class="sf-brand-short">Frame</span> · <a href="https://chenhua.net">chenhua.net</a></span></div>
