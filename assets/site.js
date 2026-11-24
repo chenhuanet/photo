@@ -54,7 +54,7 @@
   function textOf(el) { return (el.textContent || "").replace(/\s+/g, ""); }
 
   function findSearchLink() {
-    var nodes = document.querySelectorAll(".desknav a, .masthead-nav a, .g-nav a, .sf-nav a");
+    var nodes = document.querySelectorAll(".desknav a, .masthead-nav a, .sf-nav a");
     for (var i = 0; i < nodes.length; i++) {
       var a = nodes[i];
       var href = a.getAttribute("href") || "";
@@ -67,7 +67,7 @@
   }
 
   function removeSearchLinks() {
-    var nodes = document.querySelectorAll(".desknav a, .masthead-nav a, .g-nav a, .sf-nav a");
+    var nodes = document.querySelectorAll(".desknav a, .masthead-nav a, .sf-nav a");
     for (var i = nodes.length - 1; i >= 0; i--) {
       var a = nodes[i];
       if (textOf(a).toLowerCase().indexOf("search") >= 0 ||
@@ -78,7 +78,7 @@
   }
 
   function removeHomeNavLink() {
-    Array.prototype.forEach.call(document.querySelectorAll(".desknav, .masthead-nav, .g-nav"), function (nav) {
+    Array.prototype.forEach.call(document.querySelectorAll(".desknav, .masthead-nav"), function (nav) {
       var first = nav.querySelector("a");
       if (!first) return;
       var label = textOf(first);
@@ -212,7 +212,7 @@
     var foot = FOOT_NAV.map(a);
     var headHtml = head.join("");
     var footHtml = foot.join("");
-    Array.prototype.forEach.call(document.querySelectorAll(".desknav, .masthead-nav, .g-nav"), function (nav) {
+    Array.prototype.forEach.call(document.querySelectorAll(".desknav, .masthead-nav"), function (nav) {
       nav.innerHTML = headHtml;
     });
     Array.prototype.forEach.call(document.querySelectorAll(".site-foot .sf-nav"), function (nav) {
