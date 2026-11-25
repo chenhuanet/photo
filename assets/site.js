@@ -462,3 +462,86 @@
   }
   bootTabbar();
 })();
+
+/* Theme image randomisation.  The static 8 + 8 cards are a no-JS fallback;
+   every page load replaces them with a fresh pick from the theme's own pool. */
+(function () {
+  if (window.__chenhuaThemeRandom) return;
+  window.__chenhuaThemeRandom = true;
+
+  function readJSON(id) {
+    var node = document.getElementById(id);
+    if (!node) return null;
+    try { return JSON.parse(node.textContent || "{}"); } catch (e) { return null; }
+  }
+
+  function shuffled(items) {
+    var a = items.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function choose(items, n, used) {
+    var out = [];
+    var list = shuffled(items || []);
+    for (var i = 0; i < list.length && out.length < n; i++) {
+      var item = list[i];
+      if (!item || !item.img || used[item.img]) continue;
+      used[item.img] = true;
+      out.push(item);
+    }
+    return out;
+  }
+
+  function bootThemeDetail() {
+    var pool = readJSON("theme-pool");
+    if (!pool) return;
+    var used = {};
+    [["painting", "paint-grid"], ["photo", "photo-grid"]].forEach(function (pair) {
+      var kind = pair[0], id = pair[1];
+      var grid = document.getElementById(id);
+      if (!grid) return;
+      var items = choose(pool[kind] || [], 8, used);
+      if (!items.length) return;
+      grid.innerHTML = items.map(function (x) { return x.html; }).join("");
+      var counter = grid.parentNode.querySelector("h2 .n");
+      if (counter) counter.textContent = String(items.length);
+    });
+  }
+
+  function bootThemeIndex() {
+    var map = readJSON("theme-covers");
+    if (!map) return;
+    var used = {};
+    var cards = document.querySelectorAll("[data-theme-key]");
+    for (var i = 0; i < cards.length; i++) {
+      var key = cards[i].getAttribute("data-theme-key");
+      var candidates = shuffled(map[key] || []);
+      var pick = null;
+      for (var j = 0; j < candidates.length; j++) {
+        if (candidates[j].img && !used[candidates[j].img]) { pick = candidates[j]; break; }
+      }
+      if (!pick && candidates.length) pick = candidates[0];
+      if (!pick || !pick.img) continue;
+      var img = cards[i].querySelector(".pic img");
+      if (!img) continue;
+      img.src = pick.img;
+      img.alt = pick.alt || img.alt;
+      used[pick.img] = true;
+    }
+  }
+
+  function bootThemeRandom() {
+    bootThemeDetail();
+    bootThemeIndex();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootThemeRandom);
+  } else {
+    bootThemeRandom();
+  }
+})();
