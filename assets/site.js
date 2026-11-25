@@ -504,7 +504,11 @@
       var kind = pair[0], id = pair[1];
       var grid = document.getElementById(id);
       if (!grid) return;
-      var items = choose(pool[kind] || [], 8, used);
+      var all = pool[kind] || [];
+      // A pool of exactly eight would repeat the same whole set on every
+      // load. Take seven from it; larger pools keep the full 8-card grid.
+      var take = all.length > 8 ? 8 : (all.length > 1 ? 7 : all.length);
+      var items = choose(all, take, used);
       if (!items.length) return;
       grid.innerHTML = items.map(function (x) { return x.html; }).join("");
       var counter = grid.parentNode.querySelector("h2 .n");
