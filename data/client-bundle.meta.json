@@ -2,10 +2,10 @@
   "site": "photo",
   "file": "client-bundle.js",
   "records": 3522,
-  "stories": 330,
+  "stories": 331,
   "notes": 3522,
   "search_records": 3522,
-  "search_stories": 330,
-  "bytes": 4521798,
-  "sha256": "7afe26a25cdbc117c584648011881ae3ce76ea111050c72687778af42b4ec134"
+  "search_stories": 331,
+  "bytes": 4523003,
+  "sha256": "f72383d681e4c5ec10d533f9150fdd981d78204e3c04d7a7f4aad9aefbc4fc23"
 }
