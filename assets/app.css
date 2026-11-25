@@ -111,6 +111,9 @@ html[data-theme="light"] .icon-moon{display:none}
   .tab{font-size:8.5px;letter-spacing:0}
   .tab svg{width:19px;height:19px}
 }
+@media(max-width:899px){
+  .tabbar.site-tabbar{grid-template-columns:repeat(8,minmax(0,1fr))}
+}
 
 /* shared */
 .section{padding:16px}
