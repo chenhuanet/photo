@@ -127,4 +127,11 @@ html[data-theme="light"] .s-story-hero:after{
   .s-story-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .s-story-hero{margin:0 -28px}
 }
+.s-deep{border-top:1px solid var(--line);margin:30px 0 0;padding:24px 0 6px}
+.s-deep h2{font-family:var(--serif);font-weight:400;font-size:clamp(21px,3.5vw,28px);margin:0 0 12px}
+.s-deep h3{font-family:var(--serif);font-weight:400;font-size:15px;margin:18px 0 6px;color:var(--accent)}
+.s-deep p{font-size:13px;line-height:1.95;color:var(--muted);margin:0 0 10px}
+.s-deep .s-deep-src{margin:0;padding-left:20px;font-size:11px;line-height:1.8;color:var(--dim)}
+.s-deep .s-deep-src a{color:var(--muted)}
+.s-deep .s-deep-review{font-size:10.5px;color:var(--dim);border-left:2px solid var(--line);padding-left:10px;margin-top:16px}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}

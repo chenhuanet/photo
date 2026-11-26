@@ -91,6 +91,23 @@
     if (r.collection === "paintings" && r.image && /^https?:\/\//.test(r.image)) return r.image;
     return imgOf(r);
   }
+  function displayImage(url, width) {
+    if (!url || !/^https?:\/\/(thumb|upload)\.wikimedia\.org\//.test(url)) return url;
+    var u;
+    try { u = new URL(url, location.href); } catch (e) { return url; }
+    if (u.hostname === "thumb.wikimedia.org") {
+      u.pathname = u.pathname.replace(/\/\d+px-/, "/" + width + "px-");
+      return u.href;
+    }
+    var m = u.pathname.match(/^\/wikipedia\/commons\/([^/]+)\/([^/]+)\/(.+)$/);
+    if (!m) return url;
+    u.hostname = "thumb.wikimedia.org";
+    u.pathname = "/wikipedia/commons/thumb/" + m[1] + "/" + m[2] + "/" + m[3] +
+      "/" + width + "px-" + m[3];
+    return u.href;
+  }
+  function heroImage(r) { return displayImage(recordImage(r), 500); }
+  function cardImage(url) { return displayImage(url, 500); }
   function modeOk(r) {
     if (state.mode === "commercial") return r.commercial_ok === true;
     return true;
@@ -567,7 +584,7 @@
     var date = fmtDate(d);
     var related = riverPicks(rows, r.id, 8);
     return '<section class="today-hero">' +
-      '<img class="today-hero-img" src="' + esc(imgOf(r)) + '" alt="' + esc(loc(r, "title")) + '">' +
+      '<img class="today-hero-img" src="' + esc(heroImage(r)) + '" alt="' + esc(loc(r, "title")) + '">' +
       '<div class="today-inner">' +
         '<div class="today-date">' + esc(date) + " · " + esc(t("brand.name")) + " · " + esc(isPaint ? t("home.todayPainting") : t("home.todayFrame")) + "</div>" +
         "<h1>" + esc(loc(r, "title")) + "</h1>" +
@@ -650,7 +667,7 @@
     var year = r.year ? String(r.year) : "";
     var kind = r.collection === "paintings" ? (isEn() ? "Painting" : "绘画") : (isEn() ? "Photography" : "摄影");
     return '<a class="day-card" href="' + esc(staticHref(r)) + '">' +
-      '<div class="day-pic"><img src="' + esc(recordImage(r)) + '" alt="' + esc(loc(r, "title")) + '" loading="lazy"></div>' +
+      '<div class="day-pic"><img src="' + esc(cardImage(recordImage(r))) + '" alt="' + esc(loc(r, "title")) + '" loading="lazy"></div>' +
       '<div class="day-copy"><span class="day-date">' + esc(year || "—") + ' <i class="day-kind">' + esc(kind) + "</i></span><h3>" + esc(loc(r, "title") || r.id) + "</h3></div></a>";
   }
   function dayCard(item) {
@@ -659,7 +676,7 @@
     var title = dayCardTitle(s);
     var year = String(s.date || "").slice(0, 4);
     return '<a class="day-card" href="' + esc(storyStaticHref(s)) + '">' +
-      '<div class="day-pic"><img src="' + esc(storyImage(s)) + '" alt="' + esc(loc(s, "title")) + '" loading="lazy"></div>' +
+      '<div class="day-pic"><img src="' + esc(cardImage(storyImage(s))) + '" alt="' + esc(loc(s, "title")) + '" loading="lazy"></div>' +
       '<div class="day-copy"><span class="day-date">' + esc(dayLabel(s)) + (year ? ' <b>' + esc(year) + "</b>" : "") + ' <i class="day-kind">' + esc(isEn() ? "Photography" : "摄影") + "</i></span><h3>" + esc(title) + "</h3></div></a>";
   }
   function homeItemYear(item) {
@@ -733,7 +750,7 @@
       ? '<span>' + esc(dateText) + "</span><span>" + esc(loc(s, "place")) + "</span>"
       : '<span>' + esc(tagsText(s)) + "</span>";
     return '<section class="today-hero theme-hero">' +
-      '<img class="today-hero-img" src="' + esc(cover ? imgOf(cover) : (preview[0] ? imgOf(preview[0]) : "")) + '" alt="' + esc(loc(s, "title")) + '">' +
+      '<img class="today-hero-img" src="' + esc(cover ? heroImage(cover) : (preview[0] ? heroImage(preview[0]) : "")) + '" alt="' + esc(loc(s, "title")) + '">' +
       '<div class="today-inner">' +
         '<div class="today-date">' + esc(dateText) + " · " + esc(label) + " · " + esc(t("brand.name")) + "</div>" +
         "<h1>" + esc(loc(s, "title")) + "</h1>" +
@@ -821,16 +838,51 @@
     else if (scope === "themes") rows = [];
     return rows;
   }
+  var SEARCH_SYNONYMS = {
+    "照片": ["摄影", "影像", "photo", "photograph"],
+    "摄影": ["照片", "影像", "photo", "photograph"],
+    "绘画": ["画", "油画", "painting", "paint"],
+    "画": ["绘画", "油画", "painting", "paint"],
+    "灾难": ["灾害", "火灾", "火山", "disaster", "fire", "volcano"],
+    "灾害": ["灾难", "火灾", "火山", "disaster", "fire", "volcano"],
+    "火灾": ["大火", "灾难", "fire", "great fire"],
+    "太空": ["宇宙", "航天", "space", "cosmos"],
+    "宇宙": ["太空", "航天", "space", "cosmos"],
+    "铁路": ["火车", "铁道", "rail", "railway", "train"],
+    "火车": ["铁路", "铁道", "rail", "railway", "train"],
+    "城市": ["都市", "街道", "city", "urban"],
+    "夜": ["夜晚", "夜景", "night"],
+    "宗教": ["信仰", "神", "religion", "faith"],
+    "photo": ["photograph", "摄影", "照片"],
+    "photograph": ["photo", "摄影", "照片"],
+    "painting": ["paint", "绘画", "画"],
+    "paint": ["painting", "绘画", "画"],
+    "space": ["cosmos", "太空", "宇宙"],
+    "cosmos": ["space", "太空", "宇宙"],
+    "rail": ["railway", "train", "铁路", "火车"],
+    "railway": ["rail", "train", "铁路", "火车"],
+    "city": ["urban", "城市", "都市"],
+    "night": ["夜", "夜晚", "夜景"],
+    "disaster": ["灾难", "灾害", "火灾", "火山"]
+  };
+  function searchTermGroups(qtext) {
+    return qtext.toLowerCase().trim().split(/\s+/).filter(Boolean).map(function (term) {
+      return [term].concat(SEARCH_SYNONYMS[term] || []);
+    });
+  }
   function search(qtext, scope) {
+    var groups = searchTermGroups(qtext);
     var terms = qtext.toLowerCase().trim().split(/\s+/).filter(Boolean);
-    if (!terms.length) return [];
+    if (!groups.length) return [];
     var rows = searchRows(scope).filter(function (r) {
       var ix = (SEARCH_INDEX.records || {})[r.id];
       var txt = String(
         ix ? (isEn() ? (ix[1] || ix[0]) : ix[0]) :
           (isEn() ? (r.search_text_en || r.search_text) : r.search_text)
       ).toLowerCase();
-      return terms.every(function (term) { return txt.indexOf(term) >= 0; });
+      return groups.every(function (group) {
+        return group.some(function (term) { return txt.indexOf(term) >= 0; });
+      });
     });
     return rows.map(function (r) {
       var title = String(loc(r, "title") || "").toLowerCase();
@@ -859,11 +911,14 @@
       isEn() ? (s.themes_en || []).join(" ") : (s.themes || []).join(" ")].join(" ").toLowerCase();
   }
   function searchThemes(qtext) {
+    var groups = searchTermGroups(qtext);
     var terms = qtext.toLowerCase().trim().split(/\s+/).filter(Boolean);
-    if (!terms.length) return [];
+    if (!groups.length) return [];
     return themeStories().filter(function (s) {
       var txt = themeSearchText(s);
-      return terms.every(function (term) { return txt.indexOf(term) >= 0; });
+      return groups.every(function (group) {
+        return group.some(function (term) { return txt.indexOf(term) >= 0; });
+      });
     }).map(function (s) {
       var title = String(loc(s, "title") || "").toLowerCase();
       var score = title.indexOf(qtext.toLowerCase()) >= 0 ? 10 : 0;
@@ -899,7 +954,8 @@
     }).join("");
   }
   function viewSearch() {
-    return '<div class="searchbar"><div class="search-field">' + ICONS.search +
+    return '<h1 class="search-h1">' + esc(t("search.title")) + "</h1>" +
+      '<div class="searchbar"><div class="search-field">' + ICONS.search +
       '<input id="searchInput" type="search" placeholder="' + esc(t("search.ph.main")) + '" value="' + esc(state.q) + '" autocomplete="off">' +
       '<button class="search-clear" id="searchClear">' + esc(t("common.clear")) + "</button></div></div>" +
       '<div class="chips" id="searchChips">' + searchScopeChips() + "</div>" +
@@ -938,7 +994,12 @@
     var total = themes.length + rows.length;
     if (cnt) cnt.textContent = total ? t("search.found", { n: total }) : t("search.noMatch");
     if (!total) {
-      box.innerHTML = emptyState("surprised", t("search.noMatchTitle"), t("search.noMatchText"));
+      var tips = isEn() ? ["disaster", "space", "rail", "night", "portrait"] : ["灾难", "太空", "铁路", "夜", "肖像"];
+      box.innerHTML = emptyState("surprised", t("search.noMatchTitle"), t("search.noMatchText")) +
+        '<div class="search-suggest"><div class="eyebrow">' + esc(t("search.try")) + "</div>" +
+        tips.map(function (x) { return '<button class="chip" data-search-topic="' + esc(x) + '">' + esc(x) + "</button>"; }).join("") +
+        "</div>";
+      bindSearchTopics();
       return;
     }
     var html = "";
