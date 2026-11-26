@@ -863,7 +863,11 @@
     "railway": ["rail", "train", "铁路", "火车"],
     "city": ["urban", "城市", "都市"],
     "night": ["夜", "夜晚", "夜景"],
-    "disaster": ["灾难", "灾害", "火灾", "火山"]
+    "disaster": ["灾难", "灾害", "火灾", "火山"],
+    "死亡与记忆": ["死亡", "记忆", "death", "memory"],
+    "信仰与仪式": ["信仰", "仪式", "faith", "ritual"],
+    "西亚北非": ["西亚", "北非", "west asia", "north africa"],
+    "西亚·北非": ["西亚", "北非", "west asia", "north africa"]
   };
   function searchTermGroups(qtext) {
     return qtext.toLowerCase().trim().split(/\s+/).filter(Boolean).map(function (term) {
