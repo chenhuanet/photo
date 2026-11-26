@@ -754,6 +754,7 @@
       '<div class="today-inner">' +
         '<div class="today-date">' + esc(dateText) + " · " + esc(label) + " · " + esc(t("brand.name")) + "</div>" +
         "<h1>" + esc(loc(s, "title")) + "</h1>" +
+        '<h2 class="sr-only"><span data-l="zh">今日条目</span><span data-l="en">Today\u2019s entries</span></h2>' +
         '<p class="today-note">' + esc(intro) + "</p>" +
         '<div class="today-meta">' + meta + "</div>" +
         '<div class="today-actions"><a class="btn gold" href="' + esc(storyStaticHref(s)) + '">' + esc(isEvent ? t("home.readEvent") : t("home.readTheme")) + '</a><a class="btn" href="' + esc(routeHref("stories")) + '">' + esc(t("story.allStories")) + '</a><a class="btn" href="' + esc(routeHref("timeline")) + '">' + esc(t("timeline.title")) + "</a></div>" +
@@ -959,6 +960,7 @@
   }
   function viewSearch() {
     return '<h1 class="search-h1">' + esc(t("search.title")) + "</h1>" +
+      '<h2 class="sr-only"><span data-l="zh">搜索结果</span><span data-l="en">Search results</span></h2>' +
       '<div class="searchbar"><div class="search-field">' + ICONS.search +
       '<input id="searchInput" type="search" placeholder="' + esc(t("search.ph.main")) + '" value="' + esc(state.q) + '" autocomplete="off">' +
       '<button class="search-clear" id="searchClear">' + esc(t("common.clear")) + "</button></div></div>" +

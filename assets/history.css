@@ -181,3 +181,5 @@ html[data-lang="zh"] .ph-two,html[data-lang="en"] .ph-two{grid-template-columns:
 @media(min-width:1280px){.ph-calendar{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:1600px){.ph-calendar{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .ph-day .t{font-size:9.5px;line-height:1.35;max-height:38px}
+/* a11y: 44px minimum touch targets */
+.ph-btn,.ph-pill{min-height:44px}
