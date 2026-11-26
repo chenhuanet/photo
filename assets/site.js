@@ -517,7 +517,7 @@
 
   function bootThemeDetail() {
     var pool = readJSON("theme-pool");
-    if (pool) {
+    if (pool && (pool.painting || pool.photo)) {
       applyThemePool(pool);
       return;
     }
