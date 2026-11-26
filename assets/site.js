@@ -496,8 +496,7 @@
     return out;
   }
 
-  function bootThemeDetail() {
-    var pool = readJSON("theme-pool");
+  function applyThemePool(pool) {
     if (!pool) return;
     var used = {};
     [["painting", "paint-grid"], ["photo", "photo-grid"]].forEach(function (pair) {
@@ -514,6 +513,21 @@
       var counter = grid.parentNode.querySelector("h2 .n");
       if (counter) counter.textContent = String(items.length);
     });
+  }
+
+  function bootThemeDetail() {
+    var pool = readJSON("theme-pool");
+    if (pool) {
+      applyThemePool(pool);
+      return;
+    }
+    var node = document.getElementById("theme-pool");
+    var src = node && node.getAttribute("data-src");
+    if (!src || !window.fetch) return;
+    fetch(src, { credentials: "same-origin" })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(applyThemePool)
+      .catch(function () {});
   }
 
   function bootThemeIndex() {
