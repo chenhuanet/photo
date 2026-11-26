@@ -106,6 +106,14 @@
       "/" + width + "px-" + m[3];
     return u.href;
   }
+  function heroSrcset(r) {
+    var url = recordImage(r), widths = [400, 500, 800], out = [], seen = {};
+    for (var i = 0; i < widths.length; i++) {
+      var u = displayImage(url, widths[i]);
+      if (u && !seen[u]) { seen[u] = 1; out.push(u + " " + widths[i] + "w"); }
+    }
+    return out.join(", ");
+  }
   function heroImage(r) { return displayImage(recordImage(r), 500); }
   function cardImage(url) { return displayImage(url, 500); }
   function modeOk(r) {
@@ -584,7 +592,7 @@
     var date = fmtDate(d);
     var related = riverPicks(rows, r.id, 8);
     return '<section class="today-hero">' +
-      '<img class="today-hero-img" src="' + esc(heroImage(r)) + '" alt="' + esc(loc(r, "title")) + '">' +
+      '<img class="today-hero-img" src="' + esc(heroImage(r)) + '" srcset="' + esc(heroSrcset(r)) + '" sizes="(max-width: 600px) 100vw, 500px" fetchpriority="high" alt="' + esc(loc(r, "title")) + '">' +
       '<div class="today-inner">' +
         '<div class="today-date">' + esc(date) + " · " + esc(t("brand.name")) + " · " + esc(isPaint ? t("home.todayPainting") : t("home.todayFrame")) + "</div>" +
         "<h1>" + esc(loc(r, "title")) + "</h1>" +
@@ -750,7 +758,7 @@
       ? '<span>' + esc(dateText) + "</span><span>" + esc(loc(s, "place")) + "</span>"
       : '<span>' + esc(tagsText(s)) + "</span>";
     return '<section class="today-hero theme-hero">' +
-      '<img class="today-hero-img" src="' + esc(cover ? heroImage(cover) : (preview[0] ? heroImage(preview[0]) : "")) + '" alt="' + esc(loc(s, "title")) + '">' +
+      '<img class="today-hero-img" src="' + esc(cover ? heroImage(cover) : (preview[0] ? heroImage(preview[0]) : "")) + '" srcset="' + esc(cover ? heroSrcset(cover) : (preview[0] ? heroSrcset(preview[0]) : "")) + '" sizes="(max-width: 600px) 100vw, 500px" fetchpriority="high" alt="' + esc(loc(s, "title")) + '">' +
       '<div class="today-inner">' +
         '<div class="today-date">' + esc(dateText) + " · " + esc(label) + " · " + esc(t("brand.name")) + "</div>" +
         "<h1>" + esc(loc(s, "title")) + "</h1>" +
