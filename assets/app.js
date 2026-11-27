@@ -155,12 +155,10 @@
     return base + route + "/";
   }
   function staticHref(r) {
-    if (r.collection === "paintings") {
-      if (CFG.staticPaintBase) return CFG.staticPaintBase + r.id + ".html";
-      return siteUrl(CFG.site === "paint" ? "painting/" + r.id + ".html" : "../paint/painting/" + r.id + ".html");
-    }
-    if (CFG.staticPhotoBase) return CFG.staticPhotoBase + r.id + ".html";
-    return siteUrl(CFG.site === "photo" ? "photo/" + r.id + ".html" : "../photo/photo/" + r.id + ".html");
+    var y = Number(r.year) || 0;
+    var c = y && y < 1800 ? "pre19century" : y && y < 1900 ? "19century" : y && y < 2000 ? "20century" : "21century";
+    var kind = r.collection === "paintings" ? "painting" : r.collection === "objects" ? "object" : r.collection === "links" ? "links" : "photo";
+    return "https://" + c + ".chenhua.net/" + kind + "/" + r.id + ".html";
   }
   function storyStaticHref(s) {
     if (CFG.staticStoryBase) return CFG.staticStoryBase + s.id + ".html";

@@ -113,6 +113,8 @@ html[data-theme="light"] .icon-moon{display:none}
 }
 @media(max-width:899px){
   .tabbar.site-tabbar{grid-template-columns:repeat(8,minmax(0,1fr))}
+  .site-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40}
+  body.static-body{padding-bottom:calc(62px + env(safe-area-inset-bottom))}
 }
 
 /* shared */
